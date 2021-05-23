@@ -1,0 +1,150 @@
+{% extends 'admin/base.html' %}
+{% import "admin/macros.html" as macros %}
+
+{% block title %}
+Категории
+{% endblock %}
+
+{% block page_header %}
+Категории
+{% endblock %}
+
+
+
+{% block modals %}
+{{ macros.modal(modal_id = "addModal",
+		handler_url = url_for('.FormHandlerCategory:add_category'),
+		title = "Добавление категории",
+		hidden_fields = [add_category_form.csrf_token],
+		visible_fields = [
+			[
+				add_category_form.category.label(class_="col-form-label"),
+				add_category_form.category(class_="form-control", id="edit_category_content")
+			],
+			[
+				add_category_form.icon_name.label(class_="col-form-label"),
+				add_category_form.icon_name(class_="form-control", id="edit_category_content")
+			]
+		],
+		optional_bottom =
+			'<div class="mb-3">
+				*Все иконки <a href='+ url_for(".icons_font_awesome") +'>здесь</a>
+			</div>',
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			add_category_form.submit(class_="btn btn-primary")
+		]
+	)
+}}
+
+{{ macros.modal(modal_id = "editModal",
+		handler_url = url_for('.FormHandlerCategory:edit_category'),
+		title = "Редактирование категории",
+		hidden_fields =
+		[
+			edit_category_form.csrf_token,
+			edit_category_form.id(id="edit_id")
+		],
+		visible_fields = [
+			[
+				edit_category_form.name.label(class_="col-form-label"),
+				edit_category_form.name(class_="form-control", id="edit_name_content")
+			],
+			[
+				edit_category_form.icon_name.label(class_="col-form-label"),
+				edit_category_form.icon_name(class_="form-control", id="edit_icon_name_content")
+			]
+		],
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			edit_category_form.submit(class_="btn btn-primary")
+		]
+	)
+}}
+
+{{ macros.modal(modal_id = "deleteModal",
+		handler_url = url_for('.FormHandlerCategory:delete_category'),
+		title = "Удаление категории",
+		optional_top =
+			'<strong>Подтвердите удаление категории: </strong>
+			<span class="modal_inline_content" id="delete_name_content"></span>',
+		hidden_fields =
+		[
+			delete_category_form.csrf_token,
+			delete_category_form.id(id="delete_id"),
+			delete_category_form.count_qa(id="delete_count_qa")
+		],
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			delete_category_form.submit(class_="btn btn-danger")
+		]
+	)
+}}
+{% endblock %}
+
+
+
+
+{% block body %}
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">
+	Добавить категорию
+</button>
+
+{{ macros.flash_messages() }}
+
+
+<table class="table table-striped table-sm">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">Название</th>
+			<th scope="col">Иконка</th>
+			<th scope="col">Цвет</th>
+			<th scope="col">Кол-во</th>
+			<th scope="col">Проритет</th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for category in categories_questions_count %}
+
+		<tr class="table_line_item" data-id="{{ category[0].id }}" data-name="{{ category[0].name }}" data-icon_name="{{ category[0].icon_name }}" data-count_qa="{{ category[1] }}">
+			<th scope="row">{{ category[0].id }}</th>
+			<td>{{ category[0].name }}</td>
+
+			<td scope="col">
+				<i class="fa fa-lg {{ category[0].icon_name }}" aria-hidden="true"></i>
+			</td>
+			<td scope="col">
+				<div class="category_color" style="background-color: {{ category[0].color }};"></div>
+			</td>
+
+			<td>{{ category[1] }}</td>
+			<td>{{ category[0].priority }}</td>
+
+			
+			<td scope="col" width="45">
+
+				<a href="{{ url_for('.colors', cat_id=('popular' if category[0].id == 0 else category[0].id)) }}">
+					<i class="fa fa-paint-brush fa-lg table_action_icon change_color_icon" aria-hidden="true"></i>
+				</a>
+			</td>
+			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal"></i></td>
+			<td scope="col" width="45">
+				{% if category[0].id != 0 %}
+				<i class="fa fa-trash fa-lg table_action_icon delete_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal"></i>
+				{% endif %}
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('.static', filename='js/modal_load_date/modal_category.js')}}"></script>
+<script src="{{ url_for('.static', filename='js/renumber_rows.js')}}"></script>
+{% endblock %}

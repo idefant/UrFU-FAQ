@@ -1,0 +1,127 @@
+{% extends 'admin/base.html' %}
+{% import "admin/macros.html" as macros %}
+
+{% block title %}
+Личный кабинет
+{% endblock %}
+
+
+{% block styles %}
+<style>
+	@font-face {
+		font-family: Consolas;
+		src: url({{ url_for('.static', filename='fonts/consolas.ttf')}});
+}
+</style>
+{% endblock %}
+
+{% block page_header %}
+Профиль {{ current_user.username }}
+{% endblock %}
+
+
+
+{% block modals %}
+
+{{ macros.modal(modal_id = "changePsswdModal",
+		handler_url = url_for('.FormHandlerAccount:change_password_account'),
+		title = "Смена пароля",
+		hidden_fields = [changePasswordAccountForm.csrf_token],
+		visible_fields = [
+			[
+				changePasswordAccountForm.old_password.label(class_="col-form-label"),
+				changePasswordAccountForm.old_password(class_="form-control psswd_field")
+			],
+			[
+				changePasswordAccountForm.password.label(class_="col-form-label"),
+				changePasswordAccountForm.password(class_="form-control psswd_field", id="input-password", readonly="")
+			],
+			[
+				changePasswordAccountForm.password_confirm.label(class_="col-form-label"),
+				changePasswordAccountForm.password_confirm(class_="form-control psswd_field", id="input-confirm-password", readonly="")
+			]
+		],
+		optional_bottom =
+			'<div class="form_change_psswd_btns">
+				<button type="button" id="input-generate" class="btn btn-primary">Сгенерировать</button>
+				<button type="button" id="input-confirm" class="btn btn-primary">Подтвердить пароль</button>
+			</div>',
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			changePasswordAccountForm.submit(class_="btn btn-success")
+		]
+	)
+}}
+
+{% endblock %}
+
+
+
+
+{% block body %}
+
+<div class="col-6 offset-3">
+	{{ macros.flash_messages() }}
+
+	<form action="{{ url_for('.FormHandlerAccount:edit_account') }}" method="post">
+		{{ editAccountForm.csrf_token }}
+		<div class="row mb-3">
+			{{ editAccountForm.username.label(class_="col-sm-2 col-form-label") }}
+			<div class="col-sm-10">
+				{{ editAccountForm.username(class_="form-control") }}
+			</div>
+		</div>
+		<div class="row mb-3">
+			{{ editAccountForm.name.label(class_="col-sm-2 col-form-label") }}
+			<div class="col-sm-10">
+				{{ editAccountForm.name(class_="form-control") }}
+			</div>
+		</div>
+		{{ editAccountForm.submit(class_="btn btn-success edit_current_user_btn") }}
+	</form>
+
+	<hr>
+
+	<div class="about">
+		<div class="user_position account_user_data">
+			<div class="user_position_label col-sm-2">
+				Должность:
+			</div>
+			<div class="user_position_content col-sm-10">
+				{{ current_user.post }}
+			</div>
+		</div>
+		<div class="user_rigths account_user_data">
+			<div class="user_rigths_label col-sm-2">
+				Права:
+			</div>
+			<div class="user_rigths_content col-sm-10">
+				<ul>
+					{% if current_user.right_category %}
+					<li>Категории</li>
+					{% endif %}
+					{% if current_user.right_users %}
+					<li>Пользователи</li>
+					{% endif %}
+				</ul>
+			</div>
+			
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="footer_btns">
+		<button class="btn btn-primary" id="btn_change_psswd" data-bs-toggle="modal" data-bs-target="#changePsswdModal">Сменить пароль</button>
+		<a href="{{ url_for('.logout') }}" class="btn btn-danger">Выйти из аккаунта</a>
+	</div>
+</div>
+
+{% endblock %}
+
+
+
+
+{% block scripts %}
+<script src="{{ url_for('.static', filename='js/psswd_generator.js')}}"></script>
+{% endblock %}

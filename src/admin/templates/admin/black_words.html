@@ -1,0 +1,111 @@
+{% extends 'admin/base.html' %}
+{% import "admin/macros.html" as macros %}
+
+{% block title %}
+Список черных слов
+{% endblock %}
+
+{% block page_header %}
+Список черных слов
+{% endblock %}
+
+
+{% block modals %}
+{{ macros.modal(modal_id = "addModal",
+		handler_url = url_for('.FormHandlerBlackWord:add_black_word'),
+		title = "Добавление слова в черный список",
+		hidden_fields = [addBlackWordForm.csrf_token],
+		visible_fields = [
+			[
+				addBlackWordForm.word.label(class_="col-form-label"),
+				addBlackWordForm.word(class_="form-control", id="edit_category_content")
+			]
+		],
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			addBlackWordForm.submit(class_="btn btn-primary")
+		]
+	)
+}}
+
+{{ macros.modal(modal_id = "editModal",
+		handler_url = url_for('.FormHandlerBlackWord:edit_black_word'),
+		title = "Редактирование слова из черного списка",
+		hidden_fields =
+		[
+			editBlackWordForm.csrf_token,
+			editBlackWordForm.id(id="edit_id")
+		],
+		visible_fields = [
+			[
+				editBlackWordForm.word.label(class_="col-form-label"),
+				editBlackWordForm.word(class_="form-control", id="edit_name_content")
+			]
+		],
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			editBlackWordForm.submit(class_="btn btn-primary")
+		]
+	)
+}}
+
+{{ macros.modal(modal_id = "deleteModal",
+		handler_url = url_for('.FormHandlerBlackWord:delete_black_word'),
+		title = "Удаление слова из черного списка",
+		optional_top = 
+			'<strong>Подтвердите удаление слова: </strong>
+			<span class="modal_inline_content" id="delete_name_content"></span>',
+		hidden_fields =
+		[
+			deleteBlackWordForm.csrf_token,
+			deleteBlackWordForm.id(id="delete_id")
+		],
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			deleteBlackWordForm.submit(class_="btn btn-danger")
+		]
+	)
+}}
+{% endblock %}
+
+
+
+
+{% block body %}
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">
+	Добавить слово
+</button>
+
+
+{{ macros.flash_messages() }}
+
+
+<table class="table table-striped table-sm">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">Слово</th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for black_word in black_words %}
+
+		<tr class="table_line_item" data-id="{{ black_word.id }}" data-name="{{ black_word.word }}">
+			<th scope="row"></th>
+			<td>{{ black_word.word }}</td>
+			
+			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal"></i></td>
+			<td scope="col" width="45"><i class="fa fa-trash fa-lg table_action_icon delete_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal"></i></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('.static', filename='js/modal_load_date/modal_black_word.js')}}"></script>
+<script src="{{ url_for('.static', filename='js/renumber_rows.js')}}"></script>
+{% endblock %}

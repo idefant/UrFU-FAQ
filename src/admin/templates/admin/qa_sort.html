@@ -1,0 +1,98 @@
+{% extends 'admin/base.html' %}
+{% import "admin/macros.html" as macros %}
+
+{% block title %}
+QA - Sort
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/sort.css') }}">
+{% endblock %}
+
+
+{% block page_header %}
+Сортировка
+
+{% if cat_id_data %}
+	{% if cat_id_data == "popular" %}
+	 - Популярное
+	{% else %}
+	 - {{ current_category.name }}
+	{% endif %}
+{% endif %}
+
+{% endblock %}
+
+
+{% block body %}
+
+{{ macros.flash_messages() }}
+
+
+<select onchange="return setAttr('cat_id',this.options[this.selectedIndex].value)" class="form-select" aria-label="Default select example">
+	<option value="" disabled selected hidden>Не выбрано</option>
+	<option value="popular" {{ "selected=selected" if cat_id_data == "popular"}}>Популярное</option>
+	{% for category in categories %}
+	<option value="{{ category.id }}" {{ "selected=selected" if cat_id_data == category.id}}>{{ category.name }}</option>
+	{% endfor %}
+</select>
+
+{% if message != "" %}
+
+<h1>{{ message }}</h1>
+
+{% else %}
+
+<button class="btn btn-success" id="get_data">Собрать данные</button>
+
+
+
+<table class="table table-striped table-sm">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">Вопрос</th>
+		</tr>
+	</thead>
+	<tbody id="list">
+		{% for qa in questions %}
+		<tr data-id="{{ qa.id }}" class="table_row_data">
+			<th scope="row"></th>
+			<td>{{ qa.question }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+
+
+
+{% endif %}
+
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+<script src="{{ url_for('.static', filename='js/sort.js')}}"></script>
+<script>
+	function getData() {
+		var table_row=$('.table_row_data');
+		var sequence_id = [];
+		for (var i=0; i<table_row.length; i++) {
+			sequence_id[i] = table_row[i].getAttribute('data-id');
+		}
+		window.location.href = "{{ url_for('.FormHandlerQA:change_order_qa') }}?sequence_id="+sequence_id+"&cat_id={{ cat_id_data }}";
+	};
+
+	$("#get_data").on("click", function() {
+		getData();
+	});
+</script>
+
+<script src="{{ url_for('.static', filename='js/set_get_attribute.js')}}"></script>
+<script src="{{ url_for('.static', filename='js/renumber_rows.js')}}"></script>
+{% endblock %}

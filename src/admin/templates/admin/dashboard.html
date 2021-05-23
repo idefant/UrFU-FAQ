@@ -1,0 +1,103 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+Дашборд
+{% endblock %}
+
+{% block page_header %}
+Дашборд
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<section class="dashboard">
+	<div class="dashboard_container">
+
+		<div class="block_item">
+			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.qa') }}';" style="background-color: #4976e7;">
+	
+					<div class="block_item_title">
+						Вопросов: {{ questions_count }}
+					</div>
+					<ol class="block_item_qa_list">
+						{% for category in categories_questions_count %}
+						<li>
+							{% if category[0].id == 0 %}
+							<a href="{{ url_for('.qa', popular=True) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
+							{% else %}
+							<a href="{{ url_for('.qa', cat_id=category[2]) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
+							{% endif %}
+
+						</li>
+						{% endfor %}
+					</ol>
+
+			</div>
+		</div>
+
+		<div class="block_item">
+			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.category') }}';" style="background-color: #7cc6fa;">
+				<div class="block_item_title">
+					Категорий: {{ categories_count }}
+				</div>
+			</div>
+		</div>
+
+		<div class="block_item">
+			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.users') }}';" style="background-color: #9e71ce;">
+				<div class="block_item_title">
+					Пользователей: {{ users_count }}
+				</div>
+			</div>
+		</div>
+
+		<div class="block_item">
+			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.account') }}';" style="background-color: #85d1b3;">
+				<div class="block_item_title">
+					Личный кабинет
+				</div>
+			</div>
+		</div>
+
+		<div class="block_item">
+			<div class="block_item_container" onclick="window.open('{{ url_for('.icons_font_awesome') }}')" style="background-color: #c43434;">
+				<div class="block_item_title">
+					Дополнительные иконки: 786
+				</div>
+			</div>
+		</div>
+
+		<div class="block_item">
+			<div class="block_item_container" onclick="window.open('{{ url_for('website.index') }}')" style="background-color: #e3ab00;">
+				<div class="block_item_title">
+					Перейти на сайт
+				</div>
+			</div>
+		</div>
+
+		<div class="block_item">
+			<div class="block_item_container" onclick="window.open('{{ url_for('.black_words') }}')" style="background-color: #af14a4;">
+				<div class="block_item_title">
+					Черные слова
+				</div>
+			</div>
+		</div>
+
+	</div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
+<script>
+	$('.dashboard_container').masonry({
+		itemSelector: '.block_item',
+		transitionDuration: 0
+	});
+</script>
+{% endblock %}

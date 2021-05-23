@@ -1,0 +1,128 @@
+{% extends 'admin/base.html' %}
+{% import "admin/macros.html" as macros %}
+
+{% block title %}
+Синонимы
+{% endblock %}
+
+{% block page_header %}
+Синонимы
+{% endblock %}
+
+
+
+{% block modals %}
+{{ macros.modal(modal_id = "addModal",
+		handler_url = url_for('.FormHandlerSynonym:add_synonym', word_id=word_id),
+		title = "Добавление синонима",
+		hidden_fields = [addSynonymsDependentForm.csrf_token],
+		visible_fields = [
+			[
+				addSynonymsDependentForm.word.label(class_="col-form-label"),
+				addSynonymsDependentForm.word(class_="form-control", id="edit_category_content")
+			]
+		],
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			addSynonymsDependentForm.submit(class_="btn btn-primary")
+		]
+	)
+}}
+
+{{ macros.modal(modal_id = "editModal",
+		handler_url = url_for('.FormHandlerSynonym:edit_synonym', word_id=word_id),
+		title = "Редактирование синонима",
+		hidden_fields = [
+			editSynonymsDependentForm.csrf_token,
+			editSynonymsDependentForm.word_id(id="edit_id")
+		],
+		visible_fields = [
+			[
+				editSynonymsDependentForm.word.label(class_="col-form-label"),
+				editSynonymsDependentForm.word(class_="form-control", id="edit_name_content")
+			]
+		],
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			editSynonymsDependentForm.submit(class_="btn btn-primary")
+		]
+	)
+}}
+
+{{ macros.modal(modal_id = "deleteModal",
+		handler_url = url_for('.FormHandlerSynonym:delete_synonym', word_id=word_id),
+		title = "Удаление синонима",
+		optional_top = 
+		'<strong>Подтвердите удаление категории: </strong>
+		<span class="modal_inline_content" id="delete_name_content"></span>',
+		hidden_fields = [
+			deleteSynonymsDependentForm.csrf_token,
+			deleteSynonymsDependentForm.word_id(id="delete_id")
+		],
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			deleteSynonymsDependentForm.submit(class_="btn btn-danger")
+		]
+	)
+}}
+{% endblock %}
+
+
+
+
+{% block body %}
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">
+	Добавить слово
+</button>
+
+
+
+{{ macros.flash_messages() }}
+
+
+
+<table class="table table-striped table-sm">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">Слово</th>
+			<th scope="col">Синонимы</th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for main_dependent_word in main_dependent_words %}
+
+		<tr class="table_line_item" data-id="{{ main_dependent_word[0].id }}" data-name="{{ main_dependent_word[0].word }}">
+			<th scope="row"></th>
+			<td>{{ main_dependent_word[0].word }}</td>
+			<td>
+				{% for dependent_word in main_dependent_word[1] %}
+				{{ dependent_word.word -}} {{ ',' if not loop.last }}
+				{% endfor %}
+			</td>
+			
+			<td scope="col" width="45">
+				<a href="{{ url_for('.synonyms_replacement', word_id=main_dependent_word[0].id) }}">
+					<i class="fa fa-eye fa-lg table_action_icon view_icon category_table" aria-hidden="true"></i>
+				</a>
+			</td>
+			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon category_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal"></i></td>
+			<td scope="col" width="45"><i class="fa fa-trash fa-lg table_action_icon delete_icon category_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal"></i></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('.static', filename='js/modal_load_date/modal_synonym.js')}}"></script>
+<script src="{{ url_for('.static', filename='js/renumber_rows.js')}}"></script>
+{% endblock %}

@@ -1,3 +1,8 @@
+src/.idea/
+src/__pycache__/
+src/venv/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

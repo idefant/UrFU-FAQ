@@ -1,0 +1,99 @@
+header {
+	margin-bottom: 20px;
+}
+
+.delete_icon {
+	color: #d12d2d;
+}
+
+.edit_icon {
+	color: #3aaa2d;
+}
+
+.view_icon {
+	color: #1631af;
+}
+
+.change_color_icon {
+	color: #9400d0;
+}
+
+.yes_icon {
+	color: green;
+}
+
+.table_action_icon {
+	cursor: pointer;
+}
+
+.modal_readonly_field[readonly] {
+	background-color: #f7f7f8;
+	/*min-height: 100%;*/
+}
+
+.view_item {
+	margin-bottom: 10px;
+}
+
+.modal_inline_content {
+	padding-left: 10px;
+}
+
+#view_answer_content {
+	padding: 10px;
+	margin-top: 5px;
+	border: 2px solid #000;
+	border-radius: 10px;
+}
+
+.alert {
+	padding: 8px;
+}
+
+.fa-star {
+	color: yellow;
+}
+
+
+
+
+
+.account_title, .change_psswd {
+	text-align: center;
+}
+
+.edit_current_user_btn {
+	display: block;
+	margin: auto;
+}
+
+.account_user_data {
+ 	display: flex;
+	flex-wrap: wrap;
+}
+
+.psswd_field {
+	font-family: Consolas, 'Consolas';
+	font-size: 20px;
+}
+
+.form_change_psswd_btns, .footer_btns {
+	display: flex;
+	justify-content: space-around;
+}
+
+.deactivated_user {
+	opacity: 0.3;
+}
+
+.nav .dropdown:hover > .dropdown-menu {
+	display: block; 
+}
+
+
+
+.category_color {
+	width: 50px;
+	height: 24px;
+	border: 1px solid black;
+}

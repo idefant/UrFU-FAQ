@@ -1,0 +1,65 @@
+{% extends 'admin/base.html' %}
+{% import "admin/macros.html" as macros %}
+
+{% block title %}
+Категории - Sort
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/sort.css') }}">
+{% endblock %}
+
+{% block page_header %}
+Сортировка категорий
+{% endblock %}
+
+
+
+{% block body %}
+
+{{ macros.flash_messages() }}
+
+<button class="btn btn-success" id="get_data">Собрать данные</button>
+
+<table class="table table-striped table-sm">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">Вопрос</th>
+		</tr>
+	</thead>
+	<tbody id="list">
+		{% for category in categories %}
+		<tr data-id="{{ category.id }}" class="table_row_data">
+			<th scope="row"></th>
+			<td>{{ category.name }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+<script src="{{ url_for('.static', filename='js/sort.js')}}"></script>
+<script>
+	function getData() {
+		var table_row=$('.table_row_data');
+		var sequence_id = [];
+		for (var i=0; i<table_row.length; i++) {
+			sequence_id[i] = table_row[i].getAttribute('data-id');
+		}
+		window.location.href = "{{ url_for('.FormHandlerCategory:change_order_category') }}?sequence_id="+sequence_id;
+	};
+
+	$("#get_data").on("click", function() {
+		getData();
+	});
+</script>
+
+<script src="{{ url_for('.static', filename='js/set_get_attribute.js')}}"></script>
+<script src="{{ url_for('.static', filename='js/renumber_rows.js')}}"></script>
+{% endblock %}

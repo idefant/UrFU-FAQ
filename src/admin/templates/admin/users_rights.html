@@ -1,0 +1,117 @@
+{% extends 'admin/base.html' %}
+{% import "admin/macros.html" as macros %}
+
+{% block title %}
+Категории
+{% endblock %}
+
+{% block page_header %}
+Права пользователей
+{% endblock %}
+
+
+
+{% block modals %}
+{{ macros.modal(modal_id = "editModal",
+		handler_url = url_for('.FormHandlerUser:edit_user_rights'),
+		title = "Изменение прав",
+		optional_top =
+			'<strong>Изменение прав пользователя: </strong>
+			<span class="modal_inline_content" id="user_rights_content"></span>',
+		hidden_fields = [
+			editUserRightsForm.csrf_token,
+			editUserRightsForm.id(id="edit_id")
+		],
+		visible_fields = [
+			[
+				editUserRightsForm.right_category(class_="form-check-input", id="edit_right_category"),
+				editUserRightsForm.right_category.label(class_="form-check-label")
+			],
+			[
+				editUserRightsForm.right_users(class_="form-check-input", id="edit_right_users"),
+				editUserRightsForm.right_users.label(class_="form-check-label")
+			],
+			[
+				editUserRightsForm.right_qa(class_="form-check-input", id="edit_right_users"),
+				editUserRightsForm.right_qa.label(class_="form-check-label")
+			],
+			[
+				editUserRightsForm.right_synonym(class_="form-check-input", id="edit_right_users"),
+				editUserRightsForm.right_synonym.label(class_="form-check-label")
+			],
+			[
+				editUserRightsForm.right_black_word(class_="form-check-input", id="edit_right_users"),
+				editUserRightsForm.right_black_word.label(class_="form-check-label")
+			]
+		],
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			editUserRightsForm.submit(class_="btn btn-primary")
+		]
+	)
+}}
+{% endblock %}
+
+
+
+{% block body %}
+
+{{ macros.flash_messages() }}
+
+
+<table class="table table-striped table-sm">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">ФИО</th>
+			<th scope="col">Категории</th>
+			<th scope="col">Пользователи</th>
+			<th scope="col">Вопросы</th>
+			<th scope="col">Синонимы</th>
+			<th scope="col">Черный список слов</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for user in users %}
+		
+		<tr class="table_line_item {% if user.is_deactivated %} deactivated_user {% endif %}" data-id="{{ user.id }}" data-name="{{ user.name }}" data-right-category="{{ user.right_category }}" data-right-users="{{ user.right_users }}" data-right-users="{{ user.right_qa }}" data-right-users="{{ user.right_synonym }}" data-right-users="{{ user.right_black_word }}">
+
+			<th scope="row">{{ user.id }}</th>
+			<td>{{ user.name }} ({{ user.post }})</td>
+			<td>
+				{% if user.right_category %}
+					<i class="fa fa-check yes_icon" aria-hidden="true"></i>
+				{% endif %}
+			</td>
+			<td>
+				{% if user.right_users %}
+					<i class="fa fa-check yes_icon" aria-hidden="true"></i>
+				{% endif %}
+			</td>
+			<td>
+				{% if user.right_qa %}
+					<i class="fa fa-check yes_icon" aria-hidden="true"></i>
+				{% endif %}
+			</td>
+			<td>
+				{% if user.right_synonym %}
+					<i class="fa fa-check yes_icon" aria-hidden="true"></i>
+				{% endif %}
+			</td>
+			<td>
+				{% if user.right_black_word %}
+					<i class="fa fa-check yes_icon" aria-hidden="true"></i>
+				{% endif %}
+			</td>
+			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal"></i></td>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('.static', filename='js/modal_load_date/modal_user_rights.js')}}"></script>
+<script src="{{ url_for('.static', filename='js/renumber_rows.js')}}"></script>
+{% endblock %}

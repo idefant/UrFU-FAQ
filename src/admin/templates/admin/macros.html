@@ -1,0 +1,46 @@
+{% macro modal(modal_id, handler_url, title, optional_top, hidden_fields, visible_fields, optional_bottom, buttons) %}
+<div class="modal fade" id="{{ modal_id }}" tabindex="-1" aria-labelledby="{{ modal_id }}Label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form action="{{ handler_url }}" method="post">
+				<div class="modal-header">
+					<h5 class="modal-title" id="{{ modal_id }}Label">{{ title }}</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body">
+					{{ optional_top | safe }}
+
+					{% for hidden_field in hidden_fields %}
+					{{ hidden_field }}
+					{% endfor %}
+
+					{% for visible_field in visible_fields %}
+					<div class="mb-3">
+						{% for visible_field_element in visible_field %}
+						{{ visible_field_element }}
+						{% endfor %}
+					</div>
+					{% endfor %}
+
+					{{ optional_bottom | safe }}
+					
+				</div>
+				<div class="modal-footer">
+					{% for button in buttons %}
+					{{ button | safe }}
+					{% endfor %}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endmacro %}
+
+
+{% macro flash_messages() %}
+{% for cat, msg in get_flashed_messages(True) %}
+<div class="alert alert-{{ cat }} alert-dismissible fade show" role="alert">
+  {{ msg }}
+</div>
+{% endfor %}
+{% endmacro %}
