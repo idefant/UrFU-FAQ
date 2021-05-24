@@ -79,7 +79,7 @@ def parse_table():
 
 
 def get_answer(request):
-    qa_list = db.session.query(Questions)
+    qa_list = Questions.query
     scores = []
     clear_text = correct_error(convert_text(request))
     clear_text = ' '.join(clear_text)
