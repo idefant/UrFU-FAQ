@@ -32,11 +32,9 @@
 			<th scope="row">{{ user.id }}</th>
 			<td>{{ user.name }}</td>
 			<td>{{ user.username }}</td>
-			<td>
-				{{ user.post }}
-			</td>
-			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon user_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal"></i></td>
-			<td scope="col" width="45"><i class="fa fa-trash fa-lg table_action_icon delete_icon user_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal"></i></td>
+			<td>{{ user.post }}</td>
+			<td scope="col" width="45"><i class="fa fa-reply fa-lg table_action_icon edit_icon user_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal" title="Активировать заново"></i></td>
+			<td scope="col" width="45"><i class="fa fa-trash fa-lg table_action_icon delete_icon user_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Удалить безвозвратно"></i></td>
 		</tr>
 		{% endfor %}
 	</tbody>

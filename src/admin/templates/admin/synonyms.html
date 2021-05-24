@@ -106,11 +106,11 @@
 			
 			<td scope="col" width="45">
 				<a href="{{ url_for('.synonyms_replacement', word_id=main_dependent_word[0].id) }}">
-					<i class="fa fa-eye fa-lg table_action_icon view_icon category_table" aria-hidden="true"></i>
+					<i class="fa fa-eye fa-lg table_action_icon view_icon category_table" aria-hidden="true" title="Просмотреть синонимы слова"></i>
 				</a>
 			</td>
-			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon category_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal"></i></td>
-			<td scope="col" width="45"><i class="fa fa-trash fa-lg table_action_icon delete_icon category_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal"></i></td>
+			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon category_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal" title="Редактировать"></i></td>
+			<td scope="col" width="45"><i class="fa fa-trash fa-lg table_action_icon delete_icon category_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Удалить"></i></td>
 		</tr>
 		{% endfor %}
 	</tbody>
