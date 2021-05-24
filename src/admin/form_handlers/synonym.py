@@ -67,19 +67,31 @@ class FormHandlerSynonym(FlaskView):
         main_word_id = request.args.get("word_id")
         if delete_synonyms_dependent_form.validate_on_submit():
             word_id = delete_synonyms_dependent_form.word_id.data
+
+            if word_id == main_word_id:
+                return "Нельзя удалять главный синоним"
+
             try:
-                synonym = SynonymousWords.query.get(word_id)
+                synonyms = [SynonymousWords.query.get(word_id)]
             except NameError:
                 return "Ошибка чтения из БД"
 
-            if synonym is None:
+            if synonyms is None:
                 return "Такого слова нет"
 
-            word = synonym.word
+            if not main_word_id:
+                synonyms += SynonymousWords.query.filter(SynonymousWords.synonym_id == word_id).all()
+
+            word = synonyms[0].word
             try:
-                db.session.delete(synonym)
+                for synonym in synonyms:
+                    db.session.delete(synonym)
                 db.session.commit()
-                flash(Markup("<strong>Удалено слово:</strong> " + word), category='success')
+                if len(synonyms) > 1:
+                    flash(Markup("<strong>Удалено слово:</strong> " + word
+                                 + " <strong>и все слова синонимичные ему</strong>"), category='success')
+                else:
+                    flash(Markup("<strong>Удалено слово:</strong> " + word), category='success')
             except exc.SQLAlchemyError:
                 flash('Ошибка внесения изменений в базу данных', category='danger')
         if main_word_id:
