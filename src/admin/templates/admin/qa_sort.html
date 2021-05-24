@@ -51,6 +51,7 @@ QA - Sort
 	<thead>
 		<tr>
 			<th scope="col">#</th>
+			<th scope="col"></th>
 			<th scope="col">Вопрос</th>
 		</tr>
 	</thead>
@@ -58,6 +59,14 @@ QA - Sort
 		{% for qa in questions %}
 		<tr data-id="{{ qa.id }}" class="table_row_data">
 			<th scope="row"></th>
+			<td width="32">
+				{% if qa.is_popular %}
+				<span class="fa-stack">
+					<i class="fa fa-star fa-stack-1x fa-lg"></i>
+					<i class="fa fa-star-o fa-stack-1x fa-lg"></i>
+				</span>
+				{% endif %}
+			</td>
 			<td>{{ qa.question }}</td>
 		</tr>
 		{% endfor %}
