@@ -13,16 +13,16 @@
 {{ macros.modal(modal_id = "addModal",
 		handler_url = url_for('.FormHandlerSynonym:add_synonym', word_id=word_id),
 		title = "Добавление синонима",
-		hidden_fields = [addSynonymsDependentForm.csrf_token],
+		hidden_fields = [add_synonyms_dependent_form.csrf_token],
 		visible_fields = [
 			[
-				addSynonymsDependentForm.word.label(class_="col-form-label"),
-				addSynonymsDependentForm.word(class_="form-control", id="edit_category_content")
+				add_synonyms_dependent_form.word.label(class_="col-form-label"),
+				add_synonyms_dependent_form.word(class_="form-control", id="edit_category_content")
 			]
 		],
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
-			addSynonymsDependentForm.submit(class_="btn btn-primary")
+			add_synonyms_dependent_form.submit(class_="btn btn-primary")
 		]
 	)
 }}
@@ -31,18 +31,18 @@
 		handler_url = url_for('.FormHandlerSynonym:edit_synonym', word_id=word_id),
 		title = "Редактирование синонима",
 		hidden_fields = [
-			editSynonymsDependentForm.csrf_token,
-			editSynonymsDependentForm.word_id(id="edit_id")
+			edit_synonyms_dependent_form.csrf_token,
+			edit_synonyms_dependent_form.word_id(id="edit_id")
 		],
 		visible_fields = [
 			[
-				editSynonymsDependentForm.word.label(class_="col-form-label"),
-				editSynonymsDependentForm.word(class_="form-control", id="edit_name_content")
+				edit_synonyms_dependent_form.word.label(class_="col-form-label"),
+				edit_synonyms_dependent_form.word(class_="form-control", id="edit_name_content")
 			]
 		],
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
-			editSynonymsDependentForm.submit(class_="btn btn-primary")
+			edit_synonyms_dependent_form.submit(class_="btn btn-primary")
 		]
 	)
 }}
@@ -54,12 +54,12 @@
 			'<strong>Подтвердите удаление синонима: </strong>
 			<span class="modal_inline_content" id="delete_name_content"></span>',
 		hidden_fields = [
-			editSynonymsDependentForm.csrf_token,
-			deleteSynonymsDependentForm.word_id(id="delete_id")
+			edit_synonyms_dependent_form.csrf_token,
+			delete_synonyms_dependent_form.word_id(id="delete_id")
 		],
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
-			deleteSynonymsDependentForm.submit(class_="btn btn-danger")
+			delete_synonyms_dependent_form.submit(class_="btn btn-danger")
 		]
 	)
 }}

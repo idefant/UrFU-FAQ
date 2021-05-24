@@ -26,19 +26,19 @@
 {{ macros.modal(modal_id = "changePsswdModal",
 		handler_url = url_for('.FormHandlerAccount:change_password_account'),
 		title = "Смена пароля",
-		hidden_fields = [changePasswordAccountForm.csrf_token],
+		hidden_fields = [change_password_account_form.csrf_token],
 		visible_fields = [
 			[
-				changePasswordAccountForm.old_password.label(class_="col-form-label"),
-				changePasswordAccountForm.old_password(class_="form-control psswd_field")
+				change_password_account_form.old_password.label(class_="col-form-label"),
+				change_password_account_form.old_password(class_="form-control psswd_field")
 			],
 			[
-				changePasswordAccountForm.password.label(class_="col-form-label"),
-				changePasswordAccountForm.password(class_="form-control psswd_field", id="input-password", readonly="")
+				change_password_account_form.password.label(class_="col-form-label"),
+				change_password_account_form.password(class_="form-control psswd_field", id="input-password", readonly="")
 			],
 			[
-				changePasswordAccountForm.password_confirm.label(class_="col-form-label"),
-				changePasswordAccountForm.password_confirm(class_="form-control psswd_field", id="input-confirm-password", readonly="")
+				change_password_account_form.password_confirm.label(class_="col-form-label"),
+				change_password_account_form.password_confirm(class_="form-control psswd_field", id="input-confirm-password", readonly="")
 			]
 		],
 		optional_bottom =
@@ -48,7 +48,7 @@
 			</div>',
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
-			changePasswordAccountForm.submit(class_="btn btn-success")
+			change_password_account_form.submit(class_="btn btn-success")
 		]
 	)
 }}
@@ -64,20 +64,20 @@
 	{{ macros.flash_messages() }}
 
 	<form action="{{ url_for('.FormHandlerAccount:edit_account') }}" method="post">
-		{{ editAccountForm.csrf_token }}
+		{{ edit_account_form.csrf_token }}
 		<div class="row mb-3">
-			{{ editAccountForm.username.label(class_="col-sm-2 col-form-label") }}
+			{{ edit_account_form.username.label(class_="col-sm-2 col-form-label") }}
 			<div class="col-sm-10">
-				{{ editAccountForm.username(class_="form-control") }}
+				{{ edit_account_form.username(class_="form-control") }}
 			</div>
 		</div>
 		<div class="row mb-3">
-			{{ editAccountForm.name.label(class_="col-sm-2 col-form-label") }}
+			{{ edit_account_form.name.label(class_="col-sm-2 col-form-label") }}
 			<div class="col-sm-10">
-				{{ editAccountForm.name(class_="form-control") }}
+				{{ edit_account_form.name(class_="form-control") }}
 			</div>
 		</div>
-		{{ editAccountForm.submit(class_="btn btn-success edit_current_user_btn") }}
+		{{ edit_account_form.submit(class_="btn btn-success edit_current_user_btn") }}
 	</form>
 
 	<hr>

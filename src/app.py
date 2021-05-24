@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, flash, make_response, session, redirect
+from flask import Flask, render_template
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
@@ -20,7 +20,6 @@ app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(bot, url_prefix='/bot')
 app.register_blueprint(website, url_prefix='/')
 
-app.static_url_path = "/website"
 
 manager = Manager(app)
 migrate = Migrate(app, db)
@@ -36,17 +35,14 @@ login_manager.login_view = 'admin.login'
 login_manager.login_message = 'Для продолжения авторизуйтесь'
 
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.query(Users).get(user_id)
 
 
 @app.errorhandler(404)
-def pageNotFound(error):
+def page_not_found(error):
     return render_template('page404.html')
-
-
 
 
 if __name__ == "__main__":

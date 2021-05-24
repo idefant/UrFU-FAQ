@@ -14,16 +14,16 @@
 {{ macros.modal(modal_id = "addModal",
 		handler_url = url_for('.FormHandlerBlackWord:add_black_word'),
 		title = "Добавление слова в черный список",
-		hidden_fields = [addBlackWordForm.csrf_token],
+		hidden_fields = [add_black_word_form.csrf_token],
 		visible_fields = [
 			[
-				addBlackWordForm.word.label(class_="col-form-label"),
-				addBlackWordForm.word(class_="form-control", id="edit_category_content")
+				add_black_word_form.word.label(class_="col-form-label"),
+				add_black_word_form.word(class_="form-control", id="edit_category_content")
 			]
 		],
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
-			addBlackWordForm.submit(class_="btn btn-primary")
+			add_black_word_form.submit(class_="btn btn-primary")
 		]
 	)
 }}
@@ -33,18 +33,18 @@
 		title = "Редактирование слова из черного списка",
 		hidden_fields =
 		[
-			editBlackWordForm.csrf_token,
-			editBlackWordForm.id(id="edit_id")
+			edit_black_word_form.csrf_token,
+			edit_black_word_form.id(id="edit_id")
 		],
 		visible_fields = [
 			[
-				editBlackWordForm.word.label(class_="col-form-label"),
-				editBlackWordForm.word(class_="form-control", id="edit_name_content")
+				edit_black_word_form.word.label(class_="col-form-label"),
+				edit_black_word_form.word(class_="form-control", id="edit_name_content")
 			]
 		],
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
-			editBlackWordForm.submit(class_="btn btn-primary")
+			edit_black_word_form.submit(class_="btn btn-primary")
 		]
 	)
 }}
@@ -57,12 +57,12 @@
 			<span class="modal_inline_content" id="delete_name_content"></span>',
 		hidden_fields =
 		[
-			deleteBlackWordForm.csrf_token,
-			deleteBlackWordForm.id(id="delete_id")
+			delete_black_word_form.csrf_token,
+			delete_black_word_form.id(id="delete_id")
 		],
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
-			deleteBlackWordForm.submit(class_="btn btn-danger")
+			delete_black_word_form.submit(class_="btn btn-danger")
 		]
 	)
 }}

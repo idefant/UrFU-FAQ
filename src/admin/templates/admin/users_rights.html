@@ -19,34 +19,34 @@
 			'<strong>Изменение прав пользователя: </strong>
 			<span class="modal_inline_content" id="user_rights_content"></span>',
 		hidden_fields = [
-			editUserRightsForm.csrf_token,
-			editUserRightsForm.id(id="edit_id")
+			edit_user_rights_form.csrf_token,
+			edit_user_rights_form.id(id="edit_id")
 		],
 		visible_fields = [
 			[
-				editUserRightsForm.right_category(class_="form-check-input", id="edit_right_category"),
-				editUserRightsForm.right_category.label(class_="form-check-label")
+				edit_user_rights_form.right_category(class_="form-check-input", id="edit_right_category"),
+				edit_user_rights_form.right_category.label(class_="form-check-label")
 			],
 			[
-				editUserRightsForm.right_users(class_="form-check-input", id="edit_right_users"),
-				editUserRightsForm.right_users.label(class_="form-check-label")
+				edit_user_rights_form.right_users(class_="form-check-input", id="edit_right_users"),
+				edit_user_rights_form.right_users.label(class_="form-check-label")
 			],
 			[
-				editUserRightsForm.right_qa(class_="form-check-input", id="edit_right_users"),
-				editUserRightsForm.right_qa.label(class_="form-check-label")
+				edit_user_rights_form.right_qa(class_="form-check-input", id="edit_right_users"),
+				edit_user_rights_form.right_qa.label(class_="form-check-label")
 			],
 			[
-				editUserRightsForm.right_synonym(class_="form-check-input", id="edit_right_users"),
-				editUserRightsForm.right_synonym.label(class_="form-check-label")
+				edit_user_rights_form.right_synonym(class_="form-check-input", id="edit_right_users"),
+				edit_user_rights_form.right_synonym.label(class_="form-check-label")
 			],
 			[
-				editUserRightsForm.right_black_word(class_="form-check-input", id="edit_right_users"),
-				editUserRightsForm.right_black_word.label(class_="form-check-label")
+				edit_user_rights_form.right_black_word(class_="form-check-input", id="edit_right_users"),
+				edit_user_rights_form.right_black_word.label(class_="form-check-label")
 			]
 		],
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
-			editUserRightsForm.submit(class_="btn btn-primary")
+			edit_user_rights_form.submit(class_="btn btn-primary")
 		]
 	)
 }}

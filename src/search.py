@@ -6,6 +6,7 @@ import re
 from enchant.checker import SpellChecker
 from flask_sqlalchemy import SQLAlchemy
 from fuzzywuzzy import fuzz
+from sqlalchemy import exc
 
 from app import app
 from dbase import db, Categories, Questions
@@ -15,6 +16,7 @@ db = SQLAlchemy(app)
 morph = pymorphy2.MorphAnalyzer()
 language = enchant.Dict("ru_RU")
 checker = SpellChecker("ru_RU")
+
 
 def convert_text(string):
     word_list = (clear_string(string))
@@ -53,7 +55,7 @@ def correct_error(text):
 
 
 def parse_table():
-    categories = list() # Заменить этот массив на БД
+    categories = list()  # Заменить этот массив на БД
     with open("FAQ_CSV.csv") as r_file:
         file_reader = csv.DictReader(r_file, delimiter=",")
         for row in file_reader:
@@ -64,7 +66,7 @@ def parse_table():
                     # db.session.add(category)
                     # db.session.commit()
                     print("OK")
-                except:
+                except exc.SQLAlchemyError:
                     print("___ERROR___")
             qa = Questions(question=row["Вопрос"], clear_question=convert_text(row["Вопрос"]), answer=row["Ответ"],
                            cat_id=int(categories.index(row["Категория"]) + 1), priority=0)
@@ -72,7 +74,7 @@ def parse_table():
                 db.session.add(qa)
                 db.session.commit()
                 print("OK")
-            except:
+            except exc.SQLAlchemyError:
                 print("___ERROR___")
 
 

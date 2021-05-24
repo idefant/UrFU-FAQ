@@ -12,11 +12,11 @@ class FormHandlerLogin(FlaskView):
 
     @route('/login_handler', methods=["POST"])
     def login_handler(self):
-        form = forms.LoginForm()
-        if form.validate_on_submit():
-            user = Users.query.filter(Users.username == form.username.data).first()
-            if user and check_password_hash(user.psswd, form.password.data):
-                login_user(user, remember=form.remember.data)
+        login_form = forms.LoginForm()
+        if login_form.validate_on_submit():
+            user = Users.query.filter(Users.username == login_form.username.data).first()
+            if user and check_password_hash(user.psswd, login_form.password.data):
+                login_user(user, remember=login_form.remember.data)
                 return redirect(url_for('.index'))
 
             flash("Неверный логин/пароль", 'danger')

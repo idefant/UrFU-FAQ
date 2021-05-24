@@ -1,8 +1,5 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
-from flask_login import login_required, logout_user, current_user, login_user
-from sqlalchemy import exc
-
-from werkzeug.security import check_password_hash
+from flask_login import login_required, logout_user, current_user
 
 from .form_handlers.black_word import FormHandlerBlackWord
 from dbase import db, Users, Questions, Categories, BlackWords, SynonymousWords
@@ -172,7 +169,7 @@ def qa_sort():
         except (NameError, AttributeError):
             return "Ошибка чтения из БД"
 
-    categories = categories.filter(Categories.id != 0).all()
+    categories = categories.filter(Categories.id != 0)
 
     return render_template("admin/qa_sort.html", questions=questions, categories=categories, message=message,
                            current_category=current_category, cat_id_data=cat_id_data)
@@ -198,105 +195,108 @@ def login():
 @admin.route('/account')
 @login_required
 def account():
-    editAccountForm = forms.EditAccountForm()
-    changePasswordAccountForm = forms.ChangePasswordAccountForm()
-    editAccountForm.username.default = current_user.username
-    editAccountForm.name.default = current_user.name
-    editAccountForm.process()
-    return render_template('admin/account.html', editAccountForm=editAccountForm,
-                           changePasswordAccountForm=changePasswordAccountForm, current_user=current_user)
+    edit_account_form = forms.EditAccountForm()
+    change_password_account_form = forms.ChangePasswordAccountForm()
+    edit_account_form.username.default = current_user.username
+    edit_account_form.name.default = current_user.name
+    edit_account_form.process()
+    return render_template('admin/account.html', edit_account_form=edit_account_form,
+                           change_password_account_form=change_password_account_form, current_user=current_user)
 
 
 @admin.route('/users')
 @login_required
 def users():
-    if (not current_user.right_users):
+    if not current_user.right_users:
         return render_template('admin/access_denied.html')
-    addUserForm = forms.AddUserForm()
-    editUserForm = forms.EditUserForm()
-    deactivateUserForm = forms.DeactivateUserForm()
-    users = []
+    add_user_form = forms.AddUserForm()
+    edit_user_form = forms.EditUserForm()
+    deactivate_user_form = forms.DeactivateUserForm()
     try:
-        users = db.session.query(Users).filter(Users.is_deactivated.is_(False)).all()
-    except:
-        print("Ошибка чтения из БД")
-    return render_template('admin/users.html', users=users, addUserForm=addUserForm, editUserForm=editUserForm,
-                           deactivateUserForm=deactivateUserForm)
+        users = Users.query.filter(Users.is_deactivated.is_(False))
+    except (NameError, AttributeError):
+        return "Ошибка чтения из БД"
+    return render_template('admin/users.html', users=users, add_user_form=add_user_form, edit_user_form=edit_user_form,
+                           deactivate_user_form=deactivate_user_form)
 
 
 @admin.route('/users/deactivate')
 @login_required
 def users_deactivate():
-    if (not current_user.right_users):
+    if not current_user.right_users:
         return render_template('admin/access_denied.html')
-    users = []
     try:
-        users = db.session.query(Users).filter(Users.is_deactivated).all()
-    except:
-        print("Ошибка чтения из БД")
+        users = Users.query.filter(Users.is_deactivated)
+    except (NameError, AttributeError):
+        return "Ошибка чтения из БД"
     return render_template('admin/users_deactivate.html', users=users)
 
 
 @admin.route('/users/rights')
 @login_required
 def users_rights():
-    if (not current_user.right_users):
+    if not current_user.right_users:
         return render_template('admin/access_denied.html')
-    editUserRightsForm = forms.EditUserRightsForm()
-    users = []
+    edit_user_rights_form = forms.EditUserRightsForm()
     try:
-        users = db.session.query(Users).all()
-    except:
-        print("Ошибка чтения из БД")
-    return render_template('admin/users_rights.html', users=users, editUserRightsForm=editUserRightsForm)
+        users = Users.query
+    except NameError:
+        return "Ошибка чтения из БД"
+    return render_template('admin/users_rights.html', users=users, edit_user_rights_form=edit_user_rights_form)
 
 
 @admin.route('/colors')
 @login_required
 def colors():
-    if (not current_user.right_category):
+    if not current_user.right_category:
         return render_template('admin/access_denied.html')
     cat_id_data = request.args.get("cat_id")
 
     qa_list = []
-    categories_list = []
-    current_category = []
-    index = 0
     is_popular_category = False
 
-    try:
-        categories_list = db.session.query(Categories).order_by(Categories.priority)
-    except:
-        print("Ошибка чтения из БД 1")
+    questions = Questions.query
 
-    if cat_id_data == None:
-        print("Категория не выбрана")
+    try:
+        categories_list = Categories.query.order_by(Categories.priority)
+    except (NameError, AttributeError):
+        return "Ошибка чтения из БД"
+
+    if cat_id_data is None:
+        return "Категория не выбрана"
     elif cat_id_data == "popular":
         is_popular_category = True
+
+        current_category = categories_list.get(0)
+        if current_category is None:
+            return "Нет такой категории в БД"
+        index = categories_list.all().index(current_category)
         try:
-            current_category = categories_list.get(0)
-            index = categories_list.all().index(current_category)
-            popular_qa_list = db.session.query(Questions).filter(Questions.is_popular == True).order_by(Questions.popular_priority)
-            for qa in popular_qa_list:
-                category = categories_list.get(qa.cat_id)
-                if category != None:
-                    icon_name = category.icon_name
-                    qa_list += [(qa, icon_name)]
-        except:
-            print("Ошибка чтения из БД 2")
+            popular_qa_list = questions.filter(Questions.is_popular).order_by(Questions.popular_priority)
+        except (NameError, AttributeError):
+            return "Ошибка чтения из БД"
+
+        for qa in popular_qa_list:
+            category = categories_list.get(qa.cat_id)
+            if category is not None:
+                qa_list += [(qa, category.icon_name)]
+
     else:
+
         try:
             cat_id_data = int(cat_id_data)
-            current_category = categories_list.get(cat_id_data)
-            index = categories_list.all().index(current_category)
-            if (categories_list.get(cat_id_data) == None):
-                return "Нет такой категории"
-
-            qa_list = db.session.query(Questions).filter(Questions.cat_id == cat_id_data).order_by(Questions.priority)
-            qa_list = qa_list.all()
-        except:
-            print("Ошибка чтения из БД 3")
-
+        except ValueError:
+            return "ID категории должен быть числом"
+        current_category = categories_list.get(cat_id_data)
+        if current_category is None:
+            return "Нет такой категории в БД"
+        index = categories_list.all().index(current_category)
+        if (categories_list.get(cat_id_data) == None):
+            return "Нет такой категории"
+        try:
+            qa_list = questions.filter(Questions.cat_id == cat_id_data).order_by(Questions.priority)
+        except (NameError, AttributeError):
+            return "Ошибка чтения из БД"
 
     return render_template('admin/color_picker.html', qa_list=qa_list, categories_list=categories_list,
                            current_category=current_category, index=index, is_popular_category=is_popular_category)
@@ -311,58 +311,72 @@ def icons_font_awesome():
 @admin.route('/black_words')
 @login_required
 def black_words():
-    if (not current_user.right_black_word):
+    if not current_user.right_black_word:
         return render_template('admin/access_denied.html')
-    addBlackWordForm = forms.AddBlackWordForm()
-    editBlackWordForm = forms.EditBlackWordForm()
-    deleteBlackWordForm = forms.DeleteBlackWordForm()
-    black_words = db.session.query(BlackWords)
-    return render_template('admin/black_words.html', addBlackWordForm=addBlackWordForm,
-                           editBlackWordForm=editBlackWordForm, deleteBlackWordForm=deleteBlackWordForm,
+    add_black_word_form = forms.AddBlackWordForm()
+    edit_black_word_form = forms.EditBlackWordForm()
+    delete_black_word_form = forms.DeleteBlackWordForm()
+    try:
+        black_words = BlackWords.query
+    except NameError:
+        return "Ошибка чтения из БД"
+    return render_template('admin/black_words.html', add_black_word_form=add_black_word_form,
+                           edit_black_word_form=edit_black_word_form, delete_black_word_form=delete_black_word_form,
                            black_words=black_words)
 
 
 @admin.route('/synonyms')
 @login_required
 def synonyms():
-    if (not current_user.right_synonym):
+    if not current_user.right_synonym:
         return render_template('admin/access_denied.html')
-    addSynonymsDependentForm = forms.AddSynonymsDependentForm()
-    editSynonymsDependentForm = forms.EditSynonymsDependentForm()
-    deleteSynonymsDependentForm = forms.DeleteSynonymsDependentForm()
-    synonyms = db.session.query(SynonymousWords)
-    main_words = synonyms.filter(SynonymousWords.synonym_id == None)
+    add_synonyms_dependent_form = forms.AddSynonymsDependentForm()
+    edit_synonyms_dependent_form = forms.EditSynonymsDependentForm()
+    delete_synonyms_dependent_form = forms.DeleteSynonymsDependentForm()
+    try:
+        synonyms = SynonymousWords.query
+    except NameError:
+        return "Ошибка чтения из БД"
+    main_words = synonyms.filter(SynonymousWords.synonym_id.is_(None))
     main_dependent_words = []
     for main_word in main_words:
-        dependent_words = synonyms.filter(main_word.id == SynonymousWords.synonym_id).all()
+        dependent_words = synonyms.filter(main_word.id == SynonymousWords.synonym_id)
         main_dependent_words += [(main_word, dependent_words)]
 
-    return render_template('admin/synonyms.html', addSynonymsDependentForm=addSynonymsDependentForm,
-                           editSynonymsDependentForm=editSynonymsDependentForm,
-                           deleteSynonymsDependentForm=deleteSynonymsDependentForm,
+    return render_template('admin/synonyms.html', add_synonyms_dependent_form=add_synonyms_dependent_form,
+                           edit_synonyms_dependent_form=edit_synonyms_dependent_form,
+                           delete_synonyms_dependent_form=delete_synonyms_dependent_form,
                            main_dependent_words=main_dependent_words)
 
 
 @admin.route('/synonyms/replacement')
 @login_required
 def synonyms_replacement():
-    if (not current_user.right_synonym):
+    if not current_user.right_synonym:
         return render_template('admin/access_denied.html')
-    addSynonymsDependentForm = forms.AddSynonymsDependentForm() # request.values, word_id=0
-    editSynonymsDependentForm = forms.EditSynonymsDependentForm()
-    deleteSynonymsDependentForm = forms.DeleteSynonymsDependentForm()
-
+    add_synonyms_dependent_form = forms.AddSynonymsDependentForm()
+    edit_synonyms_dependent_form = forms.EditSynonymsDependentForm()
+    delete_synonyms_dependent_form = forms.DeleteSynonymsDependentForm()
 
     main_word_id = request.args.get("word_id")
-    if (main_word_id is None):
-        return "НЛО прилетело и забрало это слово"
+    if main_word_id is None:
+        return "Слова синонима нет"
     else:
-        main_word_id = int(main_word_id)
-        main_word = db.session.query(SynonymousWords).get(main_word_id)
-        synonyms = db.session.query(SynonymousWords).filter(SynonymousWords.synonym_id == main_word_id).all()
-    return render_template('admin/synonyms_replacement.html', addSynonymsDependentForm=addSynonymsDependentForm,
-                           editSynonymsDependentForm=editSynonymsDependentForm,
-                           deleteSynonymsDependentForm=deleteSynonymsDependentForm,
+        try:
+            main_word_id = int(main_word_id)
+        except ValueError:
+            return "ID слова должен быть числом"
+
+        try:
+            synonyms = SynonymousWords.query
+            main_word = synonyms.get(main_word_id)
+            synonyms = synonyms.filter(SynonymousWords.synonym_id == main_word_id)
+        except(NameError, AttributeError):
+            return "Ошибка чтения из БД"
+
+    return render_template('admin/synonyms_replacement.html', add_synonyms_dependent_form=add_synonyms_dependent_form,
+                           edit_synonyms_dependent_form=edit_synonyms_dependent_form,
+                           delete_synonyms_dependent_form=delete_synonyms_dependent_form,
                            main_word=main_word, synonyms=synonyms, word_id=main_word_id)
 
 
@@ -371,5 +385,6 @@ def before_request():
     if current_user.is_authenticated:
         if current_user.is_deactivated:
             logout_user()
-            flash("Ваш аккаунт заблокирован. Для получения дополнительных сведений обратитесь к администратору", category='danger')
+            flash("Ваш аккаунт заблокирован. Для получения дополнительных сведений обратитесь к администратору",
+                  category='danger')
             return redirect(url_for('.login'))
