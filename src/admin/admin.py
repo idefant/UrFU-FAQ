@@ -225,11 +225,15 @@ def users():
 def users_deactivate():
     if not current_user.right_users:
         return render_template('admin/access_denied.html')
+
+    activate_user_form = forms.ActivateUserForm()
+    delete_user_form = forms.DeleteUserForm()
     try:
         users = Users.query.filter(Users.is_deactivated)
     except (NameError, AttributeError):
         return "Ошибка чтения из БД"
-    return render_template('admin/users_deactivate.html', users=users)
+    return render_template('admin/users_deactivate.html', activate_user_form=activate_user_form,
+                           delete_user_form=delete_user_form, users=users)
 
 
 @admin.route('/users/rights')

@@ -8,7 +8,7 @@ from sqlalchemy import exc
 from werkzeug.security import generate_password_hash
 
 from dbase import db, Users
-from forms import AddUserForm, EditUserForm, DeactivateUserForm, EditUserRightsForm
+from forms import AddUserForm, EditUserForm, DeactivateUserForm, EditUserRightsForm, ActivateUserForm
 
 
 class FormHandlerUser(FlaskView):
@@ -96,6 +96,80 @@ class FormHandlerUser(FlaskView):
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.users'))
+
+
+
+
+    @route('/activate_user', methods=["POST"])
+    @login_required
+    def activate_user(self):
+        if not current_user.right_users:
+            return render_template('admin/access_denied.html')
+        activate_user_form = ActivateUserForm()
+        if activate_user_form.validate_on_submit():
+
+            user_id = int(activate_user_form.id.data)
+            if current_user.id == user_id or user_id == 1:
+                flash('Вы не можете деактивировать собственный аккаунт или аккаунт админа', category='danger')
+            else:
+                try:
+                    user = Users.query.get(user_id)
+                except NameError:
+                    return "Ошибка чтения из БД"
+                if user is None:
+                    return "Пользователя не существует"
+                name = user.name
+                user.is_deactivated = False
+                user.deactivation_date = datetime.now()
+                try:
+                    db.session.commit()
+                    flash(Markup("<strong>Активирован пользователь:</strong> " + name), category='success')
+                except exc.SQLAlchemyError:
+                    flash('Ошибка внесения изменений в базу данных', category='danger')
+        return redirect(url_for('.users_deactivate'))
+
+
+
+
+
+
+    @route('/delete_user', methods=["POST"])
+    @login_required
+    def delete_user(self):
+        if not current_user.right_users:
+            return render_template('admin/access_denied.html')
+        activate_user_form = ActivateUserForm()
+        if activate_user_form.validate_on_submit():
+
+            if current_user.id != 1:
+                flash("Удалять пользователей может лишь админ", category='danger')
+            else:
+                user_id = int(activate_user_form.id.data)
+                if current_user.id == user_id:
+                    flash('Вы не можете удалвить собственный аккаунт', category='danger')
+                else:
+                    try:
+                        user = Users.query.get(user_id)
+                    except NameError:
+                        return "Ошибка чтения из БД"
+                    if user is None:
+                        return "Пользователя не существует"
+                    name = user.name
+                    try:
+                        db.session.delete(user)
+                        db.session.commit()
+                        flash(Markup("<strong>Удален пользователь:</strong> " + name), category='success')
+                    except exc.SQLAlchemyError:
+                        flash('Ошибка внесения изменений в базу данных', category='danger')
+        return redirect(url_for('.users_deactivate'))
+
+
+
+
+
+
+
+
 
     @route('/edit_user_rights', methods=["POST"])
     @login_required

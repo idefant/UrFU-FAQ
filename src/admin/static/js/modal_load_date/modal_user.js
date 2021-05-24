@@ -23,3 +23,14 @@ $(function() {
 			$("#delete_name_content").html(name);
 		})
 });
+
+$(function() {
+	$(".activate_icon").click(
+		function() {
+			var id = $(this).parents('.table_line_item').attr('data-id');
+			var name = $(this).parents('.table_line_item').attr('data-name');
+
+			$("#activate_id").val(id);
+			$("#activate_name_content").html(name);
+		})
+});

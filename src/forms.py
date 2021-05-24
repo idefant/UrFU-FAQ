@@ -86,6 +86,16 @@ class DeactivateUserForm(FlaskForm):
     submit = SubmitField("Деактивировать")
 
 
+class ActivateUserForm(FlaskForm):
+    id = HiddenField("id")
+    submit = SubmitField("Активировать заново")
+
+
+class DeleteUserForm(FlaskForm):
+    id = HiddenField("id")
+    submit = SubmitField("Удалить навсегда")
+
+
 class EditUserRightsForm(FlaskForm):
     id = HiddenField("id")
     right_category = BooleanField("Категории")

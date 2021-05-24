@@ -9,6 +9,47 @@
 Деактивированные пользователи
 {% endblock %}
 
+
+{% block modals %}
+{{ macros.modal(modal_id = "activateModal",
+		handler_url = url_for('.FormHandlerUser:activate_user'),
+		title = "Активация пользователя заново",
+		optional_top =
+			'<strong>Подтвердите активацию пользователя: </strong>
+			<span class="modal_inline_content" id="activate_name_content"></span>',
+		hidden_fields = [
+			activate_user_form.csrf_token,
+			activate_user_form.id(id="activate_id")
+		],
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			activate_user_form.submit(class_="btn btn-danger")
+		]
+	)
+}}
+
+{{ macros.modal(modal_id = "deleteModal",
+		handler_url = url_for('.FormHandlerUser:delete_user'),
+		title = "Активация пользователя заново",
+		optional_top =
+			'<strong>Подтвердите активацию пользователя: </strong>
+			<span class="modal_inline_content" id="delete_name_content"></span>',
+		hidden_fields = [
+			delete_user_form.csrf_token,
+			delete_user_form.id(id="delete_id")
+		],
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			delete_user_form.submit(class_="btn btn-danger")
+		]
+	)
+}}
+{% endblock %}
+
+
+
+
+
 {% block body %}
 
 {{ macros.flash_messages() }}
@@ -33,7 +74,7 @@
 			<td>{{ user.name }}</td>
 			<td>{{ user.username }}</td>
 			<td>{{ user.post }}</td>
-			<td scope="col" width="45"><i class="fa fa-reply fa-lg table_action_icon edit_icon user_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal" title="Активировать заново"></i></td>
+			<td scope="col" width="45"><i class="fa fa-reply fa-lg table_action_icon activate_icon user_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#activateModal" title="Активировать заново"></i></td>
 			<td scope="col" width="45"><i class="fa fa-trash fa-lg table_action_icon delete_icon user_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Удалить безвозвратно"></i></td>
 		</tr>
 		{% endfor %}
@@ -43,5 +84,6 @@
 
 
 {% block scripts %}
+<script src="{{ url_for('.static', filename='js/modal_load_date/modal_user.js')}}"></script>
 <script src="{{ url_for('.static', filename='js/renumber_rows.js')}}"></script>
 {% endblock %}

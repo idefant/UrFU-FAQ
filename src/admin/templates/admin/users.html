@@ -72,7 +72,7 @@
 	)
 }}
 
-{{ macros.modal(modal_id = "deleteModal",
+{{ macros.modal(modal_id = "deactivateModal",
 		handler_url = url_for('.FormHandlerUser:deactivate_user'),
 		title = "Деактивация пользователя",
 		optional_top =
@@ -128,7 +128,7 @@
 			<td>{{ user.username }}</td>
 			<td>{{ user.post }}</td>
 			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal" title="Редактировать"></i></td>
-			<td scope="col" width="45"><i class="fa fa-ban fa-lg table_action_icon delete_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Деактивировать"></i></td>
+			<td scope="col" width="45"><i class="fa fa-ban fa-lg table_action_icon delete_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deactivateModal" title="Деактивировать"></i></td>
 		</tr>
 		{% endfor %}
 	</tbody>
