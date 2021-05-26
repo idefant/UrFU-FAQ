@@ -101,3 +101,22 @@ header {
 	height: 24px;
 	border: 1px solid black;
 }
+
+.btn_container {
+	margin-bottom: 10px;
+}
+
+.button_active {
+	margin-right: 10px;
+}
+
+.filter_container {
+	display: flex;
+	margin-bottom: 10px;
+}
+
+.filter_active {
+	width: auto;
+	margin-right: 10px;
+}
+

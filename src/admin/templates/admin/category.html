@@ -86,9 +86,11 @@
 
 
 {% block body %}
-<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">
-	Добавить категорию
-</button>
+<div class="btn_container">
+	<button type="button" class="btn btn-success button_active" data-bs-toggle="modal" data-bs-target="#addModal">
+		Добавить категорию
+	</button>
+</div>
 
 {{ macros.flash_messages() }}
 

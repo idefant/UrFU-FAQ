@@ -131,9 +131,9 @@ QA
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-				<button type="button" class="btn btn-primary">Редактировать</button>
-				<button type="button" class="btn btn-danger">Удалить</button>
+				<button type="button" class="btn btn-secondary">Закрыть</button>
+				<button type="button" class="btn btn-primary btn_view_edit" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#editModal">Редактировать</button>
+				<button type="button" class="btn btn-danger btn_view_delete" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#deleteModal">Удалить</button>
 			</div>
 		</div>
 	</div>
@@ -145,37 +145,37 @@ QA
 
 {% block body %}
 
-<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">
-	Добавить вопрос
-</button>
+<div class="btn_container">
+	<button type="button" class="btn btn-success button_active" data-bs-toggle="modal" data-bs-target="#addModal">
+		Добавить вопрос
+	</button>
 
-<a href="{{ url_for('.qa_sort') }}" class="btn btn-primary">Сортировщик</a>
-
+	<a href="{{ url_for('.qa_sort') }}" class="btn btn-primary button_active" data-bs-dismiss="modal">Сортировщик</a>
+</div>
 
 
 {{ macros.flash_messages() }}
 
 
 
-
-<select onchange="return setAttr('cat_id',this.options[this.selectedIndex].value)" class="form-select" aria-label="Default select example">
-	<option value="">Главная</option>
-	{% for category in categories %}
-	<option value="{{ category.id }}" {{ "selected=selected" if category.id == cat_id_data }}>{{ category.name }}</option>
-	{% endfor %}
-</select>
-
-
-
-<select onchange="return setAttr('popular',this.options[this.selectedIndex].value)" class="form-select" aria-label="Default select example">
-	<option value="">Показывать все</option>
-
-	<option value="True" {{ "selected=selected" if popular_data}}>Популярное</option>
-	<option value="False" {{ "selected=selected" if popular_data != None and not popular_data }}>Непопулярное</option>
-
-</select>
+<div class="filter_container">
+	<select onchange="return setAttr('cat_id',this.options[this.selectedIndex].value)" class="form-select filter_active" aria-label="Default select example">
+		<option value="">Главная</option>
+		{% for category in categories %}
+		<option value="{{ category.id }}" {{ "selected=selected" if category.id == cat_id_data }}>{{ category.name }}</option>
+		{% endfor %}
+	</select>
 
 
+
+	<select onchange="return setAttr('popular',this.options[this.selectedIndex].value)" class="form-select filter_active" aria-label="Default select example">
+		<option value="">Показывать все</option>
+
+		<option value="True" {{ "selected=selected" if popular_data}}>Популярное</option>
+		<option value="False" {{ "selected=selected" if popular_data != None and not popular_data }}>Непопулярное</option>
+
+	</select>
+</div>
 
 
 
