@@ -8,23 +8,28 @@ from flask_sqlalchemy import SQLAlchemy
 from fuzzywuzzy import fuzz
 from sqlalchemy import exc
 
-from app import app
-from dbase import db, Categories, Questions
+# from app import app
+from dbase import db, Categories, Questions, BlackWords, SynonymousWords
 
-
-db = SQLAlchemy(app)
+# db = SQLAlchemy()
 morph = pymorphy2.MorphAnalyzer()
 language = enchant.Dict("ru_RU")
 checker = SpellChecker("ru_RU")
 
 
 def convert_text(string):
-    word_list = (clear_string(string))
+    cleared_text = (clear_string(string))
+    word_list = (correct_error(cleared_text))
     result_word = []
     for word in word_list:
         word = initial_form(word)
         if len(word) > 2:
-            result_word.append(word)
+            db_word = BlackWords.query.filter(BlackWords.word == word).first()
+            if db_word is None:
+                syn_word = SynonymousWords.query.filter(SynonymousWords.word == word).first()
+                if syn_word is not None and syn_word.synonym_id is not None:
+                    word = SynonymousWords.query.get(syn_word.synonym_id).word
+                result_word.append(word)
     return ' '.join(result_word)
 
 
@@ -35,7 +40,7 @@ def initial_form(word):
 
 
 def clear_string(text):
-    return re.split('[^а-яА-Я]', text)
+    return re.sub('[^а-яА-Я]', ' ', text)
 
 
 def correct_error(text):
@@ -50,7 +55,8 @@ def correct_error(text):
             for word in suggestions:
                 measure = difflib.SequenceMatcher(None, word_list[i], word).ratio()
                 dictionary[measure] = word
-            word_list[i] = dictionary[max(dictionary.keys())]
+            if len(dictionary) != 0:
+                word_list[i] = dictionary[max(dictionary.keys())] # падает на max
     return word_list
 
 
@@ -81,14 +87,26 @@ def parse_table():
 def get_answer(request):
     qa_list = Questions.query
     scores = []
-    clear_text = correct_error(convert_text(request))
-    clear_text = ' '.join(clear_text)
+    clear_text = convert_text(request)
+    print(clear_text)
     for qa in qa_list:
-        scores += [(fuzz.token_sort_ratio(qa.question.lower(), clear_text.lower()), qa)]
+        scores += [(fuzz.token_sort_ratio(qa.clear_question.lower(), clear_text.lower()), qa)]
 
     max_scores = sorted(scores, key=lambda score: score[0], reverse=True)
-    for max_score in max_scores:
-        if max_score[0] < 50:  # или WRatio
-            break
-        print(max_score[0])
-        print(max_score[1].question)
+
+    result = []
+    for max_score in max_scores[:3]:
+        if max_score[0] > 40:  # или WRatio
+            result += [(max_score)]
+    return result
+
+
+def update_cleared_questions_dbase():
+    qa_list = Questions.query
+    for qa in qa_list:
+        qa.clear_question = convert_text(qa.question)
+    try:
+        db.session.commit()
+        print("OK")
+    except:
+        print("__ERROR__")

@@ -144,6 +144,7 @@ QA
 
 
 {% block body %}
+{{ macros.flash_messages() }}
 
 <div class="btn_container">
 	<button type="button" class="btn btn-success button_active" data-bs-toggle="modal" data-bs-target="#addModal">
@@ -154,7 +155,7 @@ QA
 </div>
 
 
-{{ macros.flash_messages() }}
+
 
 
 

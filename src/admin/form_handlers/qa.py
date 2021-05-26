@@ -1,3 +1,4 @@
+import re
 from flask import request, flash, url_for, render_template, redirect
 from flask_classy import FlaskView, route
 from flask_login import login_required, current_user
@@ -6,6 +7,7 @@ from sqlalchemy import exc
 
 from dbase import db, Categories, Questions
 from forms import AddQAForm, EditQAForm, DeleteQAForm
+from search import convert_text
 
 
 class FormHandlerQA(FlaskView):
@@ -32,8 +34,12 @@ class FormHandlerQA(FlaskView):
                 return "Ошибка чтения из БД"
 
             question = add_qa_form.question.data
-            clear_question = question
+            clear_question = convert_text(question)
+
             answer = add_qa_form.answer.data
+            answer = re.sub(r'<p><br></p>|<br>', '', answer)
+
+
             cat_id = add_qa_form.cat_id.data
 
             count_questions_this_cat = questions.filter(Questions.cat_id == cat_id).count()

@@ -4,10 +4,12 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from flask import request, json
 from vk_api.utils import get_random_id
 
+from search import get_answer
+
 bot = Blueprint('bot', __name__)
 
 token = '2cc72f653d14df3eb7394cf282d770b1bcbcc256cd8097f9abedfa93baa80a56edac673466b2c7393380e'
-confirmation_token = 'de39cb88'
+confirmation_token = '4e546b94'
 
 
 @bot.route('/', methods=['POST'])
@@ -20,7 +22,10 @@ def processing():
     elif data['type'] == 'message_new':
         vk_session = vk_api.VkApi(token=token)
         vk = vk_session.get_api()
-        send_message(data, vk)
+
+        message_handler(data, vk)
+
+        # send_message(data, vk)
         return 'ok'
 
 
@@ -33,7 +38,10 @@ def make_keyboard():
     return keyboard.get_keyboard()
 
 
-def message_handler(user_message_text):
+def message_handler(data, vk):
+
+    user_message_text =data['object']['message']['text']
+
     if user_message_text == "Начать":
         bot_message_text = "Привет! Это чат-бот Уральского Федерального Университета,предназначенный для помощи " \
                            "абитуриентам в поиске информации о вузе.\n\n" \
@@ -63,13 +71,21 @@ def message_handler(user_message_text):
                            "Контактные данные приёмной комиссии УрФУ: https://urfu.ru/ru/applicant/contacts/ "
 
     else:
-        bot_message_text = "Функция поиска будет введена в эксплуатацию через несколько дней"
-    return bot_message_text
+        result = get_answer(user_message_text)
+        result_count = len(result)
+        if result_count == 0:
+            bot_message_text = "Ничего не найдено"
+            send_message(data, vk, bot_message_text)
+        else:
+            send_message(data, vk, "Найдено " + str(result_count) + " результата")
+            for res in result:
+                bot_message_text = str(res[0]) + " "
+                bot_message_text += res[1].question
+                send_message(data, vk, bot_message_text)
 
 
-def send_message(data, vk):
+def send_message(data, vk, bot_message_text):
     user_id = data['object']['message']['from_id']
-    bot_message_text = message_handler(data['object']['message']['text'])
 
     vk.messages.send(access_token=token,
                      user_id=str(user_id),

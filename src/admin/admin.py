@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import login_required, logout_user, current_user
 
+from search import update_cleared_questions_dbase
 from .form_handlers.black_word import FormHandlerBlackWord
 from dbase import db, Users, Questions, Categories, BlackWords, SynonymousWords
 import forms
