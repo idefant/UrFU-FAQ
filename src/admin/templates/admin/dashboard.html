@@ -29,7 +29,7 @@
 							{% if category[0].id == 0 %}
 							<a href="{{ url_for('.qa', popular=True) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
 							{% else %}
-							<a href="{{ url_for('.qa', cat_id=category[2]) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
+							<a href="{{ url_for('.qa', cat_id=category[0].id) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
 							{% endif %}
 
 						</li>

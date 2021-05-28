@@ -8,8 +8,9 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
 				</div>
 				<div class="modal-body">
-					{{ optional_top | safe }}
-
+					<div style="margin-bottom: 10px;">
+						{{ optional_top | safe }}
+					</div>
 					{% for hidden_field in hidden_fields %}
 					{{ hidden_field }}
 					{% endfor %}

@@ -24,11 +24,17 @@ class FormHandlerUser(FlaskView):
             username = addUserForm.username.data
             password = generate_password_hash(addUserForm.password.data)
             post = addUserForm.post.data
+            right_category = addUserForm.right_category.data
             right_users = addUserForm.right_user.data
+            right_qa = addUserForm.right_qa.data
+            right_synonym = addUserForm.right_synonym.data
+            right_black_word = addUserForm.right_black_word.data
             if not (name and username):
                 flash('Неправильно заполнены поля', category='danger')
             else:
-                user = Users(username=username, name=name, psswd=password, post=post, right_users=right_users)
+                user = Users(username=username, name=name, psswd=password, post=post, right_category=right_category,
+                             right_users=right_users, right_qa=right_qa, right_synonym=right_synonym,
+                             right_black_word=right_black_word)
                 try:
                     db.session.add(user)
                     db.session.commit()

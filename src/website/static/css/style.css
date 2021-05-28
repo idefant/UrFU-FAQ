@@ -367,7 +367,7 @@ nav {
 .qa_item_container {
 	border-radius: 20px;
 	border: 2px solid #fff0;
-	padding: 10px;
+	padding: 15px 15px 20px;
 	margin: 30px 10px;
 	display: flex;
 }
@@ -380,7 +380,7 @@ nav {
 
 .qa_icon {
 	display: block;
-	width: 40px;
+	width: 45px;
 	min-width: 40px;
 	text-align: center;
 	font-size: 24px;
@@ -390,6 +390,7 @@ nav {
 	font-weight: 600;
 	font-size: 24px;
 	margin-bottom: 22px;
+    line-height: 1.2em;
 }
 
 .qa_answer {

@@ -1,6 +1,7 @@
 src/.idea/
 src/__pycache__/
 src/venv/
+src/.gitignore
 
 
 # Byte-compiled / optimized / DLL files

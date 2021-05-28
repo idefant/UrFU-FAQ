@@ -120,3 +120,6 @@ header {
 	margin-right: 10px;
 }
 
+.red_text_error {
+	color: red;
+}

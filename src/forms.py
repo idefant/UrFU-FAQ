@@ -69,7 +69,12 @@ class AddUserForm(FlaskForm):
     username = StringField("Логин", validators=[DataRequired()])
     password = StringField("Пароль", validators=[DataRequired()])
     post = StringField("Должность", validators=[DataRequired()])
+
+    right_category = BooleanField("Категории")
     right_user = BooleanField("Доступ к странице пользователей")
+    right_qa = BooleanField("Вопросы")
+    right_synonym = BooleanField("Синонимы")
+    right_black_word = BooleanField("Список черных слов")
     submit = SubmitField("Добавить")
 
 
@@ -78,7 +83,7 @@ class EditUserForm(FlaskForm):
     name = StringField("ФИО", validators=[DataRequired()])
     username = StringField("Логин", validators=[DataRequired()])
     post = StringField("Должность", validators=[DataRequired()])
-    submit = SubmitField("Добавить")
+    submit = SubmitField("Сохранить изменения")
 
 
 class DeactivateUserForm(FlaskForm):

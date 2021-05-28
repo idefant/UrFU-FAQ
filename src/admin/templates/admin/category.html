@@ -28,7 +28,10 @@
 		],
 		optional_bottom =
 			'<div class="mb-3">
-				*Все иконки <a href='+ url_for(".icons_font_awesome") +'>здесь</a>
+				*Все иконки <a href='+ url_for(".icons_font_awesome") +' target="_blank">здесь</a> (откроется в новом окне)
+			</div>
+			<div class="mb-3">
+				<div class="red_text_error"><strong>После добавления категории обязательно задайте ей цвет</strong></div>
 			</div>',
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
@@ -55,6 +58,10 @@
 				edit_category_form.icon_name(class_="form-control", id="edit_icon_name_content")
 			]
 		],
+		optional_bottom =
+			'<div class="mb-3">
+				*Все иконки <a href='+ url_for(".icons_font_awesome") +' target="_blank">здесь</a> (откроется в новом окне)
+			</div>',
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
 			edit_category_form.submit(class_="btn btn-primary")

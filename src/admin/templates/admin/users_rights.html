@@ -32,15 +32,15 @@
 				edit_user_rights_form.right_users.label(class_="form-check-label")
 			],
 			[
-				edit_user_rights_form.right_qa(class_="form-check-input", id="edit_right_users"),
+				edit_user_rights_form.right_qa(class_="form-check-input", id="edit_right_qa"),
 				edit_user_rights_form.right_qa.label(class_="form-check-label")
 			],
 			[
-				edit_user_rights_form.right_synonym(class_="form-check-input", id="edit_right_users"),
+				edit_user_rights_form.right_synonym(class_="form-check-input", id="edit_right_synonym"),
 				edit_user_rights_form.right_synonym.label(class_="form-check-label")
 			],
 			[
-				edit_user_rights_form.right_black_word(class_="form-check-input", id="edit_right_users"),
+				edit_user_rights_form.right_black_word(class_="form-check-input", id="edit_right_black_word"),
 				edit_user_rights_form.right_black_word.label(class_="form-check-label")
 			]
 		],
@@ -75,7 +75,7 @@
 	<tbody>
 		{% for user in users %}
 		
-		<tr class="table_line_item {% if user.is_deactivated %} deactivated_user {% endif %}" data-id="{{ user.id }}" data-name="{{ user.name }}" data-right-category="{{ user.right_category }}" data-right-users="{{ user.right_users }}" data-right-users="{{ user.right_qa }}" data-right-users="{{ user.right_synonym }}" data-right-users="{{ user.right_black_word }}">
+		<tr class="table_line_item {% if user.is_deactivated %} deactivated_user {% endif %}" data-id="{{ user.id }}" data-name="{{ user.name }}" data-right-category="{{ user.right_category }}" data-right-users="{{ user.right_users }}" data-right-qa="{{ user.right_qa }}" data-right-synonym="{{ user.right_synonym }}" data-right-black_word="{{ user.right_black_word }}">
 
 			<th scope="row">{{ user.id }}</th>
 			<td>{{ user.name }} ({{ user.post }})</td>
