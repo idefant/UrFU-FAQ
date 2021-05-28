@@ -34,6 +34,7 @@ class FormHandlerCategory(FlaskView):
                     db.session.add(category)
                     db.session.commit()
                     flash(Markup("<strong>Добавлена категория:</strong> " + name), category='success')
+                    flash(Markup("<strong>Необходимо добавить цвет к категории:</strong> " + name), category='danger')
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.category'))

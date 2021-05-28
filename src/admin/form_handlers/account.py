@@ -19,6 +19,14 @@ class FormHandlerAccount(FlaskView):
 
             name = edit_account_form.name.data
             username = edit_account_form.username.data
+
+            try:
+                user = Users.query.filter(Users.username == username).first()
+            except (NameError, AttributeError):
+                return "Ошибка чтения из БД"
+            if user is not None and user != current_user:
+                return "Не должно быть 2 пользователей с одинаковыми логинами"
+
             if not (name and username):
                 flash('Неправильно заполнены поля', category='danger')
             else:

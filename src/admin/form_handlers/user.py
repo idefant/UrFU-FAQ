@@ -29,9 +29,19 @@ class FormHandlerUser(FlaskView):
             right_qa = addUserForm.right_qa.data
             right_synonym = addUserForm.right_synonym.data
             right_black_word = addUserForm.right_black_word.data
+
             if not (name and username):
                 flash('Неправильно заполнены поля', category='danger')
             else:
+
+                try:
+                    user = Users.query.filter(Users.username == username).first()
+                except (NameError, AttributeError):
+                    return "Ошибка чтения из БД"
+                if user is not None:
+                    return "Не должно быть 2 пользователей с одинаковыми логинами"
+
+
                 user = Users(username=username, name=name, psswd=password, post=post, right_category=right_category,
                              right_users=right_users, right_qa=right_qa, right_synonym=right_synonym,
                              right_black_word=right_black_word)
@@ -65,6 +75,18 @@ class FormHandlerUser(FlaskView):
 
                 if user is None:
                     return "Нет такого пользователя"
+
+
+
+                try:
+                    another_user = Users.query.filter(Users.username == username).first()
+                except (NameError, AttributeError):
+                    return "Ошибка чтения из БД"
+                if another_user is not None and another_user != user:
+                    return "Не должно быть 2 пользователей с одинаковыми логинами"
+
+
+
                 user.name = name
                 user.username = username
                 user.post = post

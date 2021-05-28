@@ -78,11 +78,6 @@
 				display: block;
 				padding-bottom: 10px;
 			}
-			.save_color {
-				display: block;
-				margin-left: auto;
-				margin-right: auto;
-			}
 		</style>
 
 		<div class="picker_window">
@@ -92,7 +87,10 @@
 				acp-show-hsl="no"
 				acp-show-hex="yes">
 			</div>
-			<button class="btn btn-success save_color" id="save_color">Сохранить</button>
+			<div style="text-align: center;">
+				<button class="btn btn-success" id="save_color">Сохранить</button>
+				<a href="{{ url_for('.category') }}" class="btn btn-secondary">Отмена</a>
+			</div>	
 		</div>
 
 		
@@ -241,7 +239,7 @@
 
 
 	<script>
-		$(".save_color").on("click", function() {
+		$("#save_color").on("click", function() {
 			var bgc = $(".current_tab").css("backgroundColor");
 			window.location.href = "{{ url_for('.FormHandlerCategory:change_color') }}?color="+bgc+"&cat_id={{ current_category.id }}";
 		})		
