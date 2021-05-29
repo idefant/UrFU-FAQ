@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import login_required, logout_user, current_user
+from sqlalchemy import desc
 
 from search import update_cleared_questions_dbase
 from .form_handlers.black_word import FormHandlerBlackWord
@@ -263,7 +264,7 @@ def colors():
     questions = Questions.query
 
     try:
-        categories_list = Categories.query.order_by(Categories.priority)
+        categories_list = Categories.query.order_by(desc(Categories.priority))
     except (NameError, AttributeError):
         return "Ошибка чтения из БД"
 
@@ -307,10 +308,10 @@ def colors():
                            current_category=current_category, index=index, is_popular_category=is_popular_category)
 
 
-@admin.route('/icons_font_awesome')
+@admin.route('/cheat_sheet_icons')
 @login_required
-def icons_font_awesome():
-    return render_template('admin/icons_font_awesome.html')
+def cheat_sheet_icons():
+    return render_template('admin/cheat_sheet_icons.html')
 
 
 @admin.route('/black_words')

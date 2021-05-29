@@ -1,55 +1,7 @@
-<!DOCTYPE html>
-<html class="js no-touch" lang="ru"><head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<meta name="hmac-token-name" content="Ajax-Token">
-	<meta charset="utf-8">
+{% extends 'website/base.html' %}
 
 
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="shortcut icon" type="image/x-icon" href="https://urfu.ru/typo3conf/ext/urfu/Resources/Public/favicon/favicon.png">
-	<link rel="apple-touch-icon" href="https://urfu.ru/typo3conf/ext/urfu/Resources/Public/favicon/apple-touch-favicon.png">
-	<title>Приём, УрФУ!</title>
-
-	<link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap-reboot.min.css') }}">
-	<link rel="stylesheet" href="{{ url_for('.static', filename='css/preview.css') }}">
-	<link rel="stylesheet" href="{{ url_for('.static', filename='css/font-awesome.min.css') }}">
-
-
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> 
-
-
-
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-
-</head>
-<body class="language_ru ">
-
-	<div class="site">
-		<nav>
-			<ul class="nav_wrapper container">
-				<li class="nav_item"><a href="#">Прием, УрФУ!</a></li>
-				<li class="nav_item"><a href="#">Официальная информация</a></li>
-				<li class="nav_item"><a href="#">Кабинет абитуриента</a></li>
-			</ul> 
-		</nav>
-
-		<header class="header-custom">
-			<div class="container flex navbar">
-				<a href="https://urfu.ru/priemurfu" class="logo">
-					<img src="{{ url_for('.static', filename='img/UrFULogo_Russian.png') }}" height="50">
-				</a>
-				<a href="tel:+73433754444" class="header-phone">+7 (343) 375-44-44</a>
-				<a href="tel:+73433754444" class="header-phone-mobile">
-					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16">
-						<path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"></path>
-					</svg>
-				</a>
-			</div>
-		</header>
-
-
+{% block body %}
 
 		<section class="hero">
 			<div class="container">
@@ -125,7 +77,7 @@
 										{{ qa[0].question }}
 									</div>
 									<div class="qa_answer">
-										{{ qa[0].answer }}
+										{{ qa[0].answer | safe }}
 									</div>
 								</div>
 							</div>
@@ -148,7 +100,7 @@
 										{{ qa.question }}
 									</div>
 									<div class="qa_answer">
-										{{ qa.answer }}
+										{{ qa.answer | safe }}
 									</div>
 								</div>
 							</div>
@@ -160,69 +112,16 @@
 			</div>
 		</section>
 
+{% endblock %}
 
 
-		<section class="footer-custom">
-			<div class="container">
-				<div class="footer-menu">
-					<a href="https://urfu.ru/" target="_blank" class="footer-logo"><img src="{{ url_for('.static', filename='svg/UrFULogo100White.svg') }}" loading="lazy" alt="" width="260"></a>
-					<div class="footer-column">
-						<h3 class="footer-label">Об университете</h3>
-						<ul class="footer-list">
-							<li><a href="https://urfu.ru/ru/about/today/" target="_blank" class="footer-link">Университет
-							сегодня</a></li>
-							<li><a href="https://urfu.ru/ru/about/history/" class="footer-link">История</a><a href="https://urfu.ru/ru/about/online-museum/" target="_blank" class="footer-link">Виртуальный тур</a></li>
-							<li><a href="https://100.urfu.ru/" target="_blank" class="footer-link">#УрФУ100</a></li>
-						</ul>
-					</div>
-					<div class="footer-column">
-						<h3 class="footer-label">Контакты</h3>
-						<ul class="footer-list">
-							<li><a href="tel:88001005044" class="footer-link">8-800-100-50-44</a><a href="tel:+73433754444" class="footer-link">+7
-							(343) 375-44-44</a><a href="mailto:contact@urfu.ru" class="footer-link">contact@urfu.ru</a></li>
-						</ul>
-					</div>
-					<div class="footer-column">
-						<h3 class="footer-label">Наши соцсети</h3>
-						<ul class="footer-list">
-							<li>
-								<a href="https://vk.com/ural.federal.university" target="_blank" class="footer-link">Вконтакте</a>
-								<a href="https://www.facebook.com/ural.federal.university" target="_blank" class="footer-link">Facebook</a>
-								<a href="https://www.instagram.com/urfu.ru/" target="_blank" class="footer-link">Instagram</a>
-								<a href="https://t.me/urfu_ru" target="_blank" class="footer-link">Telegram</a>
-								<a href="https://www.youtube.com/user/stvTVIST" target="_blank" class="footer-link">Youtube</a>
-								<a href="https://twitter.com/urfu" target="_blank" class="footer-link">Twitter</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="subfooter">© ФГАОУ ВО «Уральский федеральный университет им. первого Президента России Б. Н. Ельцина»</div>
-			</div>
-		</section> 
-	</div>
-
-
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
-	<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+{% block scripts %}
+	
+	<script src="{{ url_for('website.static', filename='js/script.js') }}"></script>
 
 	<script>
-		let tabButtons = document.querySelectorAll(".tabs-menu button");
-		let tabPanels = document.querySelectorAll(".tab-content");
 
-		tabButtons.forEach(function(node) {
-			node.classList.remove('current');
-		});
-		tabPanels.forEach(function(node) {
-			node.style.display="none";
-		});
-		tabPanels[0].style.display="block"; // Это текущие вопросы
-		tabButtons[{{ index }}].classList.add('current'); // Это текущая категория, менять только это
-
-		$('.tab-content-container').masonry({
-			itemSelector: '.qa_item',
-			transitionDuration: 0
-		});
+		showPanel(0, {{ index }});
 	</script>
 
 	<script src="https://cdn.jsdelivr.net/npm/a-color-picker@1.2.1/dist/acolorpicker.min.js"></script>
@@ -245,5 +144,5 @@
 		})		
 	</script>
 
-</body>
-</html>
+
+{% endblock %}

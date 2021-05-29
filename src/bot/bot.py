@@ -6,10 +6,12 @@ from vk_api.utils import get_random_id
 
 from search import get_answer
 
+from config import vk_bot_token, vk_bot_confirmation_token
+
 bot = Blueprint('bot', __name__)
 
-token = '2cc72f653d14df3eb7394cf282d770b1bcbcc256cd8097f9abedfa93baa80a56edac673466b2c7393380e'
-confirmation_token = '4e546b94'
+token = vk_bot_token
+confirmation_token = vk_bot_confirmation_token
 
 
 @bot.route('/', methods=['POST'])
@@ -25,7 +27,6 @@ def processing():
 
         message_handler(data, vk)
 
-        # send_message(data, vk)
         return 'ok'
 
 
@@ -46,10 +47,12 @@ def message_handler(data, vk):
         bot_message_text = "Привет! Это чат-бот Уральского Федерального Университета,предназначенный для помощи " \
                            "абитуриентам в поиске информации о вузе.\n\n" \
                            "Можешь задать мне вопрос или воспользоваться кнопками для получения информации"
+        send_message(data, vk, bot_message_text)
 
     elif user_message_text == "Все вопросы":
         bot_message_text = "Список всех часто задаваемых вопросов с разделением на основные категории ты сможешь " \
                            "найти на (ЭТОМ САЙТЕ)"
+        send_message(data, vk, bot_message_text)
 
     elif user_message_text == "Соц.сети УрФУ":
         bot_message_text = "Официальный сайт УрФУ: urfu.ru \n\n" \
@@ -62,6 +65,7 @@ def message_handler(data, vk):
                            "💡 twitter.com/urfu \n" \
                            "💡 ok.ru/uralfederal \n" \
                            "💡 tiktok.com/@urfu.ru"
+        send_message(data, vk, bot_message_text)
 
     elif user_message_text == "Приемная комиссия":
         bot_message_text = "Страница УрФУ для абитуриентов: https://vk.com/abiturient_urfu \n" \
@@ -69,6 +73,7 @@ def message_handler(data, vk):
                            "медиа-штата нашего университета. \n\n" \
                            "Адрес УрФУ: ул. Мира, 19, Кировский район, микрорайон Втузгородок, Екатеринбург \n\n" \
                            "Контактные данные приёмной комиссии УрФУ: https://urfu.ru/ru/applicant/contacts/ "
+        send_message(data, vk, bot_message_text)
 
     else:
         result = get_answer(user_message_text)

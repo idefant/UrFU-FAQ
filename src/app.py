@@ -8,12 +8,13 @@ from website.website import website
 from admin.admin import admin
 from bot.bot import bot
 
-
 from dbase import db, Users
+
+from config import data_base, secret_key
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///testfaq.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = data_base
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.register_blueprint(admin, url_prefix='/admin')
@@ -28,7 +29,7 @@ manager.add_command('db', MigrateCommand)
 
 db = SQLAlchemy(app)
 
-app.config['SECRET_KEY'] = 'fdgfh78@#5?>gfhf89dx,v06k'
+app.config['SECRET_KEY'] = secret_key
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'admin.login'
