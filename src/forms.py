@@ -54,6 +54,7 @@ class DeleteCategoryForm(FlaskForm):
 class EditAccountForm(FlaskForm):
     name = StringField("ФИО", validators=[DataRequired()])
     username = StringField("Логин", validators=[DataRequired()])
+    password = PasswordField("Подтвердите паролем", validators=[DataRequired()])
     submit = SubmitField("Сохранить изменения")
 
 

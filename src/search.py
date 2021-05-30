@@ -114,12 +114,12 @@ def get_answer(user_question):
     return result
 
 
-def update_cleared_questions_dbase():
-    qa_list = Questions.query
-    for qa in qa_list:
-        qa.clear_question = convert_text(qa.question)
-    try:
-        db.session.commit()
-        print("OK")
-    except:
-        print("__ERROR__")
+# def update_cleared_questions_dbase():
+#     qa_list = Questions.query
+#     for qa in qa_list:
+#         qa.clear_question = convert_text(qa.question)
+#     try:
+#         db.session.commit()
+#         print("OK")
+#     except:
+#         print("__ERROR__")

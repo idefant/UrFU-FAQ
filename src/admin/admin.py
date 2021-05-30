@@ -5,7 +5,7 @@ from flask_login import login_required, logout_user, current_user
 from six import StringIO, BytesIO
 from sqlalchemy import desc
 
-from search import update_cleared_questions_dbase
+from search import convert_text
 from .form_handlers.black_word import FormHandlerBlackWord
 from models import db, Users, Questions, Categories, BlackWords, SynonymousWords, Requests
 import forms
@@ -333,7 +333,7 @@ def black_words():
         return "Ошибка чтения из БД"
     return render_template('admin/black_words.html', add_black_word_form=add_black_word_form,
                            edit_black_word_form=edit_black_word_form, delete_black_word_form=delete_black_word_form,
-                           black_words=black_words)
+                           black_words=black_words, current_url=url_for('.black_words'))
 
 
 @admin.route('/synonyms')
@@ -357,7 +357,7 @@ def synonyms():
     return render_template('admin/synonyms.html', add_synonyms_dependent_form=add_synonyms_dependent_form,
                            edit_synonyms_dependent_form=edit_synonyms_dependent_form,
                            delete_synonyms_dependent_form=delete_synonyms_dependent_form,
-                           main_dependent_words=main_dependent_words)
+                           main_dependent_words=main_dependent_words, current_url=url_for('.synonyms'))
 
 
 @admin.route('/synonyms/replacement')
@@ -432,6 +432,24 @@ def requests_history():
 
     return send_file(BytesIO(bytes(output.encode())), as_attachment=True, \
                      attachment_filename='requests_history.txt', mimetype='text/plain')
+
+
+
+
+
+@admin.route('/update_cleared_questions_dbase')
+def update_cleared_questions_dbase():
+    qa_list = Questions.query
+    next_to_data = request.args.get("next_to")
+    for qa in qa_list:
+        qa.clear_question = convert_text(qa.question)
+    try:
+        db.session.commit()
+        flash("Очистка вопросов прошла успешно", category='success')
+    except:
+        flash('Ошибка внесения изменений в базу данных', category='danger')
+    return redirect(next_to_data)
+
 
 
 @admin.before_request

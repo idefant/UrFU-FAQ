@@ -77,6 +77,12 @@
 				{{ edit_account_form.name(class_="form-control") }}
 			</div>
 		</div>
+		<div class="row mb-3">
+			{{ edit_account_form.password.label(class_="col-sm-2 col-form-label") }}
+			<div class="col-sm-10">
+				{{ edit_account_form.password(class_="form-control") }}
+			</div>
+		</div>
 		{{ edit_account_form.submit(class_="btn btn-success edit_current_user_btn") }}
 	</form>
 
