@@ -61,7 +61,7 @@ class ChangePasswordAccountForm(FlaskForm):
     old_password = PasswordField("Старый пароль", validators=[DataRequired()])
     password = StringField("Новый пароль", validators=[DataRequired()])
     password_confirm = PasswordField("Повторите пароль", validators=[DataRequired()])
-    submit = SubmitField("Сохранить")
+    submit = SubmitField("Обновить пароль")
 
 
 class AddUserForm(FlaskForm):
@@ -99,6 +99,12 @@ class ActivateUserForm(FlaskForm):
 class DeleteUserForm(FlaskForm):
     id = HiddenField("id")
     submit = SubmitField("Удалить навсегда")
+
+
+class ChangePasswordUserForm(FlaskForm):
+    id = HiddenField("id")
+    password = StringField("Новый пароль", validators=[DataRequired()])
+    submit = SubmitField("Сменить пароль")
 
 
 class EditUserRightsForm(FlaskForm):

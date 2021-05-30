@@ -217,12 +217,14 @@ def users():
     add_user_form = forms.AddUserForm()
     edit_user_form = forms.EditUserForm()
     deactivate_user_form = forms.DeactivateUserForm()
+    change_password_user_form = forms.ChangePasswordUserForm()
     try:
         users = Users.query.filter(Users.is_deactivated.is_(False))
     except (NameError, AttributeError):
         return "Ошибка чтения из БД"
     return render_template('admin/users.html', users=users, add_user_form=add_user_form, edit_user_form=edit_user_form,
-                           deactivate_user_form=deactivate_user_form)
+                           deactivate_user_form=deactivate_user_form,
+                           change_password_user_form=change_password_user_form)
 
 
 @admin.route('/users/deactivate')

@@ -5,10 +5,11 @@ from flask_classy import FlaskView, route
 from flask_login import login_required, current_user
 from markupsafe import Markup
 from sqlalchemy import exc
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from models import db, Users
-from forms import AddUserForm, EditUserForm, DeactivateUserForm, EditUserRightsForm, ActivateUserForm
+from forms import AddUserForm, EditUserForm, DeactivateUserForm, EditUserRightsForm, ActivateUserForm, \
+    ChangePasswordUserForm
 
 
 class FormHandlerUser(FlaskView):
@@ -237,3 +238,22 @@ class FormHandlerUser(FlaskView):
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.users_rights'))
+
+
+
+    @route('/change_user_password', methods=["POST"])
+    @login_required
+    def change_user_password(self):
+        change_password_user_form = ChangePasswordUserForm()
+        if change_password_user_form.validate_on_submit():
+            user_id = change_password_user_form.id.data
+            password = change_password_user_form.password.data
+            user = Users.query.get(int(user_id))
+
+            user.psswd = generate_password_hash(password)
+            try:
+                db.session.commit()
+                flash("Изменение пароля прошло успешно", category='success')
+            except exc.SQLAlchemyError:
+                flash('Ошибка внесения изменений в базу данных', category='danger')
+        return redirect(url_for('.users'))

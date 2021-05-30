@@ -2,6 +2,12 @@ $("#input-generate").click(function(){
 	$("#input-password").val(generatePassword());
 });
 
+$("#change_password-generate").click(function(){
+	$("#change_password").val(generatePassword());
+});
+
+
+
 function generatePassword(){
 	var length = 16,
 	charset = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz!?@+-/*_#$%&()[]{}";

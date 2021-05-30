@@ -68,7 +68,7 @@
 		],
 		optional_bottom =
 			'<div class="mb-3">
-				<div class="red_text_error"><strong>Перед нажатием кнопки добавить обязательно сохраните логин/пароль для передачи новому пользователю</strong></div>
+				<div class="red_text_error"><strong>Перед нажатием кнопки "Добавить" обязательно сохраните логин/пароль для передачи новому пользователю</strong></div>
 			</div>',
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
@@ -121,6 +121,42 @@
 		]
 	)
 }}
+
+{{ macros.modal(modal_id = "changePsswdModal",
+		handler_url = url_for('.FormHandlerUser:change_user_password'),
+		title = "Смена пароля пользователя",
+		optional_top =
+			'<strong>Смена пароля пользователя: </strong>
+			<span class="modal_inline_content" id="change_psswd_name_content"></span>
+			<div class="mb-3">
+				<div class="red_text_error"><strong>* Смена пароля таким образом предназначена только для ситуаций с утерей старого пароля</strong></div>
+			</div>',
+		hidden_fields = [
+			change_password_user_form.csrf_token,
+			change_password_user_form.id(id="change_psswd_id")
+		],
+		visible_fields = [
+			[
+				change_password_user_form.password.label(class_="col-form-label"),
+				change_password_user_form.password(class_="form-control psswd_field", id="change_password", readonly="")
+			]
+		],
+		optional_bottom =
+			'<div class="form_change_psswd_btns">
+				<button type="button" id="change_password-generate" class="btn btn-primary">Сгенерировать</button>
+			</div>
+			<div class="mb-3">
+				<div class="red_text_error"><strong>* Перед нажатием кнопки "Сменить пароль" обязательно сохраните пароль для передачи пользователю.</strong></div>
+			</div>
+			<div class="mb-3">
+				<div class="red_text_error"><strong>* После смены пароля автоматически совершится выход из учетной записи пользователя</strong></div>
+			</div>',
+		buttons = [
+			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
+			change_password_user_form.submit(class_="btn btn-success")
+		]
+	)
+}}
 {% endblock %}
 
 
@@ -152,6 +188,7 @@
 			<th scope="col">Должность</th>
 			<th scope="col"></th>
 			<th scope="col"></th>
+			<th scope="col"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -162,6 +199,7 @@
 			<td>{{ user.name }}</td>
 			<td>{{ user.username }}</td>
 			<td>{{ user.post }}</td>
+			<td scope="col" width="45"><i class="fa fa-key fa-lg table_action_icon change_psswd_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#changePsswdModal" title="Сменить пароль при утере"></i></td>
 			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal" title="Редактировать"></i></td>
 			<td scope="col" width="45"><i class="fa fa-ban fa-lg table_action_icon delete_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deactivateModal" title="Деактивировать"></i></td>
 		</tr>
