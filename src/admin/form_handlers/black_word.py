@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from markupsafe import Markup
 from sqlalchemy import exc
 
-from dbase import db, BlackWords
+from models import db, BlackWords
 from forms import AddBlackWordForm, EditBlackWordForm, DeleteBlackWordForm
 
 

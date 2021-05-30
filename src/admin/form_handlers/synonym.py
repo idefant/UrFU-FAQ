@@ -5,7 +5,7 @@ from markupsafe import Markup
 from sqlalchemy import exc
 from werkzeug.utils import redirect
 
-from dbase import db, SynonymousWords
+from models import db, SynonymousWords
 from forms import AddSynonymsDependentForm, EditSynonymsDependentForm, DeleteSynonymsDependentForm
 
 

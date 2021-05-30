@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 from markupsafe import Markup
 from sqlalchemy import exc
 
-from dbase import db, Categories, Questions
+from models import db, Categories, Questions
 from forms import AddQAForm, EditQAForm, DeleteQAForm
 from search import convert_text
 

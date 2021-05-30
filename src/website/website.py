@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from dbase import Categories, Questions
+from models import Categories, Questions
 
 website = Blueprint('website', __name__, template_folder='templates', static_folder='static', static_url_path='website')
 

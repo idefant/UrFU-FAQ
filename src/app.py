@@ -8,7 +8,7 @@ from website.website import website
 from admin.admin import admin
 from bot.bot import bot
 
-from dbase import db, Users
+from models import db, Users
 
 from config import data_base, secret_key
 

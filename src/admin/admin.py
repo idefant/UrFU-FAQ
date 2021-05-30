@@ -1,10 +1,13 @@
-from flask import Blueprint, render_template, flash, url_for, redirect, request
+import math
+
+from flask import Blueprint, render_template, flash, url_for, redirect, request, Response, send_file
 from flask_login import login_required, logout_user, current_user
+from six import StringIO, BytesIO
 from sqlalchemy import desc
 
 from search import update_cleared_questions_dbase
 from .form_handlers.black_word import FormHandlerBlackWord
-from dbase import db, Users, Questions, Categories, BlackWords, SynonymousWords
+from models import db, Users, Questions, Categories, BlackWords, SynonymousWords, Requests
 import forms
 from .form_handlers.user import FormHandlerUser
 from .form_handlers.account import FormHandlerAccount
@@ -384,6 +387,49 @@ def synonyms_replacement():
                            edit_synonyms_dependent_form=edit_synonyms_dependent_form,
                            delete_synonyms_dependent_form=delete_synonyms_dependent_form,
                            main_word=main_word, synonyms=synonyms, word_id=main_word_id)
+
+
+@admin.route('/requests')
+@login_required
+def requests():
+    requests_page_count = 2
+    page_data = request.args.get("page")
+    if page_data == None:
+        page = 1
+    else:
+        page = int(page_data)
+    requests = Requests.query
+    requests_count = requests.count()
+    requests = requests.order_by(desc(Requests.id)).paginate(page, requests_page_count, False).items
+
+
+
+    if page - 5 > 0:
+        first_pages = list(range(page - 5, page))
+    else:
+        first_pages = list(range(1, page))
+
+
+    if page + 5 < math.ceil(requests_count / requests_page_count):
+        last_pages = list(range(page + 1, page + 6))
+    else:
+        last_pages = list(range(page + 1, math.ceil(requests_count / requests_page_count) + 1))
+
+    return render_template('admin/requests.html', requests=requests, current_page=page, first_pages=first_pages,
+                           last_pages=last_pages)
+
+@admin.route('/requests_history.txt')
+def requests_history():
+    requests = Requests.query.order_by(desc(Requests.id))
+    output = "Тут какая-то инструкция" + "\n\n"
+    for request in requests:
+        output += "_"*100 + "\n\n"
+        output += request.original + "\n\n"
+        output += request.cleared + "\n\n"
+        output += str(request.date_time.strftime("%d.%m.%Y  %H:%M:%S")) + "\n"
+
+    return send_file(BytesIO(bytes(output.encode())), as_attachment=True, \
+                     attachment_filename='requests_history.txt', mimetype='text/plain')
 
 
 @admin.before_request

@@ -1,4 +1,6 @@
 import csv
+from datetime import datetime
+
 import pymorphy2
 import enchant
 import difflib
@@ -9,7 +11,7 @@ from fuzzywuzzy import fuzz
 from sqlalchemy import exc
 
 # from app import app
-from dbase import db, Categories, Questions, BlackWords, SynonymousWords
+from models import db, Categories, Questions, BlackWords, SynonymousWords, Requests
 
 # db = SQLAlchemy()
 morph = pymorphy2.MorphAnalyzer()
@@ -84,11 +86,22 @@ def parse_table():
                 print("___ERROR___")
 
 
-def get_answer(request):
+def get_answer(user_question):
     qa_list = Questions.query
     scores = []
-    clear_text = convert_text(request)
-    print(clear_text)
+    clear_text = convert_text(user_question)
+
+
+    request = Requests(original=user_question, cleared=clear_text, date_time=datetime.now())
+
+    try:
+        db.session.add(request)
+        db.session.commit()
+    except exc.SQLAlchemyError:
+        print('Ошибка внесения изменений в базу данных')
+
+
+    # print(clear_text)
     for qa in qa_list:
         scores += [(fuzz.token_sort_ratio(qa.clear_question.lower(), clear_text.lower()), qa)]
 

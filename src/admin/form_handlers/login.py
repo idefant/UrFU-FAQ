@@ -4,7 +4,7 @@ from flask_login import login_user
 from werkzeug.security import check_password_hash
 
 import forms
-from dbase import Users
+from models import Users
 
 
 class FormHandlerLogin(FlaskView):

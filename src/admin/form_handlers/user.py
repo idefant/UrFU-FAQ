@@ -7,7 +7,7 @@ from markupsafe import Markup
 from sqlalchemy import exc
 from werkzeug.security import generate_password_hash
 
-from dbase import db, Users
+from models import db, Users
 from forms import AddUserForm, EditUserForm, DeactivateUserForm, EditUserRightsForm, ActivateUserForm
 
 
