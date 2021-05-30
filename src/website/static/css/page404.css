@@ -1,0 +1,36 @@
+body {
+	font-family: 'Arial', sans-serif !important;
+}
+
+/*.container {
+	text-align: center;
+	margin-right: auto;
+	margin-left: auto;
+}*/
+
+.flex_container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.logo {
+	width: 400px;
+	margin: 50px;
+}
+
+.content {
+	margin: 50px;
+	text-align: center;
+}
+
+.error_code {
+	font-size: 300px;
+}
+
+.error_description {
+	width: 600px;
+	font-size: 22px;
+	margin-right: auto;
+	margin-left: auto;
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="{{ url_for('website.static', filename='css/page404.css') }}">
+
+	<title>Страница не найдена</title>
+</head>
+<body>
+	<div class="container">
+		<div class="flex_container">
+			<div class="logo">
+				<a href="https://urfu.ru/ru">
+					<img src="{{ url_for('website.static', filename='svg/logo.svg') }}" alt="">
+				</a>
+			</div>
+			<div class="content">
+				<div class="error_code">404</div>
+				<div class="error_description">Упс... Страница не найдена. Но вы можете посетить страницу с <a href="{{ url_for('website.index') }}">вопросами о поступлении</a> или <a href="https://urfu.ru/ru">главную страницу</a> сайта</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
