@@ -10,6 +10,16 @@
 {% endblock %}
 
 
+{% block styles %}
+<style>
+	@font-face {
+		font-family: Consolas;
+		src: url({{ url_for('.static', filename='fonts/consolas.ttf')}});
+}
+</style>
+{% endblock %}
+
+
 {% block modals %}
 {{ macros.modal(modal_id = "addModal",
 		handler_url = url_for('.FormHandlerUser:add_user'),
@@ -26,7 +36,10 @@
 			],
 			[
 				add_user_form.password.label(class_="col-form-label"),
-				add_user_form.password(class_="form-control")
+				add_user_form.password(class_="form-control psswd_field", id="input-password", readonly=""),
+				'<div class="form_change_psswd_btns" style="margin-top: 10px;">
+					<button type="button" id="input-generate" class="btn btn-primary">Сгенерировать</button>
+				</div>' | safe
 			],
 			[
 				add_user_form.post.label(class_="col-form-label"),
@@ -53,6 +66,10 @@
 				add_user_form.right_black_word.label(class_="form-check-label")
 			]
 		],
+		optional_bottom =
+			'<div class="mb-3">
+				<div class="red_text_error"><strong>Перед нажатием кнопки добавить обязательно сохраните логин/пароль для передачи новому пользователю</strong></div>
+			</div>',
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
 			add_user_form.submit(class_="btn btn-primary")
@@ -157,4 +174,5 @@
 {% block scripts %}
 <script src="{{ url_for('.static', filename='js/modal_load_date/modal_user.js')}}"></script>
 <script src="{{ url_for('.static', filename='js/renumber_rows.js')}}"></script>
+<script src="{{ url_for('.static', filename='js/psswd_generator.js')}}"></script>
 {% endblock %}
