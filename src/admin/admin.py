@@ -7,7 +7,7 @@ from sqlalchemy import desc
 
 from search import convert_text
 from .form_handlers.black_word import FormHandlerBlackWord
-from models import db, Users, Questions, Categories, BlackWords, SynonymousWords, Requests
+from models import db, Users, Questions, Categories, BlackWords, SynonymousWords, Requests, WhiteWords
 import forms
 from .form_handlers.user import FormHandlerUser
 from .form_handlers.account import FormHandlerAccount
@@ -333,7 +333,24 @@ def black_words():
         return "Ошибка чтения из БД"
     return render_template('admin/black_words.html', add_black_word_form=add_black_word_form,
                            edit_black_word_form=edit_black_word_form, delete_black_word_form=delete_black_word_form,
-                           black_words=black_words, current_url=url_for('.black_words'))
+                           black_words=black_words, word_type="black")
+
+
+@admin.route('/white_words')
+@login_required
+def white_words():
+    if not current_user.right_black_word:
+        return render_template('admin/access_denied.html')
+    add_black_word_form = forms.AddBlackWordForm()
+    edit_black_word_form = forms.EditBlackWordForm()
+    delete_black_word_form = forms.DeleteBlackWordForm()
+    try:
+        black_words = WhiteWords.query
+    except NameError:
+        return "Ошибка чтения из БД"
+    return render_template('admin/black_words.html', add_black_word_form=add_black_word_form,
+                           edit_black_word_form=edit_black_word_form, delete_black_word_form=delete_black_word_form,
+                           black_words=black_words, word_type="white")
 
 
 @admin.route('/synonyms')
@@ -394,7 +411,7 @@ def synonyms_replacement():
 @admin.route('/requests')
 @login_required
 def requests():
-    requests_page_count = 2
+    requests_page_count = 5
     page_data = request.args.get("page")
     if page_data == None:
         page = 1

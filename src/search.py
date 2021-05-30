@@ -11,7 +11,7 @@ from fuzzywuzzy import fuzz
 from sqlalchemy import exc
 
 # from app import app
-from models import db, Categories, Questions, BlackWords, SynonymousWords, Requests
+from models import db, Categories, Questions, BlackWords, SynonymousWords, Requests, WhiteWords
 
 # db = SQLAlchemy()
 morph = pymorphy2.MorphAnalyzer()
@@ -20,11 +20,12 @@ checker = SpellChecker("ru_RU")
 
 
 def convert_text(string):
-    cleared_text = (clear_string(string))
-    word_list = (correct_error(cleared_text))
+    white_words = WhiteWords.query
+    cleared_text = clear_string(string)
+    word_list = correct_error(cleared_text, white_words)
     result_word = []
     for word in word_list:
-        word = initial_form(word)
+        word = initial_form(word, white_words)
         if len(word) > 2:
             db_word = BlackWords.query.filter(BlackWords.word == word).first()
             if db_word is None:
@@ -35,8 +36,10 @@ def convert_text(string):
     return ' '.join(result_word)
 
 
-def initial_form(word):
-
+def initial_form(word, white_words):
+    is_white = white_words.filter(WhiteWords.word == word).first()
+    if is_white:
+        return word
     similar_word = morph.parse(word)[0]
     return similar_word.normal_form
 
@@ -45,20 +48,22 @@ def clear_string(text):
     return re.sub('[^а-яА-Я]', ' ', text)
 
 
-def correct_error(text):
+def correct_error(text, white_words):
     checker.set_text(text)
     word_list_mistakes = [i.word for i in checker]
     word_list = text.split()
 
     for i in range(len(word_list)):
-        if word_list_mistakes.__contains__(word_list[i]):
-            dictionary = dict()
-            suggestions = set(language.suggest(word_list[i]))
-            for word in suggestions:
-                measure = difflib.SequenceMatcher(None, word_list[i], word).ratio()
-                dictionary[measure] = word
-            if len(dictionary) != 0:
-                word_list[i] = dictionary[max(dictionary.keys())] # падает на max
+        is_white = white_words.filter(WhiteWords.word == word_list[i]).first()
+        if not is_white:
+            if word_list_mistakes.__contains__(word_list[i]):
+                dictionary = dict()
+                suggestions = set(language.suggest(word_list[i]))
+                for word in suggestions:
+                    measure = difflib.SequenceMatcher(None, word_list[i], word).ratio()
+                    dictionary[measure] = word
+                if len(dictionary) != 0:
+                    word_list[i] = dictionary[max(dictionary.keys())] # падает на max
     return word_list
 
 
@@ -112,14 +117,3 @@ def get_answer(user_question):
         if max_score[0] > 40:  # или WRatio
             result += [(max_score)]
     return result
-
-
-# def update_cleared_questions_dbase():
-#     qa_list = Questions.query
-#     for qa in qa_list:
-#         qa.clear_question = convert_text(qa.question)
-#     try:
-#         db.session.commit()
-#         print("OK")
-#     except:
-#         print("__ERROR__")

@@ -1,10 +1,10 @@
-from flask import flash, url_for, render_template, redirect
+from flask import flash, url_for, render_template, redirect, request
 from flask_classy import FlaskView, route
 from flask_login import login_required, current_user
 from markupsafe import Markup
 from sqlalchemy import exc
 
-from models import db, BlackWords
+from models import db, BlackWords, WhiteWords
 from forms import AddBlackWordForm, EditBlackWordForm, DeleteBlackWordForm
 
 
@@ -16,13 +16,21 @@ class FormHandlerBlackWord(FlaskView):
     def add_black_word(self):
         if not current_user.right_black_word:
             return render_template('admin/access_denied.html')
+
+        word_type = request.args.get("word_type")
+
         add_black_word_form = AddBlackWordForm()
         if add_black_word_form.validate_on_submit():
             word = add_black_word_form.word.data
             if not word:
                 flash('Неправильно заполнены поля', category='danger')
             else:
-                black_word = BlackWords(word=word)
+                if word_type == "white":
+                    black_word = WhiteWords(word=word)
+                elif word_type == "black":
+                    black_word = BlackWords(word=word)
+                else:
+                    return "Ни черный ни белый"
 
                 try:
                     db.session.add(black_word)
@@ -30,7 +38,13 @@ class FormHandlerBlackWord(FlaskView):
                     flash(Markup("<strong>Добавлено слово:</strong> " + word), category='success')
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.black_words'))
+        if word_type == "white":
+            return redirect(url_for('.white_words'))
+        elif word_type == "black":
+            return redirect(url_for('.black_words'))
+        else:
+            return "Ни черныйб ни белый"
+
 
     @route('/edit_black_word', methods=["POST"])
     @login_required

@@ -66,6 +66,14 @@ class BlackWords(db.Model):
         return '<BlackWords %r>' % self.id
 
 
+class WhiteWords(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    word = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return '<BlackWords %r>' % self.id
+
+
 class SynonymousWords(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     word = db.Column(db.String(100), nullable=False)

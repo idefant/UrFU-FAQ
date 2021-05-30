@@ -1,19 +1,21 @@
 {% extends 'admin/base.html' %}
 {% import "admin/macros.html" as macros %}
 
+{% set text_word_type = "черн" if word_type == "black" else "бел" %}
+
 {% block title %}
-Список черных слов
+Список {{ text_word_type -}}ых слов
 {% endblock %}
 
 {% block page_header %}
-Список черных слов
+Список {{ text_word_type -}}ых слов
 {% endblock %}
 
 
 {% block modals %}
 {{ macros.modal(modal_id = "addModal",
-		handler_url = url_for('.FormHandlerBlackWord:add_black_word'),
-		title = "Добавление слова в черный список",
+		handler_url = url_for('.FormHandlerBlackWord:add_black_word', word_type=word_type),
+		title = "Добавление слова в " + text_word_type + "ый список",
 		hidden_fields = [add_black_word_form.csrf_token],
 		visible_fields = [
 			[
@@ -29,8 +31,8 @@
 }}
 
 {{ macros.modal(modal_id = "editModal",
-		handler_url = url_for('.FormHandlerBlackWord:edit_black_word'),
-		title = "Редактирование слова из черного списка",
+		handler_url = url_for('.FormHandlerBlackWord:edit_black_word', word_type=word_type),
+		title = "Редактирование слова из "+ text_word_type +"ого списка",
 		hidden_fields =
 		[
 			edit_black_word_form.csrf_token,
@@ -50,8 +52,8 @@
 }}
 
 {{ macros.modal(modal_id = "deleteModal",
-		handler_url = url_for('.FormHandlerBlackWord:delete_black_word'),
-		title = "Удаление слова из черного списка",
+		handler_url = url_for('.FormHandlerBlackWord:delete_black_word', word_type=word_type),
+		title = "Удаление слова из "+ text_word_type +"ого списка",
 		optional_top = 
 			'<strong>Подтвердите удаление слова: </strong>
 			<span class="modal_inline_content" id="delete_name_content"></span>',
@@ -78,6 +80,7 @@
 	<button type="button" class="btn btn-success button_active" data-bs-toggle="modal" data-bs-target="#addModal">
 		Добавить слово
 	</button>
+	{% set current_url = url_for('.black_words') if word_type == "black" else url_for('.white_words') %}
 	<a href="{{ url_for('.update_cleared_questions_dbase', next_to=current_url) }}" class="btn btn-primary button_active" title="Обновление очищенных вопросов займет ~10 секунд. Это необходимо делать только после изменений базы синонимов, черного и белого списков">Обновить очищенные вопросы</a>
 </div>
 

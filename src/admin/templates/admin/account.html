@@ -103,12 +103,11 @@
 			</div>
 			<div class="user_rigths_content col-sm-10">
 				<ul>
-					{% if current_user.right_category %}
-					<li>Категории</li>
-					{% endif %}
-					{% if current_user.right_users %}
-					<li>Пользователи</li>
-					{% endif %}
+					{{ '<li>Категории</li>'|safe if current_user.right_category }}
+					{{ '<li>Пользователи</li>'|safe if current_user.right_users }}
+					{{ '<li>Вопросы</li>'|safe if current_user.right_qa }}
+					{{ '<li>Синонимы</li>'|safe if current_user.right_synonym }}
+					{{ '<li>Черные список слов</li>'|safe if current_user.right_black_word }}
 				</ul>
 			</div>
 			

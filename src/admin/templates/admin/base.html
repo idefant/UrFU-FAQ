@@ -52,6 +52,7 @@
 							<li><a class="dropdown-item" href="{{ url_for('.users_rights') }}">Права</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><a class="dropdown-item" href="{{ url_for('.users_deactivate') }}">Деактивированные</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.users') }}">Активные</a></li>
 						</ul>
 					</li>
 					<li><a href="{{ url_for('.account') }}" class="nav-link px-2 text-white">Личный кабинет</a></li>
@@ -63,7 +64,9 @@
 						</span>
 						<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
 							<li><a class="dropdown-item" href="{{ url_for('.black_words') }}">Черный список слов</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.white_words') }}">Белый список слов</a></li>
 							<li><a class="dropdown-item" href="{{ url_for('.synonyms') }}">Синонимы</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.requests') }}">История пользовательских запросов</a></li>
 						</ul>
 					</li>
 
