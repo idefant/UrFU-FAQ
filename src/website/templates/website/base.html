@@ -41,9 +41,9 @@
 
 
 		<header class="header-custom">
-			<div class="container flex navbar">
+			<div class="container flex navbar header_container">
 				<a href="https://urfu.ru/priemurfu" class="logo">
-					<img src="{{ url_for('website.static', filename='img/UrFULogo_Russian.png') }}" height="50">
+					<img class="logo_img" src="{{ url_for('website.static', filename='img/UrFULogo_Russian.png') }}" height="50">
 				</a>
 				<a href="tel:+73433754444" class="header-phone">+7 (343) 375-44-44</a>
 				<a href="tel:+73433754444" class="header-phone-mobile">
@@ -116,6 +116,9 @@
 						</ul>
 					</div>
 				</div>
+
+				<div class="creator_signature">Сделано в <a class="creator_signature_link" href="https://idefant.web.app">idefant.ru</a> для УрФУ</div>
+
 				<div class="subfooter">© ФГАОУ ВО «Уральский федеральный университет им. первого Президента России Б. Н. Ельцина»</div>
 			</div>
 		</section> 

@@ -20,14 +20,14 @@ function showPanel(panelIndex, buttonIndex) {
 
 
 
-// $(function() {					// Все работает и без нее
-// 	$("#pure-toggle-right").click(
-// 		function() {
-// 			if ($("#pure-toggle-right").is(":checked"))
-// 			{
-// 				$('html').css("overflow", "hidden");
-// 			} else {
-// 				$('html').css("overflow", "visible");
-// 			}
-// 		})
-// });
+$(function() {					// Все работает и без нее
+	$("#pure-toggle-right").click(
+		function() {
+			if ($("#pure-toggle-right").is(":checked"))
+			{
+				$('html').css("overflow", "hidden");
+			} else {
+				$('html').css("overflow", "visible");
+			}
+		})
+});
