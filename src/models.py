@@ -35,6 +35,7 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(30), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     psswd = db.Column(db.Text, nullable=False)
+    auth_token = db.Column(db.String)
     post = db.Column(db.String, nullable=False)
     is_deactivated = db.Column(db.Boolean, default = False)
     deactivation_date = db.Column(DateTime)

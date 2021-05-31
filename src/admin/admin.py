@@ -1,6 +1,6 @@
 import math
 
-from flask import Blueprint, render_template, flash, url_for, redirect, request, Response, send_file
+from flask import Blueprint, render_template, flash, url_for, redirect, request, Response, send_file, session
 from flask_login import login_required, logout_user, current_user
 from six import StringIO, BytesIO
 from sqlalchemy import desc
@@ -472,6 +472,23 @@ def update_cleared_questions_dbase():
 @admin.before_request
 def before_request():
     if current_user.is_authenticated:
+        if not 'auth_token' in session:
+            print("Сессии пока нет")
+            logout_user()
+            flash("Для продолжения авторизуйтесь", category='danger')
+            return redirect(url_for('.login'))
+        else:
+            if format(session.get('auth_token')) == current_user.auth_token:
+                print("Все норм")
+            else:
+                print("Сессии пока нет")
+                logout_user()
+                flash("Для продолжения авторизуйтесь", category='danger')
+                return redirect(url_for('.login'))
+
+
+
+
         if current_user.is_deactivated:
             logout_user()
             flash("Ваш аккаунт заблокирован. Для получения дополнительных сведений обратитесь к администратору",

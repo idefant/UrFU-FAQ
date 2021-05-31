@@ -1,4 +1,5 @@
 from datetime import datetime
+from secrets import token_urlsafe
 
 from flask import flash, redirect, url_for, render_template
 from flask_classy import FlaskView, route
@@ -45,7 +46,7 @@ class FormHandlerUser(FlaskView):
 
                 user = Users(username=username, name=name, psswd=password, post=post, right_category=right_category,
                              right_users=right_users, right_qa=right_qa, right_synonym=right_synonym,
-                             right_black_word=right_black_word)
+                             right_black_word=right_black_word, auth_token = token_urlsafe(32))
                 try:
                     db.session.add(user)
                     db.session.commit()
@@ -251,6 +252,7 @@ class FormHandlerUser(FlaskView):
             user = Users.query.get(int(user_id))
 
             user.psswd = generate_password_hash(password)
+            user.auth_token = token_urlsafe(32)
             try:
                 db.session.commit()
                 flash("Изменение пароля прошло успешно", category='success')

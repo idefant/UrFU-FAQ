@@ -1,6 +1,6 @@
-from flask import redirect, url_for, flash
+from flask import redirect, url_for, flash, session
 from flask_classy import FlaskView, route
-from flask_login import login_user
+from flask_login import login_user, current_user
 from werkzeug.security import check_password_hash
 
 import forms
@@ -17,6 +17,8 @@ class FormHandlerLogin(FlaskView):
             user = Users.query.filter(Users.username == login_form.username.data).first()
             if user and check_password_hash(user.psswd, login_form.password.data):
                 login_user(user, remember=login_form.remember.data)
+                session['auth_token'] = user.auth_token
+                session.modified = True
                 return redirect(url_for('.index'))
 
             flash("Неверный логин/пароль", 'danger')

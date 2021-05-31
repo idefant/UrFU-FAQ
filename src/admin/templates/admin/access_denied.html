@@ -1,11 +1,15 @@
 {% extends 'admin/base.html' %}
 
 {% block title %}
-Доступ к этой странице запрещен
+Доступ запрещен
+{% endblock %}
+
+{% block page_header %}
+Доступ запрещен
 {% endblock %}
 
 
 
 {% block body %}
-<h2>Доступ к этой странице запрещен. Обратитесь к администратору</h2>
+<h2 class="access_denied_content">Доступ к этой странице запрещен. Обратитесь к администратору</h2>
 {% endblock %}

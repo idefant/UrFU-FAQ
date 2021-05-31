@@ -1,3 +1,5 @@
+from secrets import token_urlsafe
+
 from flask import flash, url_for, redirect
 from flask_classy import FlaskView, route
 from flask_login import login_required, current_user
@@ -67,6 +69,7 @@ class FormHandlerAccount(FlaskView):
                     flash('Неправильный пароль подтверждения', category='danger')
                 else:
                     user.psswd = generate_password_hash(password)
+                    user.auth_token = token_urlsafe(32)
                     try:
                         db.session.commit()
                         flash("Изменение пароля прошло успешно", category='success')

@@ -127,3 +127,9 @@ header {
 .red_text_error {
 	color: red;
 }
+
+.access_denied_content {
+	text-align: center;
+	max-width: 600px;
+	margin: 70px auto 0;
+}

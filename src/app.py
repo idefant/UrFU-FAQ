@@ -10,8 +10,7 @@ from bot.bot import bot
 
 from models import db, Users
 
-from config import data_base, secret_key
-
+from config import data_base, secret_key, is_debug
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = data_base
@@ -20,7 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(bot, url_prefix='/bot')
 app.register_blueprint(website, url_prefix='/')
-
+app.debug = True
 
 manager = Manager(app)
 migrate = Migrate(app, db)
@@ -47,4 +46,4 @@ def page_not_found(error):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
