@@ -6,7 +6,7 @@ from six import StringIO, BytesIO
 from sqlalchemy import desc
 
 from search import convert_text
-from .form_handlers.black_word import FormHandlerBlackWord
+
 from models import db, Users, Questions, Categories, BlackWords, SynonymousWords, Requests, WhiteWords
 import forms
 from .form_handlers.user import FormHandlerUser
@@ -15,6 +15,7 @@ from .form_handlers.category import FormHandlerCategory
 from .form_handlers.qa import FormHandlerQA
 from .form_handlers.synonym import FormHandlerSynonym
 from .form_handlers.login import FormHandlerLogin
+from .form_handlers.exception_word import FormHandlerExceptionWord
 
 from . import functions
 
@@ -25,7 +26,7 @@ FormHandlerQA.register(admin)
 FormHandlerCategory.register(admin)
 FormHandlerAccount.register(admin)
 FormHandlerUser.register(admin)
-FormHandlerBlackWord.register(admin)
+FormHandlerExceptionWord.register(admin)
 FormHandlerSynonym.register(admin)
 FormHandlerLogin.register(admin)
 
@@ -324,15 +325,16 @@ def cheat_sheet_icons():
 def black_words():
     if not current_user.right_black_word:
         return render_template('admin/access_denied.html')
-    add_black_word_form = forms.AddBlackWordForm()
-    edit_black_word_form = forms.EditBlackWordForm()
-    delete_black_word_form = forms.DeleteBlackWordForm()
+    add_exception_word_form = forms.AddExceptionWordForm()
+    edit_exception_word_form = forms.EditExceptionWordForm()
+    delete_exception_word_form = forms.DeleteExceptionWordForm()
     try:
         black_words = BlackWords.query
     except NameError:
         return "Ошибка чтения из БД"
-    return render_template('admin/black_words.html', add_black_word_form=add_black_word_form,
-                           edit_black_word_form=edit_black_word_form, delete_black_word_form=delete_black_word_form,
+    return render_template('admin/exception_words.html', add_exception_word_form=add_exception_word_form,
+                           edit_exception_word_form=edit_exception_word_form,
+                           delete_exception_word_form=delete_exception_word_form,
                            black_words=black_words, word_type="black")
 
 
@@ -341,15 +343,16 @@ def black_words():
 def white_words():
     if not current_user.right_black_word:
         return render_template('admin/access_denied.html')
-    add_black_word_form = forms.AddBlackWordForm()
-    edit_black_word_form = forms.EditBlackWordForm()
-    delete_black_word_form = forms.DeleteBlackWordForm()
+    add_exception_word_form = forms.AddExceptionWordForm()
+    edit_exception_word_form = forms.EditExceptionWordForm()
+    delete_exception_word_form = forms.DeleteExceptionWordForm()
     try:
         black_words = WhiteWords.query
     except NameError:
         return "Ошибка чтения из БД"
-    return render_template('admin/black_words.html', add_black_word_form=add_black_word_form,
-                           edit_black_word_form=edit_black_word_form, delete_black_word_form=delete_black_word_form,
+    return render_template('admin/exception_words.html', add_exception_word_form=add_exception_word_form,
+                           edit_exception_word_form=edit_exception_word_form,
+                           delete_exception_word_form=delete_exception_word_form,
                            black_words=black_words, word_type="white")
 
 
@@ -421,13 +424,10 @@ def requests():
     requests_count = requests.count()
     requests = requests.order_by(desc(Requests.id)).paginate(page, requests_page_count, False).items
 
-
-
     if page - 5 > 0:
         first_pages = list(range(page - 5, page))
     else:
         first_pages = list(range(1, page))
-
 
     if page + 5 < math.ceil(requests_count / requests_page_count):
         last_pages = list(range(page + 1, page + 6))

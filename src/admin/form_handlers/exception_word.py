@@ -5,23 +5,23 @@ from markupsafe import Markup
 from sqlalchemy import exc
 
 from models import db, BlackWords, WhiteWords
-from forms import AddBlackWordForm, EditBlackWordForm, DeleteBlackWordForm
+from forms import DeleteExceptionWordForm, EditExceptionWordForm, AddExceptionWordForm
 
 
-class FormHandlerBlackWord(FlaskView):
+class FormHandlerExceptionWord(FlaskView):
     route_base = '/'
 
-    @route('/add_black_word', methods=["POST"])
+    @route('/add_exception_word', methods=["POST"])
     @login_required
-    def add_black_word(self):
+    def add_exception_word(self):
         if not current_user.right_black_word:
             return render_template('admin/access_denied.html')
 
         word_type = request.args.get("word_type")
 
-        add_black_word_form = AddBlackWordForm()
-        if add_black_word_form.validate_on_submit():
-            word = add_black_word_form.word.data
+        add_exception_word_form = AddExceptionWordForm()
+        if add_exception_word_form.validate_on_submit():
+            word = add_exception_word_form.word.data
             if not word:
                 flash('Неправильно заполнены поля', category='danger')
             else:
@@ -46,15 +46,15 @@ class FormHandlerBlackWord(FlaskView):
             return "Ни черныйб ни белый"
 
 
-    @route('/edit_black_word', methods=["POST"])
+    @route('/edit_exception_word', methods=["POST"])
     @login_required
-    def edit_black_word(self):
+    def edit_exception_word(self):
         if not current_user.right_black_word:
             return render_template('admin/access_denied.html')
-        edit_black_word_form = EditBlackWordForm()
-        if edit_black_word_form.validate_on_submit():
-            word_id = edit_black_word_form.id.data
-            word = edit_black_word_form.word.data
+        edit_exception_word_form = EditExceptionWordForm()
+        if edit_exception_word_form.validate_on_submit():
+            word_id = edit_exception_word_form.id.data
+            word = edit_exception_word_form.word.data
 
             try:
                 black_word = BlackWords.query.get(word_id)
@@ -70,14 +70,14 @@ class FormHandlerBlackWord(FlaskView):
                 flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.black_words'))
 
-    @route('/delete_black_word', methods=["POST"])
+    @route('/delete_exception_word', methods=["POST"])
     @login_required
-    def delete_black_word(self):
+    def delete_exception_word(self):
         if not current_user.right_black_word:
             return render_template('admin/access_denied.html')
-        delete_black_word_form = DeleteBlackWordForm()
-        if delete_black_word_form.validate_on_submit():
-            word_id = delete_black_word_form.id.data
+        delete_exception_word_form = DeleteExceptionWordForm()
+        if delete_exception_word_form.validate_on_submit():
+            word_id = delete_exception_word_form.id.data
             try:
                 black_word = BlackWords.query.get(word_id)
             except NameError:

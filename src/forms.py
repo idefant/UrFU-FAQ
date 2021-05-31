@@ -118,18 +118,18 @@ class EditUserRightsForm(FlaskForm):
     submit = SubmitField("Сохранить изменения")
 
 
-class AddBlackWordForm(FlaskForm):
+class AddExceptionWordForm(FlaskForm):
     word = StringField("Слово", validators=[DataRequired()])
     submit = SubmitField("Добавить")
 
 
-class EditBlackWordForm(FlaskForm):
+class EditExceptionWordForm(FlaskForm):
     id = HiddenField("id")
     word = StringField("Слово", validators=[DataRequired()])
     submit = SubmitField("Сохранить изменения")
 
 
-class DeleteBlackWordForm(FlaskForm):
+class DeleteExceptionWordForm(FlaskForm):
     id = HiddenField("id")
     submit = SubmitField("Удалить")
 
