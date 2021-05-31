@@ -26,14 +26,14 @@ class FormHandlerExceptionWord(FlaskView):
                 flash('Неправильно заполнены поля', category='danger')
             else:
                 if word_type == "white":
-                    black_word = WhiteWords(word=word)
+                    exception_word = WhiteWords(word=word)
                 elif word_type == "black":
-                    black_word = BlackWords(word=word)
+                    exception_word = BlackWords(word=word)
                 else:
                     return "Ни черный ни белый"
 
                 try:
-                    db.session.add(black_word)
+                    db.session.add(exception_word)
                     db.session.commit()
                     flash(Markup("<strong>Добавлено слово:</strong> " + word), category='success')
                 except exc.SQLAlchemyError:
@@ -52,45 +52,71 @@ class FormHandlerExceptionWord(FlaskView):
         if not current_user.right_black_word:
             return render_template('admin/access_denied.html')
         edit_exception_word_form = EditExceptionWordForm()
+
+        word_type = request.args.get("word_type")
+
         if edit_exception_word_form.validate_on_submit():
             word_id = edit_exception_word_form.id.data
-            word = edit_exception_word_form.word.data
+            word = edit_exception_word_form.word.data  # Проверка на пустоту
 
             try:
-                black_word = BlackWords.query.get(word_id)
+                if word_type == "white":
+                    exception_word = WhiteWords.query.get(word_id)
+                elif word_type == "black":
+                    exception_word = BlackWords.query.get(word_id)
+                else:
+                    return "Ни черный ни белый"
+
             except NameError:
                 return "Ошибка чтения из БД"
-            if black_word is None:
+            if exception_word is None:
                 return "Этого слова не существует"
-            black_word.word = word
+            exception_word.word = word
             try:
                 db.session.commit()
                 flash(Markup("<strong>Изменено слово:</strong> " + word), category='success')
             except exc.SQLAlchemyError:
                 flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.black_words'))
+        if word_type == "white":
+            return redirect(url_for('.white_words'))
+        elif word_type == "black":
+            return redirect(url_for('.black_words'))
+        else:
+            return "Ни черныйб ни белый"
 
     @route('/delete_exception_word', methods=["POST"])
     @login_required
     def delete_exception_word(self):
         if not current_user.right_black_word:
             return render_template('admin/access_denied.html')
+        word_type = request.args.get("word_type")
         delete_exception_word_form = DeleteExceptionWordForm()
         if delete_exception_word_form.validate_on_submit():
             word_id = delete_exception_word_form.id.data
             try:
-                black_word = BlackWords.query.get(word_id)
+                if word_type == "white":
+                    exception_word = WhiteWords.query.get(word_id)
+                elif word_type == "black":
+                    exception_word = BlackWords.query.get(word_id)
+                else:
+                    return "Ни черный ни белый"
+
             except NameError:
                 return "Ошибка чтения из БД"
 
-            if black_word is None:
+            if exception_word is None:
                 return "Этого слова не существует"
-            word = black_word.word
+            word = exception_word.word
             
             try:
-                db.session.delete(black_word)
+                db.session.delete(exception_word)
                 db.session.commit()
                 flash(Markup("<strong>Удалено слово:</strong> " + word), category='success')
             except exc.SQLAlchemyError:
                 flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.black_words'))
+        if word_type == "white":
+            return redirect(url_for('.white_words'))
+        elif word_type == "black":
+            return redirect(url_for('.black_words'))
+        else:
+            return "Ни черныйб ни белый"
