@@ -39,9 +39,9 @@ class FormHandlerExceptionWord(FlaskView):
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
         if word_type == "white":
-            return redirect(url_for('.white_words'))
+            return redirect(url_for('.ViewTechSetting:white_words'))
         elif word_type == "black":
-            return redirect(url_for('.black_words'))
+            return redirect(url_for('.ViewTechSetting:black_words'))
         else:
             return "Ни черныйб ни белый"
 
@@ -78,9 +78,9 @@ class FormHandlerExceptionWord(FlaskView):
             except exc.SQLAlchemyError:
                 flash('Ошибка внесения изменений в базу данных', category='danger')
         if word_type == "white":
-            return redirect(url_for('.white_words'))
+            return redirect(url_for('.ViewTechSetting:white_words'))
         elif word_type == "black":
-            return redirect(url_for('.black_words'))
+            return redirect(url_for('.ViewTechSetting:black_words'))
         else:
             return "Ни черныйб ни белый"
 
@@ -115,8 +115,8 @@ class FormHandlerExceptionWord(FlaskView):
             except exc.SQLAlchemyError:
                 flash('Ошибка внесения изменений в базу данных', category='danger')
         if word_type == "white":
-            return redirect(url_for('.white_words'))
+            return redirect(url_for('.ViewTechSetting:white_words'))
         elif word_type == "black":
-            return redirect(url_for('.black_words'))
+            return redirect(url_for('.ViewTechSetting:black_words'))
         else:
             return "Ни черныйб ни белый"

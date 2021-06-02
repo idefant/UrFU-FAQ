@@ -16,7 +16,7 @@
 
 <div class="btn_container">
 
-	<a href="{{ url_for('.requests_history') }}" class="btn btn-primary button_active" data-bs-dismiss="modal">Скачать базу пользовательских запросов</a>
+	<a href="{{ url_for('.ViewRequest:requests_history') }}" class="btn btn-primary button_active" data-bs-dismiss="modal">Скачать базу пользовательских запросов</a>
 </div>
 
 
@@ -52,27 +52,27 @@
 
   	{% if first_pages | length > 0 %}
     <li class="page-item">
-      <a class="page-link" href="{{ url_for('.requests', page=current_page-1) }}" aria-label="Предыдущая">
+      <a class="page-link" href="{{ url_for('.ViewRequest:requests', page=current_page-1) }}" aria-label="Предыдущая">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
     {% endif %}
 
     {% for page in first_pages %}
-    <li class="page-item"><a class="page-link" href="{{ url_for('.requests', page=page) }}">{{ page }}</a></li>
+    <li class="page-item"><a class="page-link" href="{{ url_for('.ViewRequest:requests', page=page) }}">{{ page }}</a></li>
     {% endfor %}
 
     <li class="page-item active" aria-current="page">
-      <a class="page-link" href="{{ url_for('.requests', page=current_page) }}">{{ current_page }}</a>
+      <a class="page-link" href="{{ url_for('.ViewRequest:requests', page=current_page) }}">{{ current_page }}</a>
     </li>
 
     {% for page in last_pages %}
-    <li class="page-item"><a class="page-link" href="{{ url_for('.requests', page=page) }}">{{ page }}</a></li>
+    <li class="page-item"><a class="page-link" href="{{ url_for('.ViewRequest:requests', page=page) }}">{{ page }}</a></li>
     {% endfor %}
 
     {% if last_pages | length > 0 %}
     <li class="page-item">
-      <a class="page-link" href="{{ url_for('.requests', page=current_page+1) }}" aria-label="Следующая">
+      <a class="page-link" href="{{ url_for('.ViewRequest:requests', page=current_page+1) }}" aria-label="Следующая">
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>

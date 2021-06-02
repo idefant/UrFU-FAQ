@@ -22,4 +22,4 @@ class FormHandlerLogin(FlaskView):
                 return redirect(url_for('.index'))
 
             flash("Неверный логин/пароль", 'danger')
-        return redirect(url_for('.login'))
+        return redirect(url_for('.ViewAccount:login'))

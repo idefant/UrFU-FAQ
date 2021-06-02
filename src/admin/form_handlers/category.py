@@ -37,7 +37,7 @@ class FormHandlerCategory(FlaskView):
                     flash(Markup("<strong>Необходимо добавить цвет к категории:</strong> " + name), category='danger')
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.category'))
+        return redirect(url_for('.ViewCategory:category'))
 
     @route('/edit_category', methods=["POST"])
     @login_required
@@ -67,7 +67,7 @@ class FormHandlerCategory(FlaskView):
                     flash(Markup("<strong>Изменен вопрос:</strong> " + name), category='success')
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.category'))
+        return redirect(url_for('.ViewCategory:category'))
 
     @route('/delete_category', methods=["POST"])
     @login_required
@@ -100,7 +100,7 @@ class FormHandlerCategory(FlaskView):
                     flash(Markup("<strong>Удалена категория:</strong> " + name), category='success')
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.category'))
+        return redirect(url_for('.ViewCategory:category'))
 
     @route('/change_color', methods=["POST", "GET"])
     @login_required
@@ -123,7 +123,7 @@ class FormHandlerCategory(FlaskView):
         except exc.SQLAlchemyError:
             flash('Ошибка внесения изменений в базу данных', category='danger')
 
-        return redirect(url_for('.category'))
+        return redirect(url_for('.ViewCategory:category'))
 
     @route('/change_order_category', methods=['GET', 'POST'])
     def change_order_category(self):
@@ -144,4 +144,4 @@ class FormHandlerCategory(FlaskView):
             flash('Порядок сортировки категорий успешно обновлен', category='success')
         except exc.SQLAlchemyError:
             flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.category_sort'))
+        return redirect(url_for('.ViewCategory:category_sort'))

@@ -30,8 +30,8 @@ class FormHandlerSynonym(FlaskView):
             except exc.SQLAlchemyError:
                 flash('Ошибка внесения изменений в базу данных', category='danger')
         if main_word_id:
-            return redirect(url_for('.synonyms_replacement', word_id=main_word_id))
-        return redirect(url_for('.synonyms'))
+            return redirect(url_for('.ViewTechSetting:synonyms_replacement', word_id=main_word_id))
+        return redirect(url_for('.ViewTechSetting:synonyms'))
 
     @route('/edit_synonym', methods=["POST"])
     @login_required
@@ -57,8 +57,8 @@ class FormHandlerSynonym(FlaskView):
             except exc.SQLAlchemyError:
                 flash('Ошибка внесения изменений в базу данных', category='danger')
         if main_word_id:
-            return redirect(url_for('.synonyms_replacement', word_id=main_word_id))
-        return redirect(url_for('.synonyms'))
+            return redirect(url_for('.ViewTechSetting:synonyms_replacement', word_id=main_word_id))
+        return redirect(url_for('.ViewTechSetting:synonyms'))
 
     @route('/delete_synonym', methods=["POST"])
     @login_required
@@ -95,5 +95,5 @@ class FormHandlerSynonym(FlaskView):
             except exc.SQLAlchemyError:
                 flash('Ошибка внесения изменений в базу данных', category='danger')
         if main_word_id:
-            return redirect(url_for('.synonyms_replacement', word_id=main_word_id))
-        return redirect(url_for('.synonyms'))
+            return redirect(url_for('.ViewTechSetting:synonyms_replacement', word_id=main_word_id))
+        return redirect(url_for('.ViewTechSetting:synonyms'))

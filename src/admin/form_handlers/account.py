@@ -51,7 +51,7 @@ class FormHandlerAccount(FlaskView):
                         flash("Изменение пользовательских данных прошло успешно", category='success')
                     except exc.SQLAlchemyError:
                         flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.account'))
+        return redirect(url_for('.ViewAccount:account'))
 
     @route('/change_password_account', methods=["POST"])
     @login_required
@@ -75,4 +75,4 @@ class FormHandlerAccount(FlaskView):
                         flash("Изменение пароля прошло успешно", category='success')
                     except exc.SQLAlchemyError:
                         flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.account'))
+        return redirect(url_for('.ViewAccount:account'))

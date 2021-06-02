@@ -55,7 +55,7 @@ class FormHandlerUser(FlaskView):
                     flash("Пользователь добавлен", category='success')
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.users'))
+        return redirect(url_for('.ViewUser:users'))
 
     @route('/edit_user', methods=["POST"])
     @login_required
@@ -99,7 +99,7 @@ class FormHandlerUser(FlaskView):
                     flash("Изменение пользовательских данных прошло успешно", category='success')
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.users'))
+        return redirect(url_for('.ViewUser:users'))
 
     @route('/deactivate_user', methods=["POST"])
     @login_required
@@ -126,7 +126,7 @@ class FormHandlerUser(FlaskView):
                     flash(Markup("<strong>Деактивирован пользователь:</strong> " + name), category='success')
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.users'))
+        return redirect(url_for('.ViewUser:users'))
 
 
 
@@ -156,7 +156,7 @@ class FormHandlerUser(FlaskView):
                     flash(Markup("<strong>Активирован пользователь:</strong> " + name), category='success')
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.users_deactivate'))
+        return redirect(url_for('.ViewUser:users_deactivate'))
 
 
 
@@ -191,7 +191,7 @@ class FormHandlerUser(FlaskView):
                         flash(Markup("<strong>Удален пользователь:</strong> " + name), category='success')
                     except exc.SQLAlchemyError:
                         flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.users_deactivate'))
+        return redirect(url_for('.ViewUser:users_deactivate'))
 
 
 
@@ -240,7 +240,7 @@ class FormHandlerUser(FlaskView):
                     flash("Изменение пользовательских данных прошло успешно", category='success')
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.users_rights'))
+        return redirect(url_for('.ViewUser:users_rights'))
 
 
 
@@ -260,4 +260,4 @@ class FormHandlerUser(FlaskView):
                 flash("Изменение пароля прошло успешно", category='success')
             except exc.SQLAlchemyError:
                 flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.users'))
+        return redirect(url_for('.ViewUser:users'))

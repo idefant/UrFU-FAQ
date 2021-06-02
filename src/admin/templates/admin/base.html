@@ -25,37 +25,37 @@
 				<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
 					<li><a href="{{ url_for('.index') }}" class="nav-link px-2 text-white">Дашборд</a></li>
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-white" href="{{ url_for('.category') }}" id="navbarDropdown" role="button" aria-expanded="false">
+						<a class="nav-link dropdown-toggle text-white" href="{{ url_for('.ViewCategory:category') }}" id="navbarDropdown" role="button" aria-expanded="false">
 							Категории
 						</a>
 						<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="{{ url_for('.category') }}">Все категории</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewCategory:category') }}">Все категории</a></li>
 							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="{{ url_for('.category_sort') }}">Сортировка</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewCategory:category_sort') }}">Сортировка</a></li>
 						</ul>
 					</li>
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-white" href="{{ url_for('.qa') }}" id="navbarDropdown" role="button" aria-expanded="false">
+						<a class="nav-link dropdown-toggle text-white" href="{{ url_for('.ViewQA:qa') }}" id="navbarDropdown" role="button" aria-expanded="false">
 							QA
 						</a>
 						<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="{{ url_for('.qa') }}">Все вопросы</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewQA:qa') }}">Все вопросы</a></li>
 							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="{{ url_for('.qa_sort') }}">Сортировка</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewQA:qa_sort') }}">Сортировка</a></li>
 						</ul>
 					</li>
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-white" href="{{ url_for('.users') }}" id="navbarDropdown" role="button" aria-expanded="false">
+						<a class="nav-link dropdown-toggle text-white" href="{{ url_for('.ViewUser:users') }}" id="navbarDropdown" role="button" aria-expanded="false">
 							Пользователи
 						</a>
 						<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="{{ url_for('.users_rights') }}">Права</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewUser:users_rights') }}">Права</a></li>
 							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="{{ url_for('.users_deactivate') }}">Деактивированные</a></li>
-							<li><a class="dropdown-item" href="{{ url_for('.users') }}">Активные</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewUser:users_deactivate') }}">Деактивированные</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewUser:users') }}">Активные</a></li>
 						</ul>
 					</li>
-					<li><a href="{{ url_for('.account') }}" class="nav-link px-2 text-white">Личный кабинет</a></li>
+					<li><a href="{{ url_for('.ViewAccount:account') }}" class="nav-link px-2 text-white">Личный кабинет</a></li>
 
 
 					<li class="nav-item dropdown">
@@ -63,10 +63,10 @@
 							Тех.Настройки
 						</span>
 						<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="{{ url_for('.black_words') }}">Черный список слов</a></li>
-							<li><a class="dropdown-item" href="{{ url_for('.white_words') }}">Белый список слов</a></li>
-							<li><a class="dropdown-item" href="{{ url_for('.synonyms') }}">Синонимы</a></li>
-							<li><a class="dropdown-item" href="{{ url_for('.requests') }}">История поиска</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewTechSetting:black_words') }}">Черный список слов</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewTechSetting:white_words') }}">Белый список слов</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewTechSetting:synonyms') }}">Синонимы</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewRequest:requests') }}">История поиска</a></li>
 						</ul>
 					</li>
 

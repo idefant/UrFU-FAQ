@@ -28,7 +28,7 @@
 		],
 		optional_bottom =
 			'<div class="mb-3">
-				*Все иконки <a href='+ url_for(".cheat_sheet_icons") +' target="_blank">здесь</a> (откроется в новом окне)
+				*Все иконки <a href='+ url_for(".ViewCategory:cheat_sheet_icons") +' target="_blank">здесь</a> (откроется в новом окне)
 			</div>
 			<div class="mb-3">
 				<div class="red_text_error"><strong>После добавления категории обязательно задайте ей цвет</strong></div>
@@ -60,7 +60,7 @@
 		],
 		optional_bottom =
 			'<div class="mb-3">
-				*Все иконки <a href='+ url_for(".cheat_sheet_icons") +' target="_blank">здесь</a> (откроется в новом окне)
+				*Все иконки <a href='+ url_for(".ViewCategory:cheat_sheet_icons") +' target="_blank">здесь</a> (откроется в новом окне)
 			</div>',
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
@@ -97,7 +97,7 @@
 	<button type="button" class="btn btn-success button_active" data-bs-toggle="modal" data-bs-target="#addModal">
 		Добавить категорию
 	</button>
-	<a href="{{ url_for('.category_sort') }}" class="btn btn-primary button_active" data-bs-dismiss="modal">Сортировщик</a>
+	<a href="{{ url_for('.ViewCategory:category_sort') }}" class="btn btn-primary button_active" data-bs-dismiss="modal">Сортировщик</a>
 </div>
 
 {{ macros.flash_messages() }}
@@ -136,7 +136,7 @@
 
 			
 			<td scope="col" width="45">
-				<a href="{{ url_for('.colors', cat_id=('popular' if category[0].id == 0 else category[0].id)) }}">
+				<a href="{{ url_for('.ViewUser:colors', cat_id=('popular' if category[0].id == 0 else category[0].id)) }}">
 					<i class="fa fa-paint-brush fa-lg table_action_icon change_color_icon" aria-hidden="true" title="Изменить цвет"></i>
 				</a>
 			</td>

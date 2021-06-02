@@ -63,7 +63,7 @@ class FormHandlerQA(FlaskView):
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
 
-        return redirect(url_for('.qa', cat_id=cat_id_data, popular=popular_data))
+        return redirect(url_for('.ViewQA:qa', cat_id=cat_id_data, popular=popular_data))
 
     @route('/edit_qa', methods=["POST"])
     @login_required
@@ -115,7 +115,7 @@ class FormHandlerQA(FlaskView):
                     flash(Markup("<strong>Изменен вопрос:</strong> " + question), category='success')
                 except exc.SQLAlchemyError:
                     flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.qa', cat_id=cat_id_data, popular=popular_data))
+        return redirect(url_for('.ViewQA:qa', cat_id=cat_id_data, popular=popular_data))
 
     @route('/delete_qa', methods=["POST"])
     @login_required
@@ -141,7 +141,7 @@ class FormHandlerQA(FlaskView):
                 flash(Markup("<strong>Удален вопрос:</strong> " + question), category='success')
             except exc.SQLAlchemyError:
                 flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.qa', cat_id=cat_id_data, popular=popular_data))
+        return redirect(url_for('.ViewQA:qa', cat_id=cat_id_data, popular=popular_data))
 
     @route('/change_order_qa', methods=['GET', 'POST'])
     def change_order_qa(self):
@@ -167,4 +167,4 @@ class FormHandlerQA(FlaskView):
             flash('Порядок сортировки успешно обновлен', category='success')
         except exc.SQLAlchemyError:
             flash('Ошибка внесения изменений в базу данных', category='danger')
-        return redirect(url_for('.qa_sort', cat_id=cat_id))
+        return redirect(url_for('.ViewQA:qa_sort', cat_id=cat_id))

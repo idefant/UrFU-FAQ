@@ -20,7 +20,7 @@
 		
 
 		<div class="block_item">
-			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.qa') }}';" style="background-color: #4976e7;">
+			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.ViewQA:qa') }}';" style="background-color: #4976e7;">
 	
 					<div class="block_item_title">
 						Вопросы: {{ questions_count }}
@@ -29,9 +29,9 @@
 						{% for category in categories_questions_count %}
 						<li>
 							{% if category[0].id == 0 %}
-							<a href="{{ url_for('.qa', popular=True) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
+							<a href="{{ url_for('.ViewQA:qa', popular=True) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
 							{% else %}
-							<a href="{{ url_for('.qa', cat_id=category[0].id) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
+							<a href="{{ url_for('.ViewQA:qa', cat_id=category[0].id) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
 							{% endif %}
 
 						</li>
@@ -43,55 +43,55 @@
 
 		{{ macros.dashboard_item(title = 'Категории: ' + categories_count | string(),
 				color = '#7cc6fa',
-				link = 'window.location.href = "' + url_for(".category") + '"'
+				link = 'window.location.href = "' + url_for('.ViewCategory:category') + '"'
 			)
 		}}
 
 		{{ macros.dashboard_item(title = 'Пользователи: ' + users_count | string(),
 				color = '#9e71ce',
-				link = 'window.location.href = "' + url_for(".users") + '"'
+				link = 'window.location.href = "' + url_for('.ViewUser:users') + '"'
 			)
 		}}
 
 		{{ macros.dashboard_item(title = 'Личный кабинет',
 				color = '#85d1b3',
-				link = 'window.location.href = "' + url_for(".account") + '"'
+				link = 'window.location.href = "' + url_for('.ViewAccount:account') + '"'
 			)
 		}}
 
 		{{ macros.dashboard_item(title = 'Доп.иконки: 786',
 				color = '#c43434',
-				link = 'window.open("' + url_for(".cheat_sheet_icons") + '")'
+				link = 'window.open("' + url_for('.ViewCategory:cheat_sheet_icons') + '")'
 			)
 		}}
 
 		{{ macros.dashboard_item(title = 'Перейти на сайт',
 				color = '#e3ab00',
-				link = 'window.open("' + url_for("website.index") + '")'
+				link = 'window.open("' + url_for('website.index') + '")'
 			)
 		}}
 
 		{{ macros.dashboard_item(title = 'Черные слова',
 				color = '#000',
-				link = 'window.location.href = "' + url_for(".black_words") + '"'
+				link = 'window.location.href = "' + url_for('.ViewTechSetting:black_words') + '"'
 			)
 		}}
 
 		{{ macros.dashboard_item(title = 'Белые слова',
 				color = '#ccc',
-				link = 'window.location.href = "' + url_for(".white_words") + '"'
+				link = 'window.location.href = "' + url_for('.ViewTechSetting:white_words') + '"'
 			)
 		}}
 
 		{{ macros.dashboard_item(title = 'Синонимы',
 				color = '#2cc200',
-				link = 'window.location.href = "' + url_for(".synonyms") + '"'
+				link = 'window.location.href = "' + url_for('.ViewTechSetting:synonyms') + '"'
 			)
 		}}
 
 		{{ macros.dashboard_item(title = 'История поиска',
 				color = '#c600c0',
-				link = 'window.location.href = "' + url_for(".requests") + '"'
+				link = 'window.location.href = "' + url_for('.ViewRequest:requests') + '"'
 			)
 		}}
 
