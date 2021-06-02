@@ -1,4 +1,5 @@
 {% extends 'admin/base.html' %}
+{% import "admin/macros.html" as macros %}
 
 {% block title %}
 Дашборд
@@ -16,12 +17,13 @@
 
 <section class="dashboard">
 	<div class="dashboard_container">
+		
 
 		<div class="block_item">
 			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.qa') }}';" style="background-color: #4976e7;">
 	
 					<div class="block_item_title">
-						Вопросов: {{ questions_count }}
+						Вопросы: {{ questions_count }}
 					</div>
 					<ol class="block_item_qa_list">
 						{% for category in categories_questions_count %}
@@ -39,53 +41,60 @@
 			</div>
 		</div>
 
-		<div class="block_item">
-			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.category') }}';" style="background-color: #7cc6fa;">
-				<div class="block_item_title">
-					Категорий: {{ categories_count }}
-				</div>
-			</div>
-		</div>
+		{{ macros.dashboard_item(title = 'Категории: ' + categories_count | string(),
+				color = '#7cc6fa',
+				link = 'window.location.href = "' + url_for(".category") + '"'
+			)
+		}}
 
-		<div class="block_item">
-			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.users') }}';" style="background-color: #9e71ce;">
-				<div class="block_item_title">
-					Пользователей: {{ users_count }}
-				</div>
-			</div>
-		</div>
+		{{ macros.dashboard_item(title = 'Пользователи: ' + users_count | string(),
+				color = '#9e71ce',
+				link = 'window.location.href = "' + url_for(".users") + '"'
+			)
+		}}
 
-		<div class="block_item">
-			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.account') }}';" style="background-color: #85d1b3;">
-				<div class="block_item_title">
-					Личный кабинет
-				</div>
-			</div>
-		</div>
+		{{ macros.dashboard_item(title = 'Личный кабинет',
+				color = '#85d1b3',
+				link = 'window.location.href = "' + url_for(".account") + '"'
+			)
+		}}
 
-		<div class="block_item">
-			<div class="block_item_container" onclick="window.open('{{ url_for('.cheat_sheet_icons') }}')" style="background-color: #c43434;">
-				<div class="block_item_title">
-					Дополнительные иконки: 786
-				</div>
-			</div>
-		</div>
+		{{ macros.dashboard_item(title = 'Доп.иконки: 786',
+				color = '#c43434',
+				link = 'window.open("' + url_for(".cheat_sheet_icons") + '")'
+			)
+		}}
 
-		<div class="block_item">
-			<div class="block_item_container" onclick="window.open('{{ url_for('website.index') }}')" style="background-color: #e3ab00;">
-				<div class="block_item_title">
-					Перейти на сайт
-				</div>
-			</div>
-		</div>
+		{{ macros.dashboard_item(title = 'Перейти на сайт',
+				color = '#e3ab00',
+				link = 'window.open("' + url_for("website.index") + '")'
+			)
+		}}
 
-		<div class="block_item">
-			<div class="block_item_container" onclick="window.open('{{ url_for('.black_words') }}')" style="background-color: #af14a4;">
-				<div class="block_item_title">
-					Черные слова
-				</div>
-			</div>
-		</div>
+		{{ macros.dashboard_item(title = 'Черные слова',
+				color = '#000',
+				link = 'window.location.href = "' + url_for(".black_words") + '"'
+			)
+		}}
+
+		{{ macros.dashboard_item(title = 'Белые слова',
+				color = '#ccc',
+				link = 'window.location.href = "' + url_for(".white_words") + '"'
+			)
+		}}
+
+		{{ macros.dashboard_item(title = 'Синонимы',
+				color = '#2cc200',
+				link = 'window.location.href = "' + url_for(".synonyms") + '"'
+			)
+		}}
+
+		{{ macros.dashboard_item(title = 'История поиска',
+				color = '#c600c0',
+				link = 'window.location.href = "' + url_for(".requests") + '"'
+			)
+		}}
+
 
 	</div>
 </section>

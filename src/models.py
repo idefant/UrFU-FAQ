@@ -4,6 +4,7 @@ from sqlalchemy import DateTime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
+
 db = SQLAlchemy()
 
 class Categories(db.Model):
@@ -38,12 +39,12 @@ class Users(db.Model, UserMixin):
     auth_token = db.Column(db.String)
     post = db.Column(db.String, nullable=False)
     is_deactivated = db.Column(db.Boolean, default = False)
-    deactivation_date = db.Column(DateTime)
     right_category = db.Column(db.Boolean, default = False)
     right_users = db.Column(db.Boolean, default = False)
     right_qa = db.Column(db.Boolean, default = False)
     right_synonym = db.Column(db.Boolean, default=False)
-    right_black_word = db.Column(db.Boolean, default=False)
+    right_exception_word = db.Column(db.Boolean, default=False)
+    right_request = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<Users %r>' % self.id

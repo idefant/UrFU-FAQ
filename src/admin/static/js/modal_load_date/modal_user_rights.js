@@ -7,7 +7,8 @@ $(function() {
 			var right_users = $(this).parents('.table_line_item').attr('data-right-users');
 			var right_qa = $(this).parents('.table_line_item').attr('data-right-qa');
 			var right_synonym = $(this).parents('.table_line_item').attr('data-right-synonym');
-			var right_black_word = $(this).parents('.table_line_item').attr('data-right-black_word');
+			var right_exception_word = $(this).parents('.table_line_item').attr('data-right-black_word');
+			var right_request = $(this).parents('.table_line_item').attr('data-right-request');
 
 			$("#edit_id").val(id);
 			$("#user_rights_content").html(name);
@@ -36,10 +37,16 @@ $(function() {
 				$("#edit_right_synonym").removeAttr("checked");
 			}
 
-			if (right_black_word == "True") {
-				$("#edit_right_black_word").attr("checked","checked");
+			if (right_exception_word == "True") {
+				$("#edit_right_exception_word").attr("checked","checked");
 			} else {
-				$("#edit_right_black_word").removeAttr("checked");
+				$("#edit_right_exception_word").removeAttr("checked");
+			}
+			
+			if (right_request == "True") {
+				$("#edit_right_request").attr("checked","checked");
+			} else {
+				$("#edit_right_request").removeAttr("checked");
 			}
 		})
 });

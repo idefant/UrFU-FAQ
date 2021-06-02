@@ -40,8 +40,12 @@
 				edit_user_rights_form.right_synonym.label(class_="form-check-label")
 			],
 			[
-				edit_user_rights_form.right_black_word(class_="form-check-input", id="edit_right_black_word"),
-				edit_user_rights_form.right_black_word.label(class_="form-check-label")
+				edit_user_rights_form.right_exception_word(class_="form-check-input", id="edit_right_exception_word"),
+				edit_user_rights_form.right_exception_word.label(class_="form-check-label")
+			],
+			[
+				edit_user_rights_form.right_request(class_="form-check-input", id="edit_right_request"),
+				edit_user_rights_form.right_request.label(class_="form-check-label")
 			]
 		],
 		buttons = [
@@ -68,14 +72,15 @@
 			<th scope="col">Пользователи</th>
 			<th scope="col">Вопросы</th>
 			<th scope="col">Синонимы</th>
-			<th scope="col">Черный список слов</th>
+			<th scope="col">Слова исключения</th>
+			<th scope="col">История поиска</th>
 			<th scope="col"></th>
 		</tr>
 	</thead>
 	<tbody>
 		{% for user in users %}
 		
-		<tr class="table_line_item {% if user.is_deactivated %} deactivated_user {% endif %}" data-id="{{ user.id }}" data-name="{{ user.name }}" data-right-category="{{ user.right_category }}" data-right-users="{{ user.right_users }}" data-right-qa="{{ user.right_qa }}" data-right-synonym="{{ user.right_synonym }}" data-right-black_word="{{ user.right_black_word }}">
+		<tr class="table_line_item {% if user.is_deactivated %} deactivated_user {% endif %}" data-id="{{ user.id }}" data-name="{{ user.name }}" data-right-category="{{ user.right_category }}" data-right-users="{{ user.right_users }}" data-right-qa="{{ user.right_qa }}" data-right-synonym="{{ user.right_synonym }}" data-right-black_word="{{ user.right_exception_word }}" data-right-request="{{ user.right_request }}">
 
 			<th scope="row">{{ user.id }}</th>
 			<td>{{ user.name }} ({{ user.post }})</td>
@@ -100,7 +105,12 @@
 				{% endif %}
 			</td>
 			<td>
-				{% if user.right_black_word %}
+				{% if user.right_exception_word %}
+					<i class="fa fa-check yes_icon" aria-hidden="true"></i>
+				{% endif %}
+			</td>
+			<td>
+				{% if user.right_request %}
 					<i class="fa fa-check yes_icon" aria-hidden="true"></i>
 				{% endif %}
 			</td>

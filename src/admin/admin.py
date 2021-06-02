@@ -323,7 +323,7 @@ def cheat_sheet_icons():
 @admin.route('/black_words')
 @login_required
 def black_words():
-    if not current_user.right_black_word:
+    if not current_user.right_exception_word:
         return render_template('admin/access_denied.html')
     add_exception_word_form = forms.AddExceptionWordForm()
     edit_exception_word_form = forms.EditExceptionWordForm()
@@ -341,7 +341,7 @@ def black_words():
 @admin.route('/white_words')
 @login_required
 def white_words():
-    if not current_user.right_black_word:
+    if not current_user.right_exception_word:
         return render_template('admin/access_denied.html')
     add_exception_word_form = forms.AddExceptionWordForm()
     edit_exception_word_form = forms.EditExceptionWordForm()
@@ -471,6 +471,7 @@ def update_cleared_questions_dbase():
 
 @admin.before_request
 def before_request():
+    session.permanent = True
     if current_user.is_authenticated:
         if not 'auth_token' in session:
             print("Сессии пока нет")

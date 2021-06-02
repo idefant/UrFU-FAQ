@@ -1,4 +1,6 @@
-from flask import Flask, render_template
+import datetime
+
+from flask import Flask, render_template, session
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
@@ -10,11 +12,13 @@ from bot.bot import bot
 
 from models import db, Users
 
-from config import data_base, secret_key, is_debug
+from config import data_base, secret_key
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = data_base
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.permanent_session_lifetime = datetime.timedelta(days=10)
 
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(bot, url_prefix='/bot')

@@ -107,7 +107,7 @@
 					{{ '<li>Пользователи</li>'|safe if current_user.right_users }}
 					{{ '<li>Вопросы</li>'|safe if current_user.right_qa }}
 					{{ '<li>Синонимы</li>'|safe if current_user.right_synonym }}
-					{{ '<li>Черные список слов</li>'|safe if current_user.right_black_word }}
+					{{ '<li>Черные список слов</li>'|safe if current_user.right_exception_word }}
 				</ul>
 			</div>
 			

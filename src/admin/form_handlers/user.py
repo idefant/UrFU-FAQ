@@ -30,7 +30,8 @@ class FormHandlerUser(FlaskView):
             right_users = addUserForm.right_user.data
             right_qa = addUserForm.right_qa.data
             right_synonym = addUserForm.right_synonym.data
-            right_black_word = addUserForm.right_black_word.data
+            right_exception_word = addUserForm.right_exception_word.data
+            right_request = addUserForm.right_request.data
 
             if not (name and username):
                 flash('Неправильно заполнены поля', category='danger')
@@ -46,7 +47,8 @@ class FormHandlerUser(FlaskView):
 
                 user = Users(username=username, name=name, psswd=password, post=post, right_category=right_category,
                              right_users=right_users, right_qa=right_qa, right_synonym=right_synonym,
-                             right_black_word=right_black_word, auth_token = token_urlsafe(32))
+                             right_exception_word=right_exception_word, right_request=right_request,
+                             auth_token = token_urlsafe(32))
                 try:
                     db.session.add(user)
                     db.session.commit()
@@ -119,7 +121,6 @@ class FormHandlerUser(FlaskView):
                     return "Пользователя не существует"
                 name = user.name
                 user.is_deactivated = True
-                user.deactivation_date = datetime.now()
                 try:
                     db.session.commit()
                     flash(Markup("<strong>Деактивирован пользователь:</strong> " + name), category='success')
@@ -150,7 +151,6 @@ class FormHandlerUser(FlaskView):
                     return "Пользователя не существует"
                 name = user.name
                 user.is_deactivated = False
-                user.deactivation_date = datetime.now()
                 try:
                     db.session.commit()
                     flash(Markup("<strong>Активирован пользователь:</strong> " + name), category='success')
@@ -216,7 +216,8 @@ class FormHandlerUser(FlaskView):
             right_users = edit_user_form.right_users.data
             right_qa = edit_user_form.right_qa.data
             right_synonym = edit_user_form.right_synonym.data
-            right_black_word = edit_user_form.right_black_word.data
+            right_exception_word = edit_user_form.right_exception_word.data
+            right_request = edit_user_form.right_request.data
             if current_user.id == user_id or user_id == 1:
                 flash('Вы не можете менять собственные права или права админа', category='danger')
             else:
@@ -232,7 +233,8 @@ class FormHandlerUser(FlaskView):
                 user.right_users = right_users
                 user.right_qa = right_qa
                 user.right_synonym = right_synonym
-                user.right_black_word = right_black_word
+                user.right_exception_word = right_exception_word
+                user.right_request = right_request
                 try:
                     db.session.commit()
                     flash("Изменение пользовательских данных прошло успешно", category='success')

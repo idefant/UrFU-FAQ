@@ -14,7 +14,7 @@ class FormHandlerExceptionWord(FlaskView):
     @route('/add_exception_word', methods=["POST"])
     @login_required
     def add_exception_word(self):
-        if not current_user.right_black_word:
+        if not current_user.right_exception_word:
             return render_template('admin/access_denied.html')
 
         word_type = request.args.get("word_type")
@@ -49,7 +49,7 @@ class FormHandlerExceptionWord(FlaskView):
     @route('/edit_exception_word', methods=["POST"])
     @login_required
     def edit_exception_word(self):
-        if not current_user.right_black_word:
+        if not current_user.right_exception_word:
             return render_template('admin/access_denied.html')
         edit_exception_word_form = EditExceptionWordForm()
 
@@ -87,7 +87,7 @@ class FormHandlerExceptionWord(FlaskView):
     @route('/delete_exception_word', methods=["POST"])
     @login_required
     def delete_exception_word(self):
-        if not current_user.right_black_word:
+        if not current_user.right_exception_word:
             return render_template('admin/access_denied.html')
         word_type = request.args.get("word_type")
         delete_exception_word_form = DeleteExceptionWordForm()

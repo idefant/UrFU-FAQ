@@ -45,3 +45,15 @@
 </div>
 {% endfor %}
 {% endmacro %}
+
+
+{% macro dashboard_item(title, color, link, optional_bottom) %}
+<div class="block_item">
+	<div class="block_item_container" onclick="{{ link }}" style="background-color: {{ color }};">
+		<div class="block_item_title">
+			{{ title | safe }}
+		</div>
+		{{ optional_bottom | safe }}
+	</div>
+</div>
+{% endmacro %}

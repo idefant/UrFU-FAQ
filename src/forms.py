@@ -75,7 +75,8 @@ class AddUserForm(FlaskForm):
     right_user = BooleanField("Доступ к странице пользователей")
     right_qa = BooleanField("Вопросы")
     right_synonym = BooleanField("Синонимы")
-    right_black_word = BooleanField("Список черных слов")
+    right_exception_word = BooleanField("Список черных слов")
+    right_request = BooleanField("История поиска")
     submit = SubmitField("Добавить")
 
 
@@ -114,7 +115,8 @@ class EditUserRightsForm(FlaskForm):
     right_users = BooleanField("Пользователи")
     right_qa = BooleanField("Вопросы")
     right_synonym = BooleanField("Синонимы")
-    right_black_word = BooleanField("Список черных слов")
+    right_exception_word = BooleanField("Слова исключения")
+    right_request = BooleanField("История поиска")
     submit = SubmitField("Сохранить изменения")
 
 
