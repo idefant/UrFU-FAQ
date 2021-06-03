@@ -90,14 +90,18 @@ class FormHandlerQA(FlaskView):
                     flash('Неправильно заполнены поля', category='danger')
                 else:
                     clear_question = convert_text(question)
+
                     try:
-                        qa = Questions.query.get(qa_id)
+                        questions = Questions.query
                     except NameError:
                         return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
+                    qa = questions.get(qa_id)
                     if qa is None:
                         flash('Этот вопрос не найден', category='danger')
                     else:
+                        if not qa.is_popular:
+                            qa.popular_priority = questions.filter(Questions.is_popular).count()
                         qa.question = question
                         qa.clear_question = clear_question
                         qa.answer = answer

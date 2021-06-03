@@ -25,26 +25,9 @@ class ViewQA(FlaskView):
         try:
             categories = Categories.query
             categories_questions = db.session.query(Categories, Questions) \
-                .join(Questions, Categories.id == Questions.cat_id) \
-                .order_by(Questions.id)
+                .join(Questions, Categories.id == Questions.cat_id)
         except (NameError, AttributeError):
             return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-
-        if cat_id_data is not None:
-            if not cat_id_data.isdigit():
-                flash('ID категории должен быть числом', category='danger')
-            else:
-                cat_id_data = int(cat_id_data)
-                current_category = categories.get(cat_id_data)
-                if current_category is None or cat_id_data == 0:
-                    flash('Нет такой категории в БД. Фильтр был сброшен', category='danger')
-                    return redirect(url_for('.ViewQA:qa'))
-                else:
-                    try:
-                        categories_questions = categories_questions.filter(Questions.cat_id == cat_id_data)
-                    except (NameError, AttributeError):
-                        return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-                    add_qa_form.cat_id.default = cat_id_data
 
         if popular_data is not None:
             if popular_data == 'True':
@@ -59,7 +42,26 @@ class ViewQA(FlaskView):
                 categories_questions = categories_questions.filter(Questions.is_popular == is_popular)
             except (NameError, AttributeError):
                 return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+            if is_popular:
+                categories_questions = categories_questions.order_by(Questions.popular_priority)
             add_qa_form.popular.default = is_popular
+
+        if cat_id_data is not None:
+            if not cat_id_data.isdigit():
+                flash('ID категории должен быть числом', category='danger')
+            else:
+                cat_id_data = int(cat_id_data)
+                current_category = categories.get(cat_id_data)
+                if current_category is None or cat_id_data == 0:
+                    flash('Нет такой категории в БД. Фильтр был сброшен', category='danger')
+                    return redirect(url_for('.ViewQA:qa'))
+                else:
+                    try:
+                        categories_questions = categories_questions.filter(Questions.cat_id == cat_id_data)\
+                            .order_by(Questions.priority)
+                    except (NameError, AttributeError):
+                        return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+                    add_qa_form.cat_id.default = cat_id_data
 
         try:
             categories = categories.filter(Categories.id != 0)
@@ -73,9 +75,9 @@ class ViewQA(FlaskView):
         add_qa_form.process()
 
         return render_template("admin/qa.html", add_qa_form=add_qa_form, edit_qa_form=edit_qa_form,
-                               delete_qa_form=delete_qa_form, categories_questions=categories_questions,
-                               categories=categories, cat_id_data=cat_id_data, popular_data=popular_data,
-                               current_category=current_category)
+                               delete_qa_form=delete_qa_form, current_category=current_category,
+                               categories_questions=categories_questions.order_by(Questions.cat_id),
+                               categories=categories, cat_id_data=cat_id_data, popular_data=popular_data)
 
     @route('/qa/sort')
     @login_required

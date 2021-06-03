@@ -94,7 +94,7 @@
 	<tbody>
 		{% for black_word in black_words %}
 		<tr class="table_line_item" data-id="{{ black_word.id }}" data-name="{{ black_word.word }}">
-			<th scope="row"></th>
+			<th scope="row" width="40"></th>
 			<td>{{ black_word.word }}</td>
 			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal" title="Редактировать"></i></td>
 			<td scope="col" width="45"><i class="fa fa-trash fa-lg table_action_icon delete_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Удалить"></i></td>
@@ -105,6 +105,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('.static', filename='js/modal_load_data/modal_black_word.js')}}"></script>
+<script src="{{ url_for('.static', filename='js/modal_load_data/modal_exception_word.js')}}"></script>
 <script src="{{ url_for('.static', filename='js/renumber_rows.js')}}"></script>
 {% endblock %}

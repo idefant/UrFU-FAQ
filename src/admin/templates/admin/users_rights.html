@@ -84,7 +84,7 @@
 		
 		<tr class="table_line_item {% if user.is_deactivated %} deactivated_user {% endif %}" data-id="{{ user.id }}" data-name="{{ user.name }}" data-right-category="{{ user.right_category }}" data-right-users="{{ user.right_users }}" data-right-qa="{{ user.right_qa }}" data-right-synonym="{{ user.right_synonym }}" data-right-black_word="{{ user.right_exception_word }}" data-right-request="{{ user.right_request }}">
 
-			<th scope="row">{{ user.id }}</th>
+			<th scope="row" width="40">{{ user.id }}</th>
 			<td>{{ user.name }} ({{ user.post }})</td>
 			<td>
 				{% if user.right_category %}

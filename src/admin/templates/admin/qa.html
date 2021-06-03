@@ -12,7 +12,7 @@
 {% endif %}
 
 {% if popular_data != None %}
-- {{ "Популярное" if popular_data else "Непопулярное" }}
+- {{ "Популярное" if popular_data == "True" else "Непопулярное" }}
 {% endif %}
 {% endblock %}
 
@@ -129,7 +129,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary">Закрыть</button>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Закрыть">Закрыть</button>
 				<button type="button" class="btn btn-primary btn_view_edit" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#editModal">Редактировать</button>
 				<button type="button" class="btn btn-danger btn_view_delete" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#deleteModal">Удалить</button>
 			</div>
@@ -163,10 +163,12 @@
 	<select onchange="return setAttr('popular',this.options[this.selectedIndex].value)" class="form-select filter_active" aria-label="Default select example">
 		<option value="">Показывать все</option>
 
-		<option value="True" {{ "selected=selected" if popular_data}}>Популярное</option>
-		<option value="False" {{ "selected=selected" if popular_data != None and not popular_data }}>Непопулярное</option>
+		<option value="True" {{ "selected=selected" if popular_data == "True"}}>Популярное</option>
+		<option value="False" {{ "selected=selected" if popular_data == "False" }}>Непопулярное</option>
 
 	</select>
+
+	
 </div>
 
 
@@ -181,13 +183,15 @@
 			<th scope="col"></th>
 			<th scope="col"></th>
 			<th scope="col"></th>
+			<!-- <th scope="col"></th> -->
 		</tr>
 	</thead>
 	<tbody>
 		{% for qa in categories_questions %}
 		<tr class="table_line_item" data-id="{{ qa.Questions.id }}" data-question="{{ qa.Questions.question }}" data-answer="{{ qa.Questions.answer }}" data-category="{{ qa.Categories.name }}" data-popular="{{ qa.Questions.is_popular }}" data-cat_id="{{ qa.Questions.cat_id }}">
-			<th scope="row"></th>
+			<th scope="row" width="40"></th>
 			<td>{{ qa.Questions.question }}</td>
+			<!-- <td>{{ qa.Questions.clear_question }}</td> -->
 			<td>{{ qa.Categories.name }}</td>
 			<td>
 				{% if qa.Questions.is_popular == True %}

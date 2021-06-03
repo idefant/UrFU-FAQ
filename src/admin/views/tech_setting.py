@@ -19,8 +19,8 @@ class ViewTechSetting(FlaskView):
         edit_exception_word_form = forms.EditExceptionWordForm()
         delete_exception_word_form = forms.DeleteExceptionWordForm()
         try:
-            black_words = BlackWords.query
-        except NameError:
+            black_words = BlackWords.query.order_by(BlackWords.word)
+        except (NameError, AttributeError):
             return render_template("admin/error_page.html", message="Ошибка чтения из БД")
         return render_template('admin/exception_words.html', add_exception_word_form=add_exception_word_form,
                                edit_exception_word_form=edit_exception_word_form,
@@ -36,13 +36,13 @@ class ViewTechSetting(FlaskView):
         edit_exception_word_form = forms.EditExceptionWordForm()
         delete_exception_word_form = forms.DeleteExceptionWordForm()
         try:
-            black_words = WhiteWords.query
-        except NameError:
+            white_words = WhiteWords.query.order_by(WhiteWords.word)
+        except (NameError, AttributeError):
             return render_template("admin/error_page.html", message="Ошибка чтения из БД")
         return render_template('admin/exception_words.html', add_exception_word_form=add_exception_word_form,
                                edit_exception_word_form=edit_exception_word_form,
                                delete_exception_word_form=delete_exception_word_form,
-                               black_words=black_words, word_type="white")
+                               black_words=white_words, word_type="white")
 
     @route('/synonyms')
     @login_required
@@ -56,11 +56,11 @@ class ViewTechSetting(FlaskView):
         main_dependent_words = []
         try:
             synonyms = SynonymousWords.query
-            main_words = synonyms.filter(SynonymousWords.synonym_id.is_(None))
+            main_words = synonyms.filter(SynonymousWords.synonym_id.is_(None)).order_by(SynonymousWords.word)
             for main_word in main_words:
                 dependent_words = synonyms.filter(main_word.id == SynonymousWords.synonym_id)
                 main_dependent_words += [(main_word, dependent_words)]
-        except NameError:
+        except (NameError, AttributeError):
             return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
         return render_template('admin/synonyms.html', add_synonyms_dependent_form=add_synonyms_dependent_form,
@@ -91,7 +91,8 @@ class ViewTechSetting(FlaskView):
                 try:
                     synonyms = SynonymousWords.query
                     main_word = synonyms.get(main_word_id)
-                    synonyms = synonyms.filter(SynonymousWords.synonym_id == main_word_id)
+                    synonyms = synonyms.filter(SynonymousWords.synonym_id == main_word_id)\
+                        .order_by(SynonymousWords.word)
                 except(NameError, AttributeError):
                     return render_template("admin/error_page.html", message="Ошибка чтения из БД")
                 if main_word is None:

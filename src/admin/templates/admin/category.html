@@ -124,7 +124,7 @@
 		{% for category in categories_questions_count %}
 
 		<tr class="table_line_item" data-id="{{ category[0].id }}" data-name="{{ category[0].name }}" data-icon_name="{{ category[0].icon_name }}" data-count_qa="{{ category[1] }}">
-			<th scope="row"></th>
+			<th scope="row" width="40"></th>
 			<td>{{ category[0].name }}</td>
 			<td scope="col">
 				<i class="fa fa-lg {{ category[0].icon_name }}" aria-hidden="true"></i>

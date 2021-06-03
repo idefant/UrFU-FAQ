@@ -69,7 +69,7 @@
 	<tbody>
 		{% for user in users %}
 		<tr class="table_line_item" data-id="{{ user.id }}" data-name="{{ user.name }}" data-username="{{ user.username }}" data-post="{{ user.post }}">
-			<th scope="row">{{ user.id }}</th>
+			<th scope="row" width="40">{{ user.id }}</th>
 			<td>{{ user.name }}</td>
 			<td>{{ user.username }}</td>
 			<td>{{ user.post }}</td>
