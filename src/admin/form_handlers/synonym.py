@@ -19,10 +19,16 @@ class FormHandlerSynonym(FlaskView):
         main_word_id = request.args.get("word_id")
         if add_synonyms_dependent_form.validate_on_submit():
             word = add_synonyms_dependent_form.word.data
+
             if not word:
                 flash('Неправильно заполнены поля', category='danger')
             else:
                 if main_word_id:
+                    main_word = SynonymousWords.query.get(main_word_id)
+                    if main_word.synonym_id:
+                        flash('Главный синоним не должен сам быть чьим-то синонимом. Фильтры сброшены',
+                              category='danger')
+                        return redirect(url_for('.ViewTechSetting:synonyms'))
                     synonym = SynonymousWords(word=word, synonym_id=main_word_id)
                 else:
                     synonym = SynonymousWords(word=word)

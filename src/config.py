@@ -1,4 +1,4 @@
-data_base = 'sqlite:///dbase_develop.db'
+data_base = 'sqlite:///testfaq.db'
 secret_key = 'fdgfh78@#5?>gfhf89dx,v06k'
 is_debug = True
 
