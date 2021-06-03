@@ -19,6 +19,7 @@
 	{{ macros.flash_messages() }}
 	
 	<div class="dashboard_container">
+		{% if current_user.right_qa %}
 		<div class="block_item">
 			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.ViewQA:qa') }}';" style="background-color: #4976e7;">
 	
@@ -40,18 +41,23 @@
 
 			</div>
 		</div>
+		{% endif %}
 
+		{% if current_user.right_category %}
 		{{ macros.dashboard_item(title = 'Категории: ' + categories_count | string(),
 				color = '#7cc6fa',
 				link = 'window.location.href = "' + url_for('.ViewCategory:category') + '"'
 			)
 		}}
+		{% endif %}
 
+		{% if current_user.right_users %}
 		{{ macros.dashboard_item(title = 'Пользователи: ' + users_count | string(),
 				color = '#9e71ce',
 				link = 'window.location.href = "' + url_for('.ViewUser:users') + '"'
 			)
 		}}
+		{% endif %}
 
 		{{ macros.dashboard_item(title = 'Личный кабинет',
 				color = '#85d1b3',
@@ -59,11 +65,13 @@
 			)
 		}}
 
+		{% if current_user.right_category %}
 		{{ macros.dashboard_item(title = 'Доп.иконки: 786',
 				color = '#c43434',
 				link = 'window.open("' + url_for('.ViewCategory:cheat_sheet_icons') + '")'
 			)
 		}}
+		{% endif %}
 
 		{{ macros.dashboard_item(title = 'Перейти на сайт',
 				color = '#e3ab00',
@@ -71,29 +79,43 @@
 			)
 		}}
 
+		{{ macros.dashboard_item(title = 'Перейти к боту',
+				color = '#646ab2',
+				link = 'window.open("https://vk.com/")'
+			)
+		}}
+
+		{% if current_user.right_exception_word %}
 		{{ macros.dashboard_item(title = 'Черные слова',
 				color = '#000',
 				link = 'window.location.href = "' + url_for('.ViewTechSetting:black_words') + '"'
 			)
 		}}
+		{% endif %}
 
+		{% if current_user.right_exception_word %}
 		{{ macros.dashboard_item(title = 'Белые слова',
 				color = '#ccc',
 				link = 'window.location.href = "' + url_for('.ViewTechSetting:white_words') + '"'
 			)
 		}}
+		{% endif %}
 
+		{% if current_user.right_synonym %}
 		{{ macros.dashboard_item(title = 'Синонимы',
 				color = '#2cc200',
 				link = 'window.location.href = "' + url_for('.ViewTechSetting:synonyms') + '"'
 			)
 		}}
+		{% endif %}
 
+		{% if current_user.right_request %}
 		{{ macros.dashboard_item(title = 'История поиска',
 				color = '#c600c0',
 				link = 'window.location.href = "' + url_for('.ViewRequest:requests') + '"'
 			)
 		}}
+		{% endif %}
 
 
 	</div>

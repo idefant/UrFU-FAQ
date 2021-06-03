@@ -31,4 +31,4 @@ class ViewAccount(FlaskView):
         edit_account_form.name.default = current_user.name
         edit_account_form.process()
         return render_template('admin/account.html', edit_account_form=edit_account_form,
-                               change_password_account_form=change_password_account_form, current_user=current_user)
+                               change_password_account_form=change_password_account_form)
