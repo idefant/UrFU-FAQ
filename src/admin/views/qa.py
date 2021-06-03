@@ -1,6 +1,7 @@
-from flask import render_template, request
+from flask import render_template, request, flash, url_for
 from flask_classy import FlaskView, route
 from flask_login import login_required, current_user
+from werkzeug.utils import redirect
 
 import forms
 from models import Categories, Questions, db
@@ -27,28 +28,44 @@ class ViewQA(FlaskView):
                 .join(Questions, Categories.id == Questions.cat_id) \
                 .order_by(Questions.id)
         except (NameError, AttributeError):
-            return "Ошибка чтения из БД"
+            return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
         if cat_id_data is not None:
-            try:
+            if not cat_id_data.isdigit():
+                flash('ID категории должен быть числом', category='danger')
+            else:
                 cat_id_data = int(cat_id_data)
-            except ValueError:
-                return "ID категории должен быть числом"
-            current_category = categories.get(cat_id_data)
-            if current_category is None or cat_id_data == 0:
-                return "Нет такой категории в БД"
-            categories_questions = categories_questions.filter(Questions.cat_id == cat_id_data)
-            add_qa_form.cat_id.default = cat_id_data
+                current_category = categories.get(cat_id_data)
+                if current_category is None or cat_id_data == 0:
+                    flash('Нет такой категории в БД. Фильтр был сброшен', category='danger')
+                    return redirect(url_for('.ViewQA:qa'))
+                else:
+                    try:
+                        categories_questions = categories_questions.filter(Questions.cat_id == cat_id_data)
+                    except (NameError, AttributeError):
+                        return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+                    add_qa_form.cat_id.default = cat_id_data
 
         if popular_data is not None:
             if popular_data == 'True':
-                popular_data = True
+                is_popular = True
             elif popular_data == 'False':
-                popular_data = False
-            categories_questions = categories_questions.filter(Questions.is_popular == popular_data)
-            add_qa_form.popular.default = popular_data
+                is_popular = False
+            else:
+                flash('Фильтр может быть популярным, непопулярным и гибридным. Четвертого не дано. Фильтр сброшен',
+                      category='danger')
+                return redirect(url_for('.ViewQA:qa'))
+            try:
+                categories_questions = categories_questions.filter(Questions.is_popular == is_popular)
+            except (NameError, AttributeError):
+                return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+            add_qa_form.popular.default = is_popular
 
-        categories = categories.filter(Categories.id != 0)
+        try:
+            categories = categories.filter(Categories.id != 0)
+        except (NameError, AttributeError):
+            return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+
         category_choices = [(0, "Выберете категорию")]
         category_choices += [(i.id, i.name) for i in categories]
         add_qa_form.cat_id.choices = category_choices
@@ -60,45 +77,43 @@ class ViewQA(FlaskView):
                                categories=categories, cat_id_data=cat_id_data, popular_data=popular_data,
                                current_category=current_category)
 
-
     @route('/qa/sort')
     @login_required
     def qa_sort(self):
         if not current_user.right_qa:
             return render_template('admin/access_denied.html')
-        questions = Questions.query
-        message = ""
-        cat_id_data = request.args.get("cat_id")
-
         try:
+            questions = Questions.query
             categories = Categories.query
         except NameError:
-            return "Ошибка чтения из БД"
+            return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
+        cat_id_data = request.args.get("cat_id")
         current_category = categories.get(cat_id_data)
 
         if cat_id_data is None:
-            message = "Выбирите категорию из списка"
+            flash('Выбирите категорию из списка', category='danger')
         elif cat_id_data == "popular":
             try:
                 questions = questions.filter(Questions.is_popular).order_by(Questions.popular_priority)
             except (NameError, AttributeError):
-                return "Ошибка чтения из БД"
+                return render_template("admin/error_page.html", message="Ошибка чтения из БД")
         else:
-            try:
+            if not cat_id_data.isdigit():
+                flash('ID категории должен быть числом', category='danger')
+            else:
                 cat_id_data = int(cat_id_data)
-            except ValueError:
-                return "ID категории должен быть числом"
 
-            if current_category is None or cat_id_data == 0:
-                return "Нет такой категории в БД"
-
-            try:
-                questions = questions.filter(Questions.cat_id == cat_id_data).order_by(Questions.priority)
-            except (NameError, AttributeError):
-                return "Ошибка чтения из БД"
+                if current_category is None or cat_id_data == 0:
+                    flash('Нет такой категории в БД. Фильтр сброшен', category='danger')
+                    return redirect(url_for('.ViewQA:qa_sort'))
+                else:
+                    try:
+                        questions = questions.filter(Questions.cat_id == cat_id_data).order_by(Questions.priority)
+                    except (NameError, AttributeError):
+                        return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
         categories = categories.filter(Categories.id != 0)
 
-        return render_template("admin/qa_sort.html", questions=questions, categories=categories, message=message,
+        return render_template("admin/qa_sort.html", questions=questions, categories=categories,
                                current_category=current_category, cat_id_data=cat_id_data)

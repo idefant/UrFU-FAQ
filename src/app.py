@@ -1,11 +1,12 @@
 import datetime
 
-from flask import Flask, render_template, session
+from flask import Flask, render_template
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
+from search import parse_table
 from website.website import website
 from admin.admin import admin
 from bot.bot import bot
@@ -35,8 +36,9 @@ db = SQLAlchemy(app)
 app.config['SECRET_KEY'] = secret_key
 
 login_manager = LoginManager(app)
-login_manager.login_view = 'admin.login'
+login_manager.login_view = 'admin.ViewAccount:login'
 login_manager.login_message = 'Для продолжения авторизуйтесь'
+
 
 
 @login_manager.user_loader

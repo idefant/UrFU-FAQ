@@ -1,4 +1,4 @@
-from flask import request, flash, url_for
+from flask import request, flash, url_for, render_template
 from flask_classy import FlaskView, route
 from flask_login import login_required
 from markupsafe import Markup
@@ -19,16 +19,19 @@ class FormHandlerSynonym(FlaskView):
         main_word_id = request.args.get("word_id")
         if add_synonyms_dependent_form.validate_on_submit():
             word = add_synonyms_dependent_form.word.data
-            if main_word_id:
-                synonym = SynonymousWords(word=word, synonym_id=main_word_id)
+            if not word:
+                flash('Неправильно заполнены поля', category='danger')
             else:
-                synonym = SynonymousWords(word=word)
-            try:
-                db.session.add(synonym)
-                db.session.commit()
-                flash(Markup("<strong>Добавлено слово:</strong> " + word), category='success')
-            except exc.SQLAlchemyError:
-                flash('Ошибка внесения изменений в базу данных', category='danger')
+                if main_word_id:
+                    synonym = SynonymousWords(word=word, synonym_id=main_word_id)
+                else:
+                    synonym = SynonymousWords(word=word)
+                try:
+                    db.session.add(synonym)
+                    db.session.commit()
+                    flash(Markup("<strong>Добавлено слово:</strong> " + word), category='success')
+                except exc.SQLAlchemyError:
+                    flash('Ошибка внесения изменений в базу данных', category='danger')
         if main_word_id:
             return redirect(url_for('.ViewTechSetting:synonyms_replacement', word_id=main_word_id))
         return redirect(url_for('.ViewTechSetting:synonyms'))
@@ -36,26 +39,28 @@ class FormHandlerSynonym(FlaskView):
     @route('/edit_synonym', methods=["POST"])
     @login_required
     def edit_synonym(self):
-        editSynonymsDependentForm = EditSynonymsDependentForm()
+        edit_synonyms_dependent_form = EditSynonymsDependentForm()
         main_word_id = request.args.get("word_id")
-        if editSynonymsDependentForm.validate_on_submit():
-            word_id = editSynonymsDependentForm.word_id.data
-            word = editSynonymsDependentForm.word.data
+        if edit_synonyms_dependent_form.validate_on_submit():
+            word_id = edit_synonyms_dependent_form.word_id.data
+            word = edit_synonyms_dependent_form.word.data
+            if not word:
+                flash('Неправильно заполнены поля', category='danger')
+            else:
+                try:
+                    synonym = SynonymousWords.query.get(word_id)
+                except NameError:
+                    return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
-            try:
-                synonym = SynonymousWords.query.get(word_id)
-            except NameError:
-                return "Ошибка чтения из БД"
-
-            if synonym is None:
-                return "Нет такого слова"
-
-            synonym.word = word
-            try:
-                db.session.commit()
-                flash(Markup("<strong>Изменено слово:</strong> " + word), category='success')
-            except exc.SQLAlchemyError:
-                flash('Ошибка внесения изменений в базу данных', category='danger')
+                if synonym is None:
+                    flash('Нет такого слова', category='danger')
+                else:
+                    synonym.word = word
+                    try:
+                        db.session.commit()
+                        flash(Markup("<strong>Изменено слово:</strong> " + word), category='success')
+                    except exc.SQLAlchemyError:
+                        flash('Ошибка внесения изменений в базу данных', category='danger')
         if main_word_id:
             return redirect(url_for('.ViewTechSetting:synonyms_replacement', word_id=main_word_id))
         return redirect(url_for('.ViewTechSetting:synonyms'))
@@ -69,31 +74,33 @@ class FormHandlerSynonym(FlaskView):
             word_id = delete_synonyms_dependent_form.word_id.data
 
             if word_id == main_word_id:
-                return "Нельзя удалять главный синоним"
+                flash('Нельзя удалять главный синоним', category='danger')
+            else:
+                try:
+                    synonyms = SynonymousWords.query
+                except NameError:
+                    return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
-            try:
-                synonyms = [SynonymousWords.query.get(word_id)]
-            except NameError:
-                return "Ошибка чтения из БД"
+                synonyms_this_word = [synonyms.get(word_id)]
 
-            if synonyms is None:
-                return "Такого слова нет"
-
-            if not main_word_id:
-                synonyms += SynonymousWords.query.filter(SynonymousWords.synonym_id == word_id).all()
-
-            word = synonyms[0].word
-            try:
-                for synonym in synonyms:
-                    db.session.delete(synonym)
-                db.session.commit()
-                if len(synonyms) > 1:
-                    flash(Markup("<strong>Удалено слово:</strong> " + word
-                                 + " <strong>и все слова синонимичные ему</strong>"), category='success')
+                if synonyms_this_word is None:
+                    flash('Такого слова нет', category='danger')
                 else:
-                    flash(Markup("<strong>Удалено слово:</strong> " + word), category='success')
-            except exc.SQLAlchemyError:
-                flash('Ошибка внесения изменений в базу данных', category='danger')
+                    if not main_word_id:
+                        synonyms_this_word += synonyms.filter(SynonymousWords.synonym_id == word_id)
+
+                    word = synonyms_this_word[0].word
+                    try:
+                        for synonyms in synonyms_this_word:
+                            db.session.delete(synonyms)
+                        db.session.commit()
+                        if len(synonyms_this_word) > 1:
+                            flash(Markup("<strong>Удалено слово:</strong> " + word
+                                         + " <strong>и все слова синонимичные ему</strong>"), category='success')
+                        else:
+                            flash(Markup("<strong>Удалено слово:</strong> " + word), category='success')
+                    except exc.SQLAlchemyError:
+                        flash('Ошибка внесения изменений в базу данных', category='danger')
         if main_word_id:
             return redirect(url_for('.ViewTechSetting:synonyms_replacement', word_id=main_word_id))
         return redirect(url_for('.ViewTechSetting:synonyms'))

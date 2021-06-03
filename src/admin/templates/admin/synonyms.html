@@ -77,7 +77,7 @@
 	<button type="button" class="btn btn-success button_active" data-bs-toggle="modal" data-bs-target="#addModal">
 		Добавить слово
 	</button>
-	<a href="{{ url_for('.ViewRequest:update_cleared_questions_dbase', next_to=current_url) }}" class="btn btn-primary button_active" title="Обновление очищенных вопросов займет ~10 секунд. Это необходимо делать только после изменений базы синонимов, черного и белого списков">Обновить очищенные вопросы</a>
+	{{ macros.update_cleared_questions_dbase(url_for('.ViewTechSetting:synonyms')) }}
 </div>
 
 

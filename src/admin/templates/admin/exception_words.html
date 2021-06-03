@@ -4,11 +4,11 @@
 {% set text_word_type = "черн" if word_type == "black" else "бел" %}
 
 {% block title %}
-Список {{ text_word_type -}}ых слов
+{{ text_word_type | capitalize -}}ый список слов
 {% endblock %}
 
 {% block page_header %}
-Список {{ text_word_type -}}ых слов
+{{ text_word_type | capitalize -}}ый список слов
 {% endblock %}
 
 
@@ -81,7 +81,7 @@
 		Добавить слово
 	</button>
 	{% set current_url = url_for('.ViewTechSetting:black_words') if word_type == "black" else url_for('.ViewTechSetting:white_words') %}
-	<a href="{{ url_for('.ViewRequest:update_cleared_questions_dbase', next_to=current_url) }}" class="btn btn-primary button_active" title="Обновление очищенных вопросов займет ~10 секунд. Это необходимо делать только после изменений базы синонимов, черного и белого списков">Обновить очищенные вопросы</a>
+	{{ macros.update_cleared_questions_dbase(current_url) }}
 </div>
 
 

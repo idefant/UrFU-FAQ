@@ -1,4 +1,5 @@
 {% extends 'admin/base.html' %}
+{% import "admin/macros.html" as macros %}
 
 {% block title %}
 Запросы
@@ -13,6 +14,8 @@
 
 
 {% block body %}
+
+{{ macros.flash_messages() }}
 
 <div class="btn_container">
 

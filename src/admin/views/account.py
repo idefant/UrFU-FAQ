@@ -1,15 +1,8 @@
-import math
-
-from flask import render_template, request, send_file, flash, url_for
+from flask import render_template, flash, url_for
 from flask_classy import FlaskView, route
 from flask_login import login_required, current_user, logout_user
-from six import BytesIO
-from sqlalchemy import desc
 from werkzeug.utils import redirect
-
 import forms
-from models import Questions, Requests, db
-from search import convert_text
 
 
 class ViewAccount(FlaskView):
@@ -27,7 +20,6 @@ class ViewAccount(FlaskView):
         if current_user.is_authenticated:
             return redirect(url_for('.ViewAccount:account'))
         login_form = forms.LoginForm()
-
         return render_template('admin/login.html', login_form=login_form)
 
     @route('/account')

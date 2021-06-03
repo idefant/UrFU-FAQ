@@ -30,8 +30,9 @@ class FormHandlerExceptionWord(FlaskView):
                 elif word_type == "black":
                     exception_word = BlackWords(word=word)
                 else:
-                    return "Ни черный ни белый"
-
+                    flash('Это должен быть либо белый список, либо черный список слов. Третьего не дано',
+                          category='danger')
+                    return redirect(url_for('.index'))
                 try:
                     db.session.add(exception_word)
                     db.session.commit()
@@ -43,8 +44,8 @@ class FormHandlerExceptionWord(FlaskView):
         elif word_type == "black":
             return redirect(url_for('.ViewTechSetting:black_words'))
         else:
-            return "Ни черныйб ни белый"
-
+            flash('Это должен быть либо белый список, либо черный список слов. Третьего не дано', category='danger')
+            return redirect(url_for('.index'))
 
     @route('/edit_exception_word', methods=["POST"])
     @login_required
@@ -57,32 +58,42 @@ class FormHandlerExceptionWord(FlaskView):
 
         if edit_exception_word_form.validate_on_submit():
             word_id = edit_exception_word_form.id.data
-            word = edit_exception_word_form.word.data  # Проверка на пустоту
+            word = edit_exception_word_form.word.data
 
-            try:
+            if not word:
+                flash('Неправильно заполнены поля', category='danger')
+            else:
+                try:
+                    white_words = WhiteWords.query
+                    black_words = BlackWords.query
+                except NameError:
+                    return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+
                 if word_type == "white":
-                    exception_word = WhiteWords.query.get(word_id)
+                    exception_word = white_words.get(word_id)
                 elif word_type == "black":
-                    exception_word = BlackWords.query.get(word_id)
+                    exception_word = black_words.get(word_id)
                 else:
-                    return "Ни черный ни белый"
+                    flash('Это должен быть либо белый список, либо черный список слов. Третьего не дано',
+                          category='danger')
+                    return redirect(url_for('.index'))
 
-            except NameError:
-                return "Ошибка чтения из БД"
-            if exception_word is None:
-                return "Этого слова не существует"
-            exception_word.word = word
-            try:
-                db.session.commit()
-                flash(Markup("<strong>Изменено слово:</strong> " + word), category='success')
-            except exc.SQLAlchemyError:
-                flash('Ошибка внесения изменений в базу данных', category='danger')
+                if exception_word is None:
+                    flash('Этого слова не существует', category='danger')
+                else:
+                    exception_word.word = word
+                    try:
+                        db.session.commit()
+                        flash(Markup("<strong>Изменено слово:</strong> " + word), category='success')
+                    except exc.SQLAlchemyError:
+                        flash('Ошибка внесения изменений в базу данных', category='danger')
         if word_type == "white":
             return redirect(url_for('.ViewTechSetting:white_words'))
         elif word_type == "black":
             return redirect(url_for('.ViewTechSetting:black_words'))
         else:
-            return "Ни черныйб ни белый"
+            flash('Это должен быть либо белый список, либо черный список слов. Третьего не дано', category='danger')
+            return redirect(url_for('.index'))
 
     @route('/delete_exception_word', methods=["POST"])
     @login_required
@@ -94,29 +105,32 @@ class FormHandlerExceptionWord(FlaskView):
         if delete_exception_word_form.validate_on_submit():
             word_id = delete_exception_word_form.id.data
             try:
-                if word_type == "white":
-                    exception_word = WhiteWords.query.get(word_id)
-                elif word_type == "black":
-                    exception_word = BlackWords.query.get(word_id)
-                else:
-                    return "Ни черный ни белый"
-
+                white_words = WhiteWords.query
+                black_words = BlackWords.query
             except NameError:
-                return "Ошибка чтения из БД"
+                return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+
+            if word_type == "white":
+                exception_word = white_words.get(word_id)
+            elif word_type == "black":
+                exception_word = black_words.get(word_id)
+            else:
+                flash('Это должен быть либо белый список, либо черный список слов. Третьего не дано', category='danger')
+                return redirect(url_for('.index'))
 
             if exception_word is None:
-                return "Этого слова не существует"
-            word = exception_word.word
-            
-            try:
-                db.session.delete(exception_word)
-                db.session.commit()
-                flash(Markup("<strong>Удалено слово:</strong> " + word), category='success')
-            except exc.SQLAlchemyError:
-                flash('Ошибка внесения изменений в базу данных', category='danger')
+                flash('Этого слова не существует', category='danger')
+            else:
+                try:
+                    db.session.delete(exception_word)
+                    db.session.commit()
+                    flash(Markup("<strong>Удалено слово:</strong> " + exception_word.word), category='success')
+                except exc.SQLAlchemyError:
+                    flash('Ошибка внесения изменений в базу данных', category='danger')
         if word_type == "white":
             return redirect(url_for('.ViewTechSetting:white_words'))
         elif word_type == "black":
             return redirect(url_for('.ViewTechSetting:black_words'))
         else:
-            return "Ни черныйб ни белый"
+            flash('Это должен быть либо белый список, либо черный список слов. Третьего не дано', category='danger')
+            return redirect(url_for('.index'))

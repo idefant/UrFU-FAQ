@@ -16,9 +16,9 @@
 {% block body %}
 
 <section class="dashboard">
+	{{ macros.flash_messages() }}
+	
 	<div class="dashboard_container">
-		
-
 		<div class="block_item">
 			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.ViewQA:qa') }}';" style="background-color: #4976e7;">
 	

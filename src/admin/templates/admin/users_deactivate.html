@@ -12,7 +12,7 @@
 
 {% block modals %}
 {{ macros.modal(modal_id = "activateModal",
-		handler_url = url_for('.FormHandlerUser:activate_user'),
+		handler_url = url_for('.FormHandlerUser:change_status_user', action="activate"),
 		title = "Активация пользователя заново",
 		optional_top =
 			'<strong>Подтвердите активацию пользователя: </strong>

@@ -6,38 +6,48 @@ import enchant
 import difflib
 import re
 from enchant.checker import SpellChecker
-from flask_sqlalchemy import SQLAlchemy
 from fuzzywuzzy import fuzz
 from sqlalchemy import exc
 
-# from app import app
 from models import db, Categories, Questions, BlackWords, SynonymousWords, Requests, WhiteWords
 
-# db = SQLAlchemy()
 morph = pymorphy2.MorphAnalyzer()
 language = enchant.Dict("ru_RU")
 checker = SpellChecker("ru_RU")
 
 
-def convert_text(string):
-    white_words = WhiteWords.query
-    cleared_text = clear_string(string)
-    word_list = correct_error(cleared_text, white_words)
+def convert_text(text):
+    try:
+        white_words = WhiteWords.query
+        black_words = BlackWords.query
+        synonyms = SynonymousWords.query
+    except NameError:
+        return "Ошибка чтения из БД"
+    cleared_text = clear_string(text)
+    correct_word_list = correct_error(cleared_text, white_words)
     result_word = []
-    for word in word_list:
-        word = initial_form(word, white_words)
-        if len(word) > 2:
-            db_word = BlackWords.query.filter(BlackWords.word == word).first()
-            if db_word is None:
-                syn_word = SynonymousWords.query.filter(SynonymousWords.word == word).first()
-                if syn_word is not None and syn_word.synonym_id is not None:
-                    word = SynonymousWords.query.get(syn_word.synonym_id).word
-                result_word.append(word)
+    for correct_word in correct_word_list:
+        correct_word = initial_form(correct_word, white_words)
+        if len(correct_word) > 2:
+            try:
+                black_word = black_words.filter(BlackWords.word == correct_word).first()
+
+                if black_word is None:
+                    synonym_word = synonyms.filter(SynonymousWords.word == correct_word).first()
+                    if synonym_word is not None and synonym_word.synonym_id is not None:
+                        correct_word = synonyms.get(synonym_word.synonym_id).word
+                    result_word.append(correct_word)
+
+            except (NameError, AttributeError):
+                return "Ошибка чтения из БД"
     return ' '.join(result_word)
 
 
 def initial_form(word, white_words):
-    is_white = white_words.filter(WhiteWords.word == word).first()
+    try:
+        is_white = white_words.filter(WhiteWords.word == word).first()
+    except (NameError, AttributeError):
+        return "Ошибка чтения из БД"
     if is_white:
         return word
     similar_word = morph.parse(word)[0]
@@ -45,7 +55,7 @@ def initial_form(word, white_words):
 
 
 def clear_string(text):
-    return re.sub('[^а-яА-Я]', ' ', text)
+    return re.sub('[^а-я]', ' ', text.lower())
 
 
 def correct_error(text, white_words):
@@ -53,60 +63,77 @@ def correct_error(text, white_words):
     word_list_mistakes = [i.word for i in checker]
     word_list = text.split()
 
-    for i in range(len(word_list)):
-        is_white = white_words.filter(WhiteWords.word == word_list[i]).first()
+    for word in word_list:
+        is_white = white_words.filter(WhiteWords.word == word).first()
         if not is_white:
-            if word_list_mistakes.__contains__(word_list[i]):
+            if word_list_mistakes.__contains__(word):
                 dictionary = dict()
-                suggestions = set(language.suggest(word_list[i]))
-                for word in suggestions:
-                    measure = difflib.SequenceMatcher(None, word_list[i], word).ratio()
-                    dictionary[measure] = word
+                suggestions = set(language.suggest(word))
+                for suggestion in suggestions:
+                    measure = difflib.SequenceMatcher(None, word, suggestion).ratio()
+                    dictionary[measure] = suggestion
                 if len(dictionary) != 0:
-                    word_list[i] = dictionary[max(dictionary.keys())] # падает на max
+                    word = dictionary[max(dictionary.keys())]
     return word_list
 
 
 def parse_table():
-    categories = list()  # Заменить этот массив на БД
+    categories = list()
     with open("FAQ_CSV.csv") as r_file:
         file_reader = csv.DictReader(r_file, delimiter=",")
+        try:
+            if not (Categories.query.first() is None or Questions.query.first() is None):
+                print("Таблицы категорий и вопросов должны быть пусты")
+                return
+        except (NameError, AttributeError):
+            print("Ошибка чтения из БД")
+            return
+
+        try:
+            db.session.add(Categories(id=0, name="Популярное", priority=0))
+        except exc.SQLAlchemyError:
+            print("___ERROR___")
+            return
         for row in file_reader:
             if not row["Категория"] in categories:
                 categories.append(row["Категория"])
-                category = Categories(name=row["Категория"], priority=0)
+                category = Categories(name=row["Категория"], priority=len(categories))
                 try:
-                    # db.session.add(category)
-                    # db.session.commit()
-                    print("OK")
+                    db.session.add(category)
                 except exc.SQLAlchemyError:
                     print("___ERROR___")
+                    return
             qa = Questions(question=row["Вопрос"], clear_question=convert_text(row["Вопрос"]), answer=row["Ответ"],
                            cat_id=int(categories.index(row["Категория"]) + 1), priority=0)
             try:
                 db.session.add(qa)
-                db.session.commit()
-                print("OK")
             except exc.SQLAlchemyError:
                 print("___ERROR___")
+                return
+        try:
+            db.session.commit()
+            print("Все удачно добавлено")
+        except exc.SQLAlchemyError:
+            print("___ERROR___")
 
 
 def get_answer(user_question):
-    qa_list = Questions.query
+    try:
+        qa_list = Questions.query
+    except NameError:
+        print("Ошибка чтения БД")
+        return
     scores = []
     clear_text = convert_text(user_question)
-
-
     request = Requests(original=user_question, cleared=clear_text, date_time=datetime.now())
-
     try:
         db.session.add(request)
         db.session.commit()
     except exc.SQLAlchemyError:
         print('Ошибка внесения изменений в базу данных')
+        return
 
 
-    # print(clear_text)
     for qa in qa_list:
         scores += [(fuzz.token_sort_ratio(qa.clear_question.lower(), clear_text.lower()), qa)]
 
@@ -115,5 +142,5 @@ def get_answer(user_question):
     result = []
     for max_score in max_scores[:3]:
         if max_score[0] > 40:  # или WRatio
-            result += [(max_score)]
+            result += [max_score]  # Зачем круглые скобки
     return result

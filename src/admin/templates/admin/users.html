@@ -110,7 +110,7 @@
 }}
 
 {{ macros.modal(modal_id = "deactivateModal",
-		handler_url = url_for('.FormHandlerUser:deactivate_user'),
+		handler_url = url_for('.FormHandlerUser:change_status_user', action="deactivate"),
 		title = "Деактивация пользователя",
 		optional_top =
 			'<strong>Подтвердите деактивацию пользователя: </strong>

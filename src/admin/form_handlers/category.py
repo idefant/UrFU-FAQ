@@ -21,12 +21,12 @@ class FormHandlerCategory(FlaskView):
             try:
                 categories_count = Categories.query.count()
             except NameError:
-                return "Ошибка чтения из БД"
+                return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
             name = add_category_form.category.data
             icon_name = add_category_form.icon_name.data
 
-            if not name:
+            if not (name, icon_name):
                 flash('Неправильно заполнены поля', category='danger')
             else:
                 category = Categories(name=name, priority=categories_count, icon_name=icon_name)
@@ -50,23 +50,24 @@ class FormHandlerCategory(FlaskView):
             name = edit_category_form.name.data
             icon_name = edit_category_form.icon_name.data
 
-            if not name:
+            if not (name and cat_id):
                 flash('Неправильно заполнены поля', category='danger')
             else:
                 try:
                     category = Categories.query.get(cat_id)
                 except NameError:
-                    return "Ошибка чтения из БД"
+                    return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
                 if category is None:
-                    return "Категории не существует"
-                category.name = name
-                category.icon_name = icon_name
-                try:
-                    db.session.commit()
-                    flash(Markup("<strong>Изменен вопрос:</strong> " + name), category='success')
-                except exc.SQLAlchemyError:
-                    flash('Ошибка внесения изменений в базу данных', category='danger')
+                    flash("Категории не существует", category='danger')
+                else:
+                    category.name = name
+                    category.icon_name = icon_name
+                    try:
+                        db.session.commit()
+                        flash(Markup("<strong>Изменен вопрос:</strong> " + name), category='success')
+                    except exc.SQLAlchemyError:
+                        flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.ViewCategory:category'))
 
     @route('/delete_category', methods=["POST"])
@@ -78,28 +79,31 @@ class FormHandlerCategory(FlaskView):
         if delete_category_form.validate_on_submit():
             cat_id = delete_category_form.id.data
             count_qa = delete_category_form.count_qa.data
-            try:
-                cat_id = int(cat_id)
-                count_qa = int(count_qa)
-            except ValueError:
-                return "Категория и количество записей должно быть представлено в виде чисел"
-            if cat_id == 0:
-                flash('Нельзя удалять категорию "Популярное"', category='danger')
-            elif count_qa != 0:
-                flash('Нельзя удалять категорию в которой есть вопросы. Переместите их в другую категорию или удалите',
-                      category='danger')
+            if not (count_qa and cat_id):
+                flash('В форме не заполнены некоторые скрытые поля', category='danger')
             else:
-                try:
-                    category = Categories.query.get(cat_id)
-                except NameError:
-                    return "Ошибка чтения из БД"
-                name = category.name
-                try:
-                    db.session.delete(category)
-                    db.session.commit()
-                    flash(Markup("<strong>Удалена категория:</strong> " + name), category='success')
-                except exc.SQLAlchemyError:
-                    flash('Ошибка внесения изменений в базу данных', category='danger')
+                if not (cat_id.isdigit() and count_qa.isdigit()):
+                    flash('Категория и количество записей должно быть представлено в виде чисел', category='danger')
+                else:
+                    cat_id = int(cat_id)
+
+                    if cat_id == 0:
+                        flash('Нельзя удалять категорию "Популярное"', category='danger')
+                    elif int(count_qa) != 0:
+                        flash('Нельзя удалять категорию в которой есть вопросы. Переместите их в другую категорию или'
+                              'удалите', category='danger')
+                    else:
+                        try:
+                            category = Categories.query.get(cat_id)
+                        except NameError:
+                            return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+                        name = category.name
+                        try:
+                            db.session.delete(category)
+                            db.session.commit()
+                            flash(Markup("<strong>Удалена категория:</strong> " + name), category='success')
+                        except exc.SQLAlchemyError:
+                            flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.ViewCategory:category'))
 
     @route('/change_color', methods=["POST", "GET"])
@@ -109,20 +113,21 @@ class FormHandlerCategory(FlaskView):
             return render_template('admin/access_denied.html')
         color = request.args.get("color")
         cat_id = request.args.get("cat_id")
+        if not (color and cat_id):
+            flash('Неправильно заполнены поля', category='danger')
         try:
             category = Categories.query.get(cat_id)
         except NameError:
-            return "Ошибка чтения из БД"
+            return render_template("admin/error_page.html", message="Ошибка чтения из БД")
         if category is None:
-            return "Категории не существует"
-        category.color = color
-
-        try:
-            db.session.commit()
-            flash("Цвет категории успешно изменен", category='success')
-        except exc.SQLAlchemyError:
-            flash('Ошибка внесения изменений в базу данных', category='danger')
-
+            flash('Категории не существует. Цвет не был изменен', category='danger')
+        else:
+            category.color = color
+            try:
+                db.session.commit()
+                flash("Цвет категории успешно изменен", category='success')
+            except exc.SQLAlchemyError:
+                flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.ViewCategory:category'))
 
     @route('/change_order_category', methods=['GET', 'POST'])
@@ -130,14 +135,21 @@ class FormHandlerCategory(FlaskView):
         if not current_user.right_category:
             return render_template('admin/access_denied.html')
         sequence_id = request.args.get("sequence_id")
-        sequence_id = sequence_id.split(",")
+        if not sequence_id:
+            flash('Последовательность элементов не была обнаружена. Порядок сортировки не был сохранен',
+                  category='danger')
+        list_sequence_id = sequence_id.split(",")
         try:
-            categories_list = Categories.query
+            categories = Categories.query
         except NameError:
-            return "Ошибка чтения из БД"
+            return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
-        for i in range(len(sequence_id)):
-            categories_list.get(int(sequence_id[i])).priority = i + 1
+        for i in range(len(list_sequence_id)):
+            if not list_sequence_id[i].isdigit():
+                flash('Последовательность элементов должна из себя представлять список чисел', category='danger')
+                return redirect(url_for('.ViewCategory:category_sort'))
+            else:
+                categories.get(int(list_sequence_id[i])).priority = i + 1
 
         try:
             db.session.commit()
