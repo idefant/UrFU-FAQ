@@ -1,3 +1,4 @@
+import re
 from secrets import token_urlsafe
 
 from flask import flash, redirect, url_for, render_template, request
@@ -22,7 +23,7 @@ class FormHandlerUser(FlaskView):
         add_user_form = AddUserForm()
         if add_user_form.validate_on_submit():
             name = add_user_form.name.data
-            username = add_user_form.username.data
+            username = add_user_form.username.data.lower()
             password = generate_password_hash(add_user_form.password.data)
             post = add_user_form.post.data
             right_category = add_user_form.right_category.data
@@ -35,23 +36,28 @@ class FormHandlerUser(FlaskView):
             if not (name and username and password and post):
                 flash('Неправильно заполнены поля', category='danger')
             else:
-                try:
-                    user = Users.query.filter(Users.username == username).first()
-                except (NameError, AttributeError):
-                    return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-                if user is not None:
-                    flash('Не должно быть 2 пользователей с одинаковыми логинами', category='danger')
+
+                if not bool(re.match("^[a-z0-9._-]*$", username)):
+                    flash('Логин может состоять только из латинских букв, цифр, знаков нижнего подчеркивания ( _ ), '
+                          'тире ( - ), точки ( . )', category='danger')
                 else:
-                    user = Users(username=username, name=name, psswd=password, post=post, right_category=right_category,
-                                 right_users=right_users, right_qa=right_qa, right_synonym=right_synonym,
-                                 right_exception_word=right_exception_word, right_request=right_request,
-                                 auth_token = token_urlsafe(32))
                     try:
-                        db.session.add(user)
-                        db.session.commit()
-                        flash("Пользователь добавлен", category='success')
-                    except exc.SQLAlchemyError:
-                        flash('Ошибка внесения изменений в базу данных', category='danger')
+                        user = Users.query.filter(Users.username == username).first()
+                    except (NameError, AttributeError):
+                        return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+                    if user is not None:
+                        flash('Не должно быть 2 пользователей с одинаковыми логинами', category='danger')
+                    else:
+                        user = Users(username=username, name=name, psswd=password, post=post,
+                                     right_category=right_category, right_users=right_users, right_qa=right_qa,
+                                     right_synonym=right_synonym, right_exception_word=right_exception_word,
+                                     right_request=right_request, auth_token = token_urlsafe(32))
+                        try:
+                            db.session.add(user)
+                            db.session.commit()
+                            flash("Пользователь добавлен", category='success')
+                        except exc.SQLAlchemyError:
+                            flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.ViewUser:users'))
 
     @route('/edit_user', methods=["POST"])
@@ -63,36 +69,40 @@ class FormHandlerUser(FlaskView):
         if edit_user_form.validate_on_submit():
             user_id = edit_user_form.id.data
             name = edit_user_form.name.data
-            username = edit_user_form.username.data
+            username = edit_user_form.username.data.lower()
             post = edit_user_form.post.data
 
             if not (name and username and post):
                 flash('Неправильно заполнены поля', category='danger')
             else:
-                try:
-                    users = Users.query
-                except NameError:
-                    return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-                user = users.get(user_id)
-
-                if user is None:
-                    flash('Нет такого пользователя', category='danger')
+                if not bool(re.match("^[a-z0-9._-]*$", username)):
+                    flash('Логин может состоять только из латинских букв, цифр, знаков нижнего подчеркивания ( _ ), '
+                          'тире ( - ), точки ( . )', category='danger')
                 else:
                     try:
-                        another_user = users.filter(Users.username == username).first()
-                    except (NameError, AttributeError):
+                        users = Users.query
+                    except NameError:
                         return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-                    if another_user is not None and another_user != user:
-                        flash('Не должно быть 2 пользователей с одинаковыми логинами', category='danger')
+                    user = users.get(user_id)
+
+                    if user is None:
+                        flash('Нет такого пользователя', category='danger')
                     else:
-                        user.name = name
-                        user.username = username
-                        user.post = post
                         try:
-                            db.session.commit()
-                            flash("Изменение пользовательских данных прошло успешно", category='success')
-                        except exc.SQLAlchemyError:
-                            flash('Ошибка внесения изменений в базу данных', category='danger')
+                            another_user = users.filter(Users.username == username).first()
+                        except (NameError, AttributeError):
+                            return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+                        if another_user is not None and another_user != user:
+                            flash('Не должно быть 2 пользователей с одинаковыми логинами', category='danger')
+                        else:
+                            user.name = name
+                            user.username = username
+                            user.post = post
+                            try:
+                                db.session.commit()
+                                flash("Изменение пользовательских данных прошло успешно", category='success')
+                            except exc.SQLAlchemyError:
+                                flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.ViewUser:users'))
 
     @route('/change_status_user', methods=["POST"])

@@ -1,3 +1,4 @@
+import re
 from secrets import token_urlsafe
 from flask import flash, url_for, redirect, render_template
 from flask_classy import FlaskView, route
@@ -37,13 +38,17 @@ class FormHandlerAccount(FlaskView):
                     if user is not None and user != current_user:
                         flash('Не должно быть 2 пользователей с одинаковыми логинами', category='danger')
                     else:
-                        current_user.name = name
-                        current_user.username = username
-                        try:
-                            db.session.commit()
-                            flash("Изменение пользовательских данных прошло успешно", category='success')
-                        except exc.SQLAlchemyError:
-                            flash('Ошибка внесения изменений в базу данных', category='danger')
+                        if not bool(re.match("^[a-z0-9._-]*$", username)):
+                            flash('Логин может состоять только из латинских букв, цифр, знаков нижнего подчеркивания '
+                                  '( _ ), тире ( - ), точки ( . )', category='danger')
+                        else:
+                            current_user.name = name
+                            current_user.username = username
+                            try:
+                                db.session.commit()
+                                flash("Изменение пользовательских данных прошло успешно", category='success')
+                            except exc.SQLAlchemyError:
+                                flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.ViewAccount:account'))
 
     @route('/change_password_account', methods=["POST"])
