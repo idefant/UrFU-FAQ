@@ -20,7 +20,7 @@ function showPanel(panelIndex, buttonIndex) {
 
 
 
-$(function() {					// Все работает и без нее
+$(function() {
 	$("#pure-toggle-right").click(
 		function() {
 			if ($("#pure-toggle-right").is(":checked"))
