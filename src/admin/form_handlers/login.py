@@ -3,7 +3,7 @@ from flask_classy import FlaskView, route
 from flask_login import login_user
 from werkzeug.security import check_password_hash
 
-import forms
+from admin import forms
 from models import Users
 
 
@@ -14,8 +14,9 @@ class FormHandlerLogin(FlaskView):
     def login_handler(self):
         login_form = forms.LoginForm()
         if login_form.validate_on_submit():
+            username = login_form.username.data.lower()
             try:
-                user = Users.query.filter(Users.username == login_form.username.data).first()
+                user = Users.query.filter(Users.username == username).first()
             except (NameError, AttributeError):
                 return render_template("admin/error_page.html", message="Ошибка чтения из БД")
             if user and check_password_hash(user.psswd, login_form.password.data):

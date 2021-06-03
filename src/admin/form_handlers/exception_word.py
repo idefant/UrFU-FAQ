@@ -3,9 +3,8 @@ from flask_classy import FlaskView, route
 from flask_login import login_required, current_user
 from markupsafe import Markup
 from sqlalchemy import exc
-
 from models import db, BlackWords, WhiteWords
-from forms import DeleteExceptionWordForm, EditExceptionWordForm, AddExceptionWordForm
+from admin.forms import DeleteExceptionWordForm, EditExceptionWordForm, AddExceptionWordForm
 
 
 class FormHandlerExceptionWord(FlaskView):
@@ -21,7 +20,8 @@ class FormHandlerExceptionWord(FlaskView):
 
         add_exception_word_form = AddExceptionWordForm()
         if add_exception_word_form.validate_on_submit():
-            word = add_exception_word_form.word.data
+            word = add_exception_word_form.word.data.lower()
+            word = " ".join(word.split())
             if not word:
                 flash('Неправильно заполнены поля', category='danger')
             else:
@@ -58,7 +58,8 @@ class FormHandlerExceptionWord(FlaskView):
 
         if edit_exception_word_form.validate_on_submit():
             word_id = edit_exception_word_form.id.data
-            word = edit_exception_word_form.word.data
+            word = edit_exception_word_form.word.data.lower()
+            word = " ".join(word.split())
 
             if not word:
                 flash('Неправильно заполнены поля', category='danger')

@@ -69,7 +69,6 @@
 
 
 
-
 {% block body %}
 {{ macros.flash_messages() }}
 
@@ -79,11 +78,6 @@
 	</button>
 	{{ macros.update_cleared_questions_dbase(url_for('.ViewTechSetting:synonyms')) }}
 </div>
-
-
-
-
-
 
 
 <table class="table table-striped table-sm">
@@ -120,11 +114,8 @@
 		{% endfor %}
 	</tbody>
 </table>
-
-
-
-
 {% endblock %}
+
 
 
 {% block scripts %}

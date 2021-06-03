@@ -1,36 +1,19 @@
 {% extends 'website/base.html' %}
+{% import "website/macros.html" as macros %}
+
+{% block title %}
+Изменение цвета категории
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/color-picker.css') }}">
+{% endblock %}
 
 
 {% block body %}
 
-		<section class="hero">
-			<div class="container">
-				<div class="hero-text">
-					<h1 class="hero-heading">Приём, УрФУ!</h1>
-					<p class="hero-paragraph">Все, что может понадобиться тебе 
-						для&nbsp;поступления, мы собрали на&nbsp;одной странице. Теперь 
-					поступить правильно стало еще проще.</p>
-					<!--<p class="hero-paragraph">Смотри сериал об&nbsp;университете!</p>-->
-				</div>
-			</div>
-		</section>
+		{{ macros.title_main_page() }}
 
-		<style>
-			.picker_window {
-				padding: 10px;
-				position: fixed;
-				z-index: 999;
-				top: 10px;
-				left: 10px;
-				background-color: white;
-				border-radius: 10px;
-				border: 1px solid gray;
-			}
-			.picker {
-				display: block;
-				padding-bottom: 10px;
-			}
-		</style>
 
 		<div class="picker_window">
 			<div class="picker" 
@@ -120,7 +103,6 @@
 	<script src="{{ url_for('website.static', filename='js/script.js') }}"></script>
 
 	<script>
-
 		showPanel(0, {{ index }});
 	</script>
 
@@ -136,13 +118,10 @@
 		});
 	</script>
 
-
 	<script>
 		$("#save_color").on("click", function() {
 			var bgc = $(".current_tab").css("backgroundColor");
 			window.location.href = "{{ url_for('.FormHandlerCategory:change_color') }}?color="+bgc+"&cat_id={{ current_category.id }}";
 		})		
 	</script>
-
-
 {% endblock %}

@@ -4,8 +4,7 @@ from flask_login import login_required, current_user
 from sqlalchemy import desc
 from werkzeug.utils import redirect
 
-import forms
-from admin import functions
+from admin import functions, forms
 from models import Categories, Questions
 
 

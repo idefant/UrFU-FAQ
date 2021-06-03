@@ -1,22 +1,18 @@
 {% extends 'website/base.html' %}
 {% import "website/macros.html" as macros %}
 
+
+{% block title %}
+Приём, УрФУ!
+{% endblock %}
+
+
 {% block body %}
 
 {{ macros.title_main_page() }}
 
-
-
-
-
-
 <section class="faq">
-
 	<div class="tabs-menu flex">
-
-
-
-
 		{% for category in result_list %}
 		<button onclick="showPanel({{ category[0] }}, {{ category[0] }})" style="background-color: {{ category[1].color }};">
 			<i class="fa {{ category[1].icon_name }}" aria-hidden="true"></i>
@@ -24,19 +20,11 @@
 		</button>
 		{% endfor %}
 
-
 		<button onclick="showPanel({{ result_list | length }}, {{ result_list | length }})" class="current" style="background-color: {{ result_popular_list[0].color }};">
 			<i class="fa {{ result_popular_list[0].icon_name }}" aria-hidden="true"></i>
 			{{ result_popular_list[0].name }}
 		</button>
-
-
 	</div>
-
-
-
-
-
 
 
 	{% for category in result_list %}
@@ -64,8 +52,6 @@
 		</div>
 	</div>
 	{% endfor %}
-
-
 
 
 	<div class="tab-content" style="background-color: {{ result_popular_list[0].color }};">
@@ -99,11 +85,7 @@
 
 {% block scripts %}
 <script src="{{ url_for('.static', filename='js/script.js') }}"></script>
-
 <script>
-	
 	showPanel({{ result_list | length }}, {{ result_list | length }});
-
-
 </script>
 {% endblock %}

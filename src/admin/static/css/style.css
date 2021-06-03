@@ -78,6 +78,7 @@ header {
 .account_user_data {
  	display: flex;
 	flex-wrap: wrap;
+	margin-bottom: 10px;
 }
 
 .psswd_field {

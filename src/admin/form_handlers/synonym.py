@@ -6,7 +6,7 @@ from sqlalchemy import exc
 from werkzeug.utils import redirect
 
 from models import db, SynonymousWords
-from forms import AddSynonymsDependentForm, EditSynonymsDependentForm, DeleteSynonymsDependentForm
+from admin.forms import AddSynonymsDependentForm, EditSynonymsDependentForm, DeleteSynonymsDependentForm
 
 
 class FormHandlerSynonym(FlaskView):
@@ -18,7 +18,8 @@ class FormHandlerSynonym(FlaskView):
         add_synonyms_dependent_form = AddSynonymsDependentForm()
         main_word_id = request.args.get("word_id")
         if add_synonyms_dependent_form.validate_on_submit():
-            word = add_synonyms_dependent_form.word.data
+            word = add_synonyms_dependent_form.word.data.lower()
+            word = " ".join(word.split())
 
             if not word:
                 flash('Неправильно заполнены поля', category='danger')
@@ -49,7 +50,8 @@ class FormHandlerSynonym(FlaskView):
         main_word_id = request.args.get("word_id")
         if edit_synonyms_dependent_form.validate_on_submit():
             word_id = edit_synonyms_dependent_form.word_id.data
-            word = edit_synonyms_dependent_form.word.data
+            word = edit_synonyms_dependent_form.word.data.lower()
+            word = " ".join(word.split())
             if not word:
                 flash('Неправильно заполнены поля', category='danger')
             else:

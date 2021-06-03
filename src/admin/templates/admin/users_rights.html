@@ -59,7 +59,6 @@
 
 
 {% block body %}
-
 {{ macros.flash_messages() }}
 
 <div class="btn_container">
@@ -118,13 +117,15 @@
 				{% endif %}
 			</td>
 			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal" title="Редактировать права"></i></td>
+		</tr>
 		{% endfor %}
 	</tbody>
 </table>
 {% endblock %}
 
 
+
 {% block scripts %}
-<script src="{{ url_for('.static', filename='js/modal_load_data/modal_user_rights.js')}}"></script>
 <script src="{{ url_for('.static', filename='js/renumber_rows.js')}}"></script>
+<script src="{{ url_for('.static', filename='js/modal_load_data/modal_user_rights.js')}}"></script>
 {% endblock %}

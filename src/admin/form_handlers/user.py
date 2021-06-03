@@ -9,7 +9,7 @@ from sqlalchemy import exc
 from werkzeug.security import generate_password_hash
 
 from models import db, Users
-from forms import AddUserForm, EditUserForm, DeactivateUserForm, EditUserRightsForm, ActivateUserForm, \
+from admin.forms import AddUserForm, EditUserForm, DeactivateUserForm, EditUserRightsForm, ActivateUserForm, \
     ChangePasswordUserForm, DeleteUserForm
 
 
@@ -22,10 +22,10 @@ class FormHandlerUser(FlaskView):
             return render_template('admin/access_denied.html')
         add_user_form = AddUserForm()
         if add_user_form.validate_on_submit():
-            name = add_user_form.name.data
+            name = " ".join(add_user_form.name.data.split())
             username = add_user_form.username.data.lower()
             password = generate_password_hash(add_user_form.password.data)
-            post = add_user_form.post.data
+            post = " ".join(add_user_form.post.data.split())
             right_category = add_user_form.right_category.data
             right_users = add_user_form.right_user.data
             right_qa = add_user_form.right_qa.data
@@ -68,9 +68,9 @@ class FormHandlerUser(FlaskView):
         edit_user_form = EditUserForm()
         if edit_user_form.validate_on_submit():
             user_id = edit_user_form.id.data
-            name = edit_user_form.name.data
+            name = " ".join(edit_user_form.name.data.split())
             username = edit_user_form.username.data.lower()
-            post = edit_user_form.post.data
+            post = " ".join(edit_user_form.post.data.split())
 
             if not (name and username and post):
                 flash('Неправильно заполнены поля', category='danger')

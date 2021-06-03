@@ -48,10 +48,7 @@
 
 
 
-
-
 {% block body %}
-
 {{ macros.flash_messages() }}
 
 <div class="btn_container">
@@ -71,7 +68,6 @@
 	</thead>
 	<tbody>
 		{% for user in users %}
-
 		<tr class="table_line_item" data-id="{{ user.id }}" data-name="{{ user.name }}" data-username="{{ user.username }}" data-post="{{ user.post }}">
 			<th scope="row">{{ user.id }}</th>
 			<td>{{ user.name }}</td>
@@ -84,6 +80,7 @@
 	</tbody>
 </table>
 {% endblock %}
+
 
 
 {% block scripts %}

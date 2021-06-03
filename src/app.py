@@ -1,17 +1,12 @@
 import datetime
-
 from flask import Flask, render_template
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-
 from website.website import website
 from admin.admin import admin
 from bot.bot import bot
-
 from models import Users
-
-from config import data_base, secret_key
+from config import data_base, secret_key, is_debug
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = data_base
@@ -22,7 +17,7 @@ app.permanent_session_lifetime = datetime.timedelta(days=10)
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(bot, url_prefix='/bot')
 app.register_blueprint(website, url_prefix='/')
-app.debug = True
+app.debug = is_debug
 
 db = SQLAlchemy(app)
 

@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 from sqlalchemy import exc
 from werkzeug.security import check_password_hash, generate_password_hash
 from models import Users, db
-from forms import EditAccountForm, ChangePasswordAccountForm
+from admin.forms import EditAccountForm, ChangePasswordAccountForm
 
 
 class FormHandlerAccount(FlaskView):
@@ -17,9 +17,10 @@ class FormHandlerAccount(FlaskView):
     def edit_account(self):
         edit_account_form = EditAccountForm()
         if edit_account_form.validate_on_submit():
-            name = edit_account_form.name.data
+            name = " ".join(edit_account_form.name.data.split())
             username = edit_account_form.username.data
             password = edit_account_form.password.data
+
             if not (name and username and password):
                 flash('Поля должны быть заполнены', category='danger')
             else:

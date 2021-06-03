@@ -2,7 +2,7 @@ from flask import render_template, flash, url_for
 from flask_classy import FlaskView, route
 from flask_login import login_required, current_user, logout_user
 from werkzeug.utils import redirect
-import forms
+from admin import forms
 
 
 class ViewAccount(FlaskView):

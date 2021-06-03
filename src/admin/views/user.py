@@ -1,7 +1,7 @@
 from flask import render_template
 from flask_classy import FlaskView, route
 from flask_login import login_required, current_user
-import forms
+from admin import forms
 from models import Users
 
 

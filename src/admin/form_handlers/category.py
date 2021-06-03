@@ -5,7 +5,7 @@ from markupsafe import Markup
 from sqlalchemy import exc
 
 from models import db, Categories
-from forms import AddCategoryForm, EditCategoryForm, DeleteCategoryForm
+from admin.forms import AddCategoryForm, EditCategoryForm, DeleteCategoryForm
 
 
 class FormHandlerCategory(FlaskView):
@@ -23,8 +23,8 @@ class FormHandlerCategory(FlaskView):
             except NameError:
                 return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
-            name = add_category_form.category.data
-            icon_name = add_category_form.icon_name.data
+            name = " ".join(add_category_form.category.data.split())
+            icon_name = " ".join(add_category_form.icon_name.data.split())
 
             if not (name, icon_name):
                 flash('Неправильно заполнены поля', category='danger')
@@ -47,8 +47,8 @@ class FormHandlerCategory(FlaskView):
         edit_category_form = EditCategoryForm()
         if edit_category_form.validate_on_submit():
             cat_id = edit_category_form.id.data
-            name = edit_category_form.name.data
-            icon_name = edit_category_form.icon_name.data
+            name = " ".join(edit_category_form.name.data.split())
+            icon_name = " ".join(edit_category_form.icon_name.data.split())
 
             if not (name and cat_id):
                 flash('Неправильно заполнены поля', category='danger')

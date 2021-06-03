@@ -66,20 +66,20 @@
 	<form action="{{ url_for('.FormHandlerAccount:edit_account') }}" method="post">
 		{{ edit_account_form.csrf_token }}
 		<div class="row mb-3">
-			{{ edit_account_form.username.label(class_="col-sm-2 col-form-label") }}
-			<div class="col-sm-10">
+			{{ edit_account_form.username.label(class_="col-sm-3 col-form-label") }}
+			<div class="col-sm-9">
 				{{ edit_account_form.username(class_="form-control") }}
 			</div>
 		</div>
 		<div class="row mb-3">
-			{{ edit_account_form.name.label(class_="col-sm-2 col-form-label") }}
-			<div class="col-sm-10">
+			{{ edit_account_form.name.label(class_="col-sm-3 col-form-label") }}
+			<div class="col-sm-9">
 				{{ edit_account_form.name(class_="form-control") }}
 			</div>
 		</div>
 		<div class="row mb-3">
-			{{ edit_account_form.password.label(class_="col-sm-2 col-form-label") }}
-			<div class="col-sm-10">
+			{{ edit_account_form.password.label(class_="col-sm-3 col-form-label") }}
+			<div class="col-sm-9">
 				{{ edit_account_form.password(class_="form-control") }}
 			</div>
 		</div>
@@ -90,24 +90,25 @@
 
 	<div class="about">
 		<div class="user_position account_user_data">
-			<div class="user_position_label col-sm-2">
+			<div class="user_position_label col-sm-3">
 				Должность:
 			</div>
-			<div class="user_position_content col-sm-10">
+			<div class="user_position_content col-sm-9">
 				{{ current_user.post }}
 			</div>
 		</div>
 		<div class="user_rigths account_user_data">
-			<div class="user_rigths_label col-sm-2">
+			<div class="user_rigths_label col-sm-3">
 				Права:
 			</div>
-			<div class="user_rigths_content col-sm-10">
+			<div class="user_rigths_content col-sm-9">
 				<ul>
 					{{ '<li>Категории</li>'|safe if current_user.right_category }}
 					{{ '<li>Пользователи</li>'|safe if current_user.right_users }}
 					{{ '<li>Вопросы</li>'|safe if current_user.right_qa }}
 					{{ '<li>Синонимы</li>'|safe if current_user.right_synonym }}
-					{{ '<li>Черные список слов</li>'|safe if current_user.right_exception_word }}
+					{{ '<li>Слова исключения</li>'|safe if current_user.right_exception_word }}
+					{{ '<li>История поиска</li>'|safe if current_user.right_request }}
 				</ul>
 			</div>
 			

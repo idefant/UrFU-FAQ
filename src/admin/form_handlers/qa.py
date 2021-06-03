@@ -6,7 +6,7 @@ from markupsafe import Markup
 from sqlalchemy import exc
 
 from models import db, Categories, Questions
-from forms import AddQAForm, EditQAForm, DeleteQAForm
+from admin.forms import AddQAForm, EditQAForm, DeleteQAForm
 from search import convert_text
 
 
@@ -31,8 +31,8 @@ class FormHandlerQA(FlaskView):
             categories_list = [(i.id, i.name) for i in categories]
             add_qa_form.cat_id.choices = categories_list
 
-            question = add_qa_form.question.data
-            answer = add_qa_form.answer.data
+            question = " ".join(add_qa_form.question.data.split())
+            answer = re.sub(r'<p><br></p>|<br>', '', add_qa_form.answer.data)
             cat_id = add_qa_form.cat_id.data
             is_popular = add_qa_form.popular.data
 
@@ -40,8 +40,6 @@ class FormHandlerQA(FlaskView):
                 flash('Неправильно заполнены поля', category='danger')
             else:
                 clear_question = convert_text(question)
-                answer = re.sub(r'<p><br></p>|<br>', '', answer)
-
                 try:
                     count_questions_this_category = questions.filter(Questions.cat_id == cat_id).count()
                     count_questions_popular = questions.filter(Questions.is_popular).count()
@@ -76,39 +74,40 @@ class FormHandlerQA(FlaskView):
             available_categories = Categories.query
         except NameError:
             return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-        if available_categories is None:         # Проверить эту строку (тут не мождет быть None)
-            return "Нет ни одной категории"
-        categories_list = [(i.id, i.name) for i in available_categories]
-        edit_qa_form.cat_id.choices = categories_list
-        if edit_qa_form.validate_on_submit():
-            qa_id = edit_qa_form.id.data
-            question = edit_qa_form.question.data
-            clear_question = question
-            answer = edit_qa_form.answer.data
-            cat_id = edit_qa_form.cat_id.data
-            is_popular = edit_qa_form.popular.data
+        if available_categories.first() is None:
+            flash('Нет ни одной категории', category='danger')
+        else:
+            categories_list = [(i.id, i.name) for i in available_categories]
+            edit_qa_form.cat_id.choices = categories_list
+            if edit_qa_form.validate_on_submit():
+                qa_id = edit_qa_form.id.data
+                question = " ".join(edit_qa_form.question.data.split())
+                answer = re.sub(r'<p><br></p>|<br>', '', edit_qa_form.answer.data)
+                cat_id = edit_qa_form.cat_id.data
+                is_popular = edit_qa_form.popular.data
 
-            if not (question and answer and cat_id):
-                flash('Неправильно заполнены поля', category='danger')
-            else:
-                try:
-                    qa = Questions.query.get(qa_id)
-                except NameError:
-                    return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-
-                if qa is None:
-                    flash('Этот вопрос не найден', category='danger')
+                if not (question and answer and cat_id):
+                    flash('Неправильно заполнены поля', category='danger')
                 else:
-                    qa.question = question
-                    qa.clear_question = clear_question
-                    qa.answer = answer
-                    qa.cat_id = cat_id
-                    qa.is_popular = is_popular
+                    clear_question = convert_text(question)
                     try:
-                        db.session.commit()
-                        flash(Markup("<strong>Изменен вопрос:</strong> " + question), category='success')
-                    except exc.SQLAlchemyError:
-                        flash('Ошибка внесения изменений в базу данных', category='danger')
+                        qa = Questions.query.get(qa_id)
+                    except NameError:
+                        return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+
+                    if qa is None:
+                        flash('Этот вопрос не найден', category='danger')
+                    else:
+                        qa.question = question
+                        qa.clear_question = clear_question
+                        qa.answer = answer
+                        qa.cat_id = cat_id
+                        qa.is_popular = is_popular
+                        try:
+                            db.session.commit()
+                            flash(Markup("<strong>Изменен вопрос:</strong> " + question), category='success')
+                        except exc.SQLAlchemyError:
+                            flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.ViewQA:qa', cat_id=cat_id_data, popular=popular_data))
 
     @route('/delete_qa', methods=["POST"])

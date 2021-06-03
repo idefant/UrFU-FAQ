@@ -124,20 +124,16 @@
 		{% for category in categories_questions_count %}
 
 		<tr class="table_line_item" data-id="{{ category[0].id }}" data-name="{{ category[0].name }}" data-icon_name="{{ category[0].icon_name }}" data-count_qa="{{ category[1] }}">
-			<th scope="row">{{ category[0].id }}</th>
+			<th scope="row"></th>
 			<td>{{ category[0].name }}</td>
-
 			<td scope="col">
 				<i class="fa fa-lg {{ category[0].icon_name }}" aria-hidden="true"></i>
 			</td>
 			<td scope="col">
 				<div class="category_color" style="background-color: {{ category[0].color }};"></div>
 			</td>
-
 			<td>{{ category[1] }}</td>
 			<td>{{ category[0].priority }}</td>
-
-			
 			<td scope="col" width="45">
 				<a href="{{ url_for('.ViewCategory:colors', cat_id=('popular' if category[0].id == 0 else category[0].id)) }}">
 					<i class="fa fa-paint-brush fa-lg table_action_icon change_color_icon" aria-hidden="true" title="Изменить цвет"></i>
@@ -157,6 +153,6 @@
 
 
 {% block scripts %}
-<script src="{{ url_for('.static', filename='js/modal_load_data/modal_category.js')}}"></script>
 <script src="{{ url_for('.static', filename='js/renumber_rows.js')}}"></script>
+<script src="{{ url_for('.static', filename='js/modal_load_data/modal_category.js')}}"></script>
 {% endblock %}

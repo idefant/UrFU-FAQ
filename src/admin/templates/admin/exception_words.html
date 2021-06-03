@@ -71,8 +71,6 @@
 {% endblock %}
 
 
-
-
 {% block body %}
 {{ macros.flash_messages() }}
 
@@ -83,10 +81,6 @@
 	{% set current_url = url_for('.ViewTechSetting:black_words') if word_type == "black" else url_for('.ViewTechSetting:white_words') %}
 	{{ macros.update_cleared_questions_dbase(current_url) }}
 </div>
-
-
-
-
 
 <table class="table table-striped table-sm">
 	<thead>
@@ -99,11 +93,9 @@
 	</thead>
 	<tbody>
 		{% for black_word in black_words %}
-
 		<tr class="table_line_item" data-id="{{ black_word.id }}" data-name="{{ black_word.word }}">
 			<th scope="row"></th>
 			<td>{{ black_word.word }}</td>
-			
 			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal" title="Редактировать"></i></td>
 			<td scope="col" width="45"><i class="fa fa-trash fa-lg table_action_icon delete_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Удалить"></i></td>
 		</tr>
@@ -111,7 +103,6 @@
 	</tbody>
 </table>
 {% endblock %}
-
 
 {% block scripts %}
 <script src="{{ url_for('.static', filename='js/modal_load_data/modal_black_word.js')}}"></script>
