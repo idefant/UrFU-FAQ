@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin, login_required, login_user, current_user, logout_user
+from flask_login import UserMixin
 from sqlalchemy import DateTime
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 

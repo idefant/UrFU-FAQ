@@ -1,17 +1,15 @@
 import datetime
 
 from flask import Flask, render_template
-from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
-from search import parse_table
 from website.website import website
 from admin.admin import admin
 from bot.bot import bot
 
-from models import db, Users
+from models import Users
 
 from config import data_base, secret_key
 
@@ -25,11 +23,6 @@ app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(bot, url_prefix='/bot')
 app.register_blueprint(website, url_prefix='/')
 app.debug = True
-
-manager = Manager(app)
-migrate = Migrate(app, db)
-manager.add_command('db', MigrateCommand)
-
 
 db = SQLAlchemy(app)
 

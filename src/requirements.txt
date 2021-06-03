@@ -1,15 +1,11 @@
-alembic==1.6.0
 certifi==2020.12.5
 chardet==4.0.0
 click==7.1.2
 DAWG-Python==0.7.2
 docopt==0.6.2
 Flask==1.1.2
-Flask-CKEditor==0.4.6
 Flask-Classy==0.6.10
 Flask-Login==0.5.0
-Flask-Migrate==2.7.0
-Flask-Script==2.0.6
 Flask-SQLAlchemy==2.5.1
 Flask-WTF==0.14.3
 fuzzywuzzy==0.18.0
@@ -18,7 +14,6 @@ gunicorn==20.1.0
 idna==2.10
 itsdangerous==1.1.0
 Jinja2==2.11.3
-Mako==1.1.4
 MarkupSafe==1.1.1
 pyenchant==3.2.0
 pymorphy2==0.9.1
