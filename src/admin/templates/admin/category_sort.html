@@ -19,6 +19,7 @@
 
 {{ macros.flash_messages() }}
 <div class="btn_container">
+	{{ macros.back_button(url=url_for('.ViewCategory:category'), text="Отмена") }}
 	<button class="btn btn-success button_active" id="get_data">Собрать данные</button>
 </div>
 

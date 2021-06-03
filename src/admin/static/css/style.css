@@ -133,3 +133,8 @@ header {
 	max-width: 600px;
 	margin: 70px auto 0;
 }
+
+
+.back_button {
+	border: 2px solid black;
+}

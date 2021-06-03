@@ -72,10 +72,7 @@
 {{ macros.flash_messages() }}
 
 <div class="btn_container">
-	<a class="btn btn-light button_active" href="{{ url_for('.ViewTechSetting:synonyms') }}" role="button">
-		<i class="fa fa-chevron-left" aria-hidden="true" style="margin-right: 6px;"></i>
-		Назад к списку
-	</a>
+	{{ macros.back_button(url=url_for('.ViewTechSetting:synonyms'), text="Назад к списку") }}
 	<button type="button" class="btn btn-success button_active" data-bs-toggle="modal" data-bs-target="#addModal">
 		Добавить слово
 	</button>

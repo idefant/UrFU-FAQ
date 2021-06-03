@@ -62,3 +62,11 @@
 {% macro update_cleared_questions_dbase(current_url) %}
 <a href="{{ url_for('.ViewRequest:update_cleared_questions_dbase', next_to=current_url) }}" class="btn btn-primary button_active" title="Обновление очищенных вопросов займет ~10 секунд. Это необходимо делать только после изменений базы синонимов, черного и белого списков">Обновить очищенные вопросы</a>
 {% endmacro %}
+
+
+{% macro back_button(url, text) %}
+<a class="btn btn-light button_active back_button" href="{{ url }}" role="button">
+	<i class="fa fa-chevron-left" aria-hidden="true" style="margin-right: 6px;"></i>
+	{{ text }}
+</a>
+{% endmacro %}

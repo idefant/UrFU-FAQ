@@ -38,10 +38,14 @@
 	</select>
 </div>
 
-{% if cat_id_data != None %}
-
+{% if cat_id_data == None %}
+<div class="btn_container">
+	{{ macros.back_button(url=url_for('.ViewQA:qa'), text="Назад к списку") }}
+</div>
+{% else %}
 
 <div class="btn_container">
+	{{ macros.back_button(url=url_for('.ViewQA:qa'), text="Отмена") }}
 	<button class="btn btn-success button_active" id="get_data">Собрать данные</button>
 </div>
 
