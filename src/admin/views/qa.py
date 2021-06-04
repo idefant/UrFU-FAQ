@@ -76,7 +76,7 @@ class ViewQA(FlaskView):
 
         return render_template("admin/qa.html", add_qa_form=add_qa_form, edit_qa_form=edit_qa_form,
                                delete_qa_form=delete_qa_form, current_category=current_category,
-                               categories_questions=categories_questions.order_by(Questions.cat_id),
+                               categories_questions=categories_questions.order_by(Questions.id),
                                categories=categories, cat_id_data=cat_id_data, popular_data=popular_data)
 
     @route('/qa/sort')

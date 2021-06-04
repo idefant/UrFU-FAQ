@@ -5,6 +5,7 @@ $(function() {
 			var category = $(this).parents('.table_line_item').attr('data-category');
 			var popular = $(this).parents('.table_line_item').attr('data-popular');
 			var question = $(this).parents('.table_line_item').attr('data-question');
+			var clear_question = $(this).parents('.table_line_item').attr('data-clear_question');
 			var answer = $(this).parents('.table_line_item').attr('data-answer');
 			var cat_id = $(this).parents('.table_line_item').attr('data-cat_id');
 
@@ -16,6 +17,7 @@ $(function() {
 			}
 			$("#view_popular_content").html(star);
 			$("#view_question_content").html(question);
+			$("#view_clear_question_content").html(clear_question);
 			$("#view_answer_content").html(answer);
 
 

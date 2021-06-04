@@ -6,7 +6,7 @@ from vk_api.utils import get_random_id
 
 from search import get_answer
 
-from config import vk_bot_token, vk_bot_confirmation_token
+from config import vk_bot_token, vk_bot_confirmation_token, bot_messages, bot_messages_emoji, bot_messages_not_found
 
 bot = Blueprint('bot', __name__)
 
@@ -32,60 +32,40 @@ def processing():
 
 def make_keyboard():
     keyboard = VkKeyboard(one_time=False)
-    keyboard.add_button('Все вопросы', color=VkKeyboardColor.PRIMARY)
-    keyboard.add_button('Соц.сети УрФУ', color=VkKeyboardColor.PRIMARY)
+    keyboard.add_button(bot_messages[1][0], color=VkKeyboardColor.PRIMARY)
+    keyboard.add_button(bot_messages[2][0], color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
-    keyboard.add_button('Приемная комиссия', color=VkKeyboardColor.POSITIVE)
+    keyboard.add_button(bot_messages[3][0], color=VkKeyboardColor.POSITIVE)
     return keyboard.get_keyboard()
 
 
 def message_handler(data, vk):
 
-    user_message_text =data['object']['message']['text']
+    user_message_text = data['object']['message']['text']
 
-    if user_message_text == "Начать":
-        bot_message_text = "Привет! Это чат-бот Уральского Федерального Университета,предназначенный для помощи " \
-                           "абитуриентам в поиске информации о вузе.\n\n" \
-                           "Можешь задать мне вопрос или воспользоваться кнопками для получения информации"
-        send_message(data, vk, bot_message_text)
 
-    elif user_message_text == "Все вопросы":
-        bot_message_text = "Список всех часто задаваемых вопросов с разделением на основные категории ты сможешь " \
-                           "найти на (ЭТОМ САЙТЕ)"
-        send_message(data, vk, bot_message_text)
+    for bot_message in bot_messages:
+        if bot_message[0] == user_message_text:
+            bot_message_text = (bot_messages_emoji["info"] + " ") if "info" in bot_messages_emoji else ""
+            send_message(data, vk, bot_message_text + bot_message[1])
+            return
 
-    elif user_message_text == "Соц.сети УрФУ":
-        bot_message_text = "Официальный сайт УрФУ: urfu.ru \n\n" \
-                           "Страница УрФУ для абитуриентов: https://vk.com/abiturient_urfu \n\n" \
-                           "Также, у нашего университета есть страницы в различных социальных сетях," \
-                           "вот ссылки на них: \n" \
-                           "💡 instagram.com/urfu.ru \n" \
-                           "💡 t.me/urfu_ru \n" \
-                           "💡 facebook.com/ural.federal.university \n" \
-                           "💡 twitter.com/urfu \n" \
-                           "💡 ok.ru/uralfederal \n" \
-                           "💡 tiktok.com/@urfu.ru"
-        send_message(data, vk, bot_message_text)
-
-    elif user_message_text == "Приемная комиссия":
-        bot_message_text = "Страница УрФУ для абитуриентов: https://vk.com/abiturient_urfu \n" \
-                           "Здесь ты можешь задать интересующий тебя вопрос непосредственно сотруднику" \
-                           "медиа-штата нашего университета. \n\n" \
-                           "Адрес УрФУ: ул. Мира, 19, Кировский район, микрорайон Втузгородок, Екатеринбург \n\n" \
-                           "Контактные данные приёмной комиссии УрФУ: https://urfu.ru/ru/applicant/contacts/ "
-        send_message(data, vk, bot_message_text)
-
+    result = get_answer(user_message_text)
+    if type(result) == str:
+        send_message(data, vk, result)
     else:
-        result = get_answer(user_message_text)
         result_count = len(result)
         if result_count == 0:
-            bot_message_text = "Ничего не найдено"
+            bot_message_text = (bot_messages_emoji["not_found"] + " ") if "not_found" in bot_messages_emoji else ""
+            bot_message_text += bot_messages_not_found
             send_message(data, vk, bot_message_text)
         else:
-            send_message(data, vk, "Найдено " + str(result_count) + " результата")
+            bot_message_text = (bot_messages_emoji["found"] + " ") if "found" in bot_messages_emoji else ""
+            bot_message_text += f"Найдено { str(result_count) } результата"
+            send_message(data, vk, bot_message_text)
             for res in result:
-                bot_message_text = str(res[0]) + " "
-                bot_message_text += res[1].question
+                bot_message_text = (bot_messages_emoji["qa"] + " ") if "qa" in bot_messages_emoji else ""
+                bot_message_text += f"{ res[1].question } \n\n { res[1].answer }"
                 send_message(data, vk, bot_message_text)
 
 
@@ -96,4 +76,5 @@ def send_message(data, vk, bot_message_text):
                      user_id=str(user_id),
                      message=bot_message_text,
                      random_id=get_random_id(),
-                     keyboard=make_keyboard())
+                     keyboard=make_keyboard(),
+                     dont_parse_links=1)

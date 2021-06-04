@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, session
 from flask_login import login_required, logout_user, current_user
+
+from config import bot_link
 from models import Users, Questions, Categories
 from search import parse_table
 from .functions import get_categories_id_count
@@ -40,7 +42,10 @@ ViewAccount.register(admin)
 @admin.route('/')
 @login_required
 def index():
-    parse_table()
+
+    # parse_table() # Это убрать
+
+
     try:
         categories = Categories.query
         questions = Questions.query
@@ -56,7 +61,8 @@ def index():
     for category in categories:
         categories_questions_count += [(category, categories_id_count[category.id])]
     return render_template("admin/dashboard.html", categories_count=categories_count, users_count=users_count,
-                           categories_questions_count=categories_questions_count, questions_count=questions_count)
+                           categories_questions_count=categories_questions_count, questions_count=questions_count,
+                           bot_link=bot_link)
 
 
 @admin.before_request

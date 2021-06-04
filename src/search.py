@@ -9,6 +9,7 @@ from enchant.checker import SpellChecker
 from fuzzywuzzy import fuzz
 from sqlalchemy import exc
 
+from config import bot_messages_emoji, bot_messages_not_found, bot_messages_break_search
 from models import db, Categories, Questions, BlackWords, SynonymousWords, Requests, WhiteWords
 
 morph = pymorphy2.MorphAnalyzer()
@@ -122,7 +123,8 @@ def get_answer(user_question):
         qa_list = Questions.query
     except NameError:
         print("Ошибка чтения БД")
-        return
+        bot_message_text = (bot_messages_emoji["not_found"] + " ") if "not_found" in bot_messages_emoji else ""
+        return bot_message_text + bot_messages_break_search
     scores = []
     clear_text = convert_text(user_question)
     request = Requests(original=user_question, cleared=clear_text, date_time=datetime.now())
@@ -131,16 +133,19 @@ def get_answer(user_question):
         db.session.commit()
     except exc.SQLAlchemyError:
         print('Ошибка внесения изменений в базу данных')
-        return
+        bot_message_text = (bot_messages_emoji["not_found"] + " ") if "not_found" in bot_messages_emoji else ""
+        return bot_message_text + bot_messages_break_search
 
+    if not clear_text:
+        bot_message_text = (bot_messages_emoji["not_found"] + " ") if "not_found" in bot_messages_emoji else ""
+        return bot_message_text + bot_messages_not_found
 
     for qa in qa_list:
         scores += [(fuzz.token_sort_ratio(qa.clear_question.lower(), clear_text.lower()), qa)]
-
     max_scores = sorted(scores, key=lambda score: score[0], reverse=True)
 
     result = []
     for max_score in max_scores[:3]:
-        if max_score[0] > 40:  # или WRatio
-            result += [max_score]  # Зачем круглые скобки
+        if max_score[0] > 40:
+            result += [max_score]
     return result

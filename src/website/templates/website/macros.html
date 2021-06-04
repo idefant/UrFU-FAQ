@@ -1,12 +1,9 @@
-{% macro title_main_page() %}
+{% macro title_main_page(site_title, site_subtitle) %}
 <section class="hero">
 	<div class="container">
 		<div class="hero-text">
-			<h1 class="hero-heading">Приём, УрФУ!</h1>
-			<p class="hero-paragraph">Все, что может понадобиться тебе 
-				для&nbsp;поступления, мы собрали на&nbsp;одной странице. Теперь 
-			поступить правильно стало еще проще.</p>
-			<!--<p class="hero-paragraph">Смотри сериал об&nbsp;университете!</p>-->
+			<h1 class="hero-heading">{{ site_title }}</h1>
+			<p class="hero-paragraph">{{ site_subtitle }}</p>
 		</div>
 	</div>
 </section>
