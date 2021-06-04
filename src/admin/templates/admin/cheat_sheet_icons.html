@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Font Awesome - иконочный шрифт и CSS-инструментарий">
   <meta name="author" content="Dave Gandy">
-  <link rel="shortcut icon" href="https://fontawesome.ru/assets/ico/favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('website.static', filename='icons/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('website.static', filename='icons/apple-touch-favicon.png') }}">
   <title>Шпаргалка по Font Awesome</title>
   <link rel="stylesheet" href="{{ url_for('.static', filename='css/cheat_sheet_icons.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='libraries/css/font-awesome.min.css') }}">

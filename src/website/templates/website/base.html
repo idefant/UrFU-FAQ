@@ -6,8 +6,8 @@
 
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="shortcut icon" type="image/x-icon" href="https://urfu.ru/typo3conf/ext/urfu/Resources/Public/favicon/favicon.png">
-	<link rel="apple-touch-icon" href="https://urfu.ru/typo3conf/ext/urfu/Resources/Public/favicon/apple-touch-favicon.png">
+	<link rel="shortcut icon" type="image/x-icon" href="{{ url_for('website.static', filename='icons/favicon.png') }}">
+	<link rel="apple-touch-icon" href="{{ url_for('website.static', filename='icons/apple-touch-favicon.png') }}">
 	<title>{% block title %}{% endblock %}</title>
 
 	<link rel="stylesheet" href="{{ url_for('static', filename='libraries/css/bootstrap-reboot.min.css') }}">

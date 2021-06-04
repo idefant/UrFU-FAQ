@@ -22,17 +22,18 @@ class FormHandlerQA(FlaskView):
         popular_data = request.args.get("popular")
         add_qa_form = AddQAForm()
 
-        if add_qa_form.validate_on_submit():
-            try:
-                categories = Categories.query
-                questions = Questions.query
-            except NameError:
-                return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-            categories_list = [(i.id, i.name) for i in categories]
-            add_qa_form.cat_id.choices = categories_list
+        try:
+            categories = Categories.query
+            questions = Questions.query
+        except NameError:
+            return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
+        categories_list = [(i.id, i.name) for i in categories]
+        add_qa_form.cat_id.choices = categories_list
+
+        if add_qa_form.validate_on_submit():
             question = " ".join(add_qa_form.question.data.split())
-            answer = re.sub(r'<p><br></p>|<br>', '', add_qa_form.answer.data)
+            answer = re.sub(r'<p><br></p>', '', add_qa_form.answer.data)
             cat_id = add_qa_form.cat_id.data
             is_popular = add_qa_form.popular.data
 
@@ -82,7 +83,7 @@ class FormHandlerQA(FlaskView):
             if edit_qa_form.validate_on_submit():
                 qa_id = edit_qa_form.id.data
                 question = " ".join(edit_qa_form.question.data.split())
-                answer = re.sub(r'<p><br></p>|<br>', '', edit_qa_form.answer.data)
+                answer = re.sub(r'<p><br></p>', '', edit_qa_form.answer.data)
                 cat_id = edit_qa_form.cat_id.data
                 is_popular = edit_qa_form.popular.data
 

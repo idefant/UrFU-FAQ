@@ -61,7 +61,7 @@ class ViewQA(FlaskView):
                             .order_by(Questions.priority)
                     except (NameError, AttributeError):
                         return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-                    add_qa_form.cat_id.default = cat_id_data
+                    # add_qa_form.cat_id.default = cat_id_data
 
         try:
             categories = categories.filter(Categories.id != 0)
@@ -72,7 +72,7 @@ class ViewQA(FlaskView):
         category_choices += [(i.id, i.name) for i in categories]
         add_qa_form.cat_id.choices = category_choices
         edit_qa_form.cat_id.choices = category_choices
-        add_qa_form.process()
+        # add_qa_form.process()
 
         return render_template("admin/qa.html", add_qa_form=add_qa_form, edit_qa_form=edit_qa_form,
                                delete_qa_form=delete_qa_form, current_category=current_category,
