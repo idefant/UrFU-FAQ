@@ -55,7 +55,7 @@ def index():
 
     categories_count = categories.count()
     questions_count = questions.count()
-    categories_id_count = get_categories_id_count(categories_count, questions)
+    categories_id_count = get_categories_id_count(categories, questions)
 
     categories_questions_count = []
     for category in categories:

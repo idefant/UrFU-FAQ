@@ -16,7 +16,9 @@ class FormHandlerAccount(FlaskView):
     @login_required
     def edit_account(self):
         edit_account_form = EditAccountForm()
-        if edit_account_form.validate_on_submit():
+        if not edit_account_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             name = " ".join(edit_account_form.name.data.split())
             username = edit_account_form.username.data
             password = edit_account_form.password.data
@@ -56,7 +58,9 @@ class FormHandlerAccount(FlaskView):
     @login_required
     def change_password_account(self):
         change_password_account_form = ChangePasswordAccountForm()
-        if change_password_account_form.validate_on_submit():
+        if not change_password_account_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             old_password = change_password_account_form.old_password.data
             password = change_password_account_form.password.data
             password_confirm = change_password_account_form.password_confirm.data

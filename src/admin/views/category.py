@@ -27,7 +27,7 @@ class ViewCategory(FlaskView):
         except (NameError, AttributeError):
             return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
-        categories_id_count = functions.get_categories_id_count(categories.count(), questions)
+        categories_id_count = functions.get_categories_id_count(categories, questions)
         categories_questions_count = []
         for category in categories:
             categories_questions_count += [(category, categories_id_count[category.id])]

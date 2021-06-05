@@ -1,3 +1,5 @@
+import re
+
 from flask import Blueprint
 from vk_api import vk_api
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
@@ -6,7 +8,7 @@ from vk_api.utils import get_random_id
 
 from search import get_answer
 
-from config import vk_bot_token, vk_bot_confirmation_token, bot_messages, bot_messages_emoji, bot_messages_not_found, \
+from config import vk_bot_token, vk_bot_confirmation_token, bot_messages_button, bot_messages_emoji, bot_messages_not_found, \
     bot_messages_too_long_require
 
 bot = Blueprint('bot', __name__)
@@ -15,7 +17,7 @@ token = vk_bot_token
 confirmation_token = vk_bot_confirmation_token
 
 
-@bot.route('/', methods=['POST'])
+@bot.route('/fd5e2fbf55ec7984fb3fe161c9a802ec', methods=['POST'])
 def processing():
     data = json.loads(request.data)
     if 'type' not in data.keys():
@@ -33,15 +35,14 @@ def processing():
 
 def make_keyboard():
     keyboard = VkKeyboard(one_time=False)
-    keyboard.add_button(bot_messages[1][0], color=VkKeyboardColor.PRIMARY)
-    keyboard.add_button(bot_messages[2][0], color=VkKeyboardColor.PRIMARY)
+    keyboard.add_button(bot_messages_button[1][0], color=VkKeyboardColor.PRIMARY)
+    keyboard.add_button(bot_messages_button[2][0], color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
-    keyboard.add_button(bot_messages[3][0], color=VkKeyboardColor.POSITIVE)
+    keyboard.add_button(bot_messages_button[3][0], color=VkKeyboardColor.POSITIVE)
     return keyboard.get_keyboard()
 
 
 def message_handler(data, vk):
-
     user_message_text = data['object']['message']['text']
 
     if len(user_message_text) > 100:
@@ -50,7 +51,7 @@ def message_handler(data, vk):
         send_message(data, vk, bot_message_text)
         return
 
-    for bot_message in bot_messages:
+    for bot_message in bot_messages_button:
         if bot_message[0] == user_message_text:
             bot_message_text = (bot_messages_emoji["info"] + " ") if "info" in bot_messages_emoji else ""
             bot_message_text += bot_message[1]
@@ -72,7 +73,7 @@ def message_handler(data, vk):
             send_message(data, vk, bot_message_text)
             for res in result:
                 bot_message_text = (bot_messages_emoji["qa"] + " ") if "qa" in bot_messages_emoji else ""
-                bot_message_text += f"{ res[1].question } \n\n { res[1].answer }"
+                bot_message_text += f"{ res[1].question } \n\n { convert_html_to_text(res[1].answer) }"
                 send_message(data, vk, bot_message_text)
 
 
@@ -85,3 +86,9 @@ def send_message(data, vk, bot_message_text):
                      random_id=get_random_id(),
                      keyboard=make_keyboard(),
                      dont_parse_links=1)
+
+def convert_html_to_text(html_code):
+    html_code = re.sub(r'</p>', '\n\n', html_code)
+    html_code = re.sub(r'<br>|<br/>|</br>', '\n', html_code)
+    html_code = re.sub(r'<.>|<./>|</.>', '', html_code)
+    return html_code

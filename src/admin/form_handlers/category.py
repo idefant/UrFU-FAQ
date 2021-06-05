@@ -17,7 +17,9 @@ class FormHandlerCategory(FlaskView):
         if not current_user.right_category:
             return render_template('admin/access_denied.html')
         add_category_form = AddCategoryForm()
-        if add_category_form.validate_on_submit():
+        if not add_category_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             try:
                 categories_count = Categories.query.count()
             except NameError:
@@ -45,7 +47,9 @@ class FormHandlerCategory(FlaskView):
         if not current_user.right_category:
             return render_template('admin/access_denied.html')
         edit_category_form = EditCategoryForm()
-        if edit_category_form.validate_on_submit():
+        if not edit_category_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             cat_id = edit_category_form.id.data
             name = " ".join(edit_category_form.name.data.split())
             icon_name = " ".join(edit_category_form.icon_name.data.split())
@@ -76,7 +80,9 @@ class FormHandlerCategory(FlaskView):
         if not current_user.right_category:
             return render_template('admin/access_denied.html')
         delete_category_form = DeleteCategoryForm()
-        if delete_category_form.validate_on_submit():
+        if not delete_category_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             cat_id = delete_category_form.id.data
             count_qa = delete_category_form.count_qa.data
             if not (count_qa and cat_id):
@@ -114,7 +120,7 @@ class FormHandlerCategory(FlaskView):
         color = request.args.get("color")
         cat_id = request.args.get("cat_id")
         if not (color and cat_id):
-            flash('Неправильно заполнены поля', category='danger')
+            flash('Невозможно распознать цвет или категорию', category='danger')
         try:
             category = Categories.query.get(cat_id)
         except NameError:

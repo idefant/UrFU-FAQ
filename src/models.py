@@ -3,20 +3,21 @@ from flask_login import UserMixin
 from sqlalchemy import DateTime
 
 
-
 db = SQLAlchemy()
+
 
 class Categories(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(100), nullable=False)
     priority = db.Column(db.Integer, nullable=False)
     icon_name = db.Column(db.String(30))
-    color = db.Column(db.String(7))
+    color = db.Column(db.String(30), default="rgb(255, 255, 255)")
 
     def __repr__(self):
         return '<Categories %r>' % self.id
 
-class Questions(db.Model):      # __tablename__ = 'posts'
+
+class Questions(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     question = db.Column(db.String(1000), nullable=False)
     clear_question = db.Column(db.String(1000))

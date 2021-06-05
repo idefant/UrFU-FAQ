@@ -29,11 +29,8 @@
 					<ol class="block_item_qa_list">
 						{% for category in categories_questions_count %}
 						<li>
-							{% if category[0].id == 0 %}
-							<a href="{{ url_for('.ViewQA:qa', popular=True) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
-							{% else %}
+							
 							<a href="{{ url_for('.ViewQA:qa', cat_id=category[0].id) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
-							{% endif %}
 
 						</li>
 						{% endfor %}

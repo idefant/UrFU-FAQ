@@ -116,7 +116,11 @@
 					<i class="fa fa-check yes_icon" aria-hidden="true"></i>
 				{% endif %}
 			</td>
+			{% if not (user.id == 1 or user.id == current_user.id) %}
 			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal" title="Редактировать права"></i></td>
+			{% else %}
+			<th scope="col"></th>
+			{% endif %}
 		</tr>
 		{% endfor %}
 	</tbody>

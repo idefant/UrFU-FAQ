@@ -30,9 +30,9 @@
 
 {{ macros.modal(modal_id = "deleteModal",
 		handler_url = url_for('.FormHandlerUser:delete_user'),
-		title = "Активация пользователя заново",
+		title = "Безвозвратно удалить пользователя",
 		optional_top =
-			'<strong>Подтвердите активацию пользователя: </strong>
+			'<strong>Удалить пользователя: </strong>
 			<span class="modal_inline_content" id="delete_name_content"></span>',
 		hidden_fields = [
 			delete_user_form.csrf_token,
@@ -63,7 +63,9 @@
 			<th scope="col">Юзернейм</th>
 			<th scope="col">Должность</th>
 			<th scope="col"></th>
+			{% if current_user.id == 1 %}
 			<th scope="col"></th>
+			{% endif %}
 		</tr>
 	</thead>
 	<tbody>
@@ -74,7 +76,9 @@
 			<td>{{ user.username }}</td>
 			<td>{{ user.post }}</td>
 			<td scope="col" width="45"><i class="fa fa-reply fa-lg table_action_icon activate_icon user_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#activateModal" title="Активировать заново"></i></td>
+			{% if current_user.id == 1 %}
 			<td scope="col" width="45"><i class="fa fa-trash fa-lg table_action_icon delete_icon user_table" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Удалить безвозвратно"></i></td>
+			{% endif %}
 		</tr>
 		{% endfor %}
 	</tbody>

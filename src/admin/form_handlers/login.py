@@ -13,7 +13,9 @@ class FormHandlerLogin(FlaskView):
     @route('/login_handler', methods=["POST"])
     def login_handler(self):
         login_form = forms.LoginForm()
-        if login_form.validate_on_submit():
+        if not login_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             username = login_form.username.data.lower()
             try:
                 user = Users.query.filter(Users.username == username).first()

@@ -21,7 +21,9 @@ class FormHandlerUser(FlaskView):
         if not current_user.right_users:
             return render_template('admin/access_denied.html')
         add_user_form = AddUserForm()
-        if add_user_form.validate_on_submit():
+        if not add_user_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             name = " ".join(add_user_form.name.data.split())
             username = add_user_form.username.data.lower()
             password = generate_password_hash(add_user_form.password.data)
@@ -66,43 +68,53 @@ class FormHandlerUser(FlaskView):
         if not current_user.right_users:
             return render_template('admin/access_denied.html')
         edit_user_form = EditUserForm()
-        if edit_user_form.validate_on_submit():
-            user_id = edit_user_form.id.data
+        if not edit_user_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             name = " ".join(edit_user_form.name.data.split())
             username = edit_user_form.username.data.lower()
             post = " ".join(edit_user_form.post.data.split())
 
-            if not (name and username and post):
-                flash('Неправильно заполнены поля', category='danger')
+            if not edit_user_form.id.data.isdigit():
+                flash('ID пользователя должен представлять из себя число', category='danger')
             else:
-                if not bool(re.match("^[a-z0-9._-]*$", username)):
-                    flash('Логин может состоять только из латинских букв, цифр, знаков нижнего подчеркивания ( _ ), '
-                          'тире ( - ), точки ( . )', category='danger')
+                user_id = int(edit_user_form.id.data)
+                if current_user.id == user_id or user_id == 1:
+                    flash('Вы не можете редактировать собственный аккаунт или аккаунт админа через страницу '
+                          'пользователей. Воспользуйтесь аккаунтом', category='danger')
                 else:
-                    try:
-                        users = Users.query
-                    except NameError:
-                        return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-                    user = users.get(user_id)
 
-                    if user is None:
-                        flash('Нет такого пользователя', category='danger')
+                    if not (name and username and post):
+                        flash('Неправильно заполнены поля', category='danger')
                     else:
-                        try:
-                            another_user = users.filter(Users.username == username).first()
-                        except (NameError, AttributeError):
-                            return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-                        if another_user is not None and another_user != user:
-                            flash('Не должно быть 2 пользователей с одинаковыми логинами', category='danger')
+                        if not bool(re.match("^[a-z0-9._-]*$", username)):
+                            flash('Логин может состоять только из латинских букв, цифр, знаков нижнего подчеркивания ( _ ), '
+                                  'тире ( - ), точки ( . )', category='danger')
                         else:
-                            user.name = name
-                            user.username = username
-                            user.post = post
                             try:
-                                db.session.commit()
-                                flash("Изменение пользовательских данных прошло успешно", category='success')
-                            except exc.SQLAlchemyError:
-                                flash('Ошибка внесения изменений в базу данных', category='danger')
+                                users = Users.query
+                            except NameError:
+                                return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+                            user = users.get(user_id)
+
+                            if user is None:
+                                flash('Нет такого пользователя', category='danger')
+                            else:
+                                try:
+                                    another_user = users.filter(Users.username == username).first()
+                                except (NameError, AttributeError):
+                                    return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+                                if another_user is not None and another_user != user:
+                                    flash('Не должно быть 2 пользователей с одинаковыми логинами', category='danger')
+                                else:
+                                    user.name = name
+                                    user.username = username
+                                    user.post = post
+                                    try:
+                                        db.session.commit()
+                                        flash("Изменение пользовательских данных прошло успешно", category='success')
+                                    except exc.SQLAlchemyError:
+                                        flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.ViewUser:users'))
 
     @route('/change_status_user', methods=["POST"])
@@ -119,7 +131,9 @@ class FormHandlerUser(FlaskView):
             flash(Markup("Пользователь может быть лишь активированным и деактивированным. Третьего не дано"),
                   category='success')
             return redirect(url_for('.ViewUser:users'))
-        if change_status_user_form.validate_on_submit():
+        if not change_status_user_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             if not change_status_user_form.id.data.isdigit():
                 flash('ID пользователя должен представлять из себя число', category='danger')
             else:
@@ -157,8 +171,9 @@ class FormHandlerUser(FlaskView):
         if not current_user.right_users:
             return render_template('admin/access_denied.html')
         delete_user_form = DeleteUserForm()
-        if delete_user_form.validate_on_submit():
-
+        if not delete_user_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             if current_user.id != 1:
                 flash("Удалять пользователей может лишь админ", category='danger')
             else:
@@ -192,7 +207,9 @@ class FormHandlerUser(FlaskView):
         if not current_user.right_users:
             return render_template('admin/access_denied.html')
         edit_user_form = EditUserRightsForm()
-        if edit_user_form.validate_on_submit():
+        if not edit_user_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
 
             if not edit_user_form.id.data.isdigit():
                 flash('ID пользователя должен представлять из себя число', category='danger')
@@ -235,22 +252,30 @@ class FormHandlerUser(FlaskView):
         if not current_user.right_users:
             return render_template('admin/access_denied.html')
         change_password_user_form = ChangePasswordUserForm()
-        if change_password_user_form.validate_on_submit():
-            user_id = change_password_user_form.id.data
+        if not change_password_user_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             password = change_password_user_form.password.data
             if not password:
                 flash('Неправильно заполнены поля', category='danger')
             else:
-                try:
-                    user = Users.query.get(user_id)
-                except NameError:
-                    return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+                if not change_password_user_form.id.data.isdigit():
+                    flash('ID пользователя должен представлять из себя число', category='danger')
+                else:
+                    user_id = int(change_password_user_form.id.data)
+                    if current_user.id == user_id or user_id == 1:
+                        flash('Вы не сменить собственный пароль или пароль админа', category='danger')
+                    else:
+                        try:
+                            user = Users.query.get(user_id)
+                        except NameError:
+                            return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
-                user.psswd = generate_password_hash(password)
-                user.auth_token = token_urlsafe(32)
-                try:
-                    db.session.commit()
-                    flash("Изменение пароля прошло успешно", category='success')
-                except exc.SQLAlchemyError:
-                    flash('Ошибка внесения изменений в базу данных', category='danger')
+                        user.psswd = generate_password_hash(password)
+                        user.auth_token = token_urlsafe(32)
+                        try:
+                            db.session.commit()
+                            flash("Изменение пароля прошло успешно", category='success')
+                        except exc.SQLAlchemyError:
+                            flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.ViewUser:users'))

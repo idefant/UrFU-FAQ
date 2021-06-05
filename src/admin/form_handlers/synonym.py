@@ -17,7 +17,9 @@ class FormHandlerSynonym(FlaskView):
     def add_synonym(self):
         add_synonyms_dependent_form = AddSynonymsDependentForm()
         main_word_id = request.args.get("word_id")
-        if add_synonyms_dependent_form.validate_on_submit():
+        if not add_synonyms_dependent_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             word = add_synonyms_dependent_form.word.data.lower()
             word = " ".join(word.split())
 
@@ -48,7 +50,9 @@ class FormHandlerSynonym(FlaskView):
     def edit_synonym(self):
         edit_synonyms_dependent_form = EditSynonymsDependentForm()
         main_word_id = request.args.get("word_id")
-        if edit_synonyms_dependent_form.validate_on_submit():
+        if not edit_synonyms_dependent_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             word_id = edit_synonyms_dependent_form.word_id.data
             word = edit_synonyms_dependent_form.word.data.lower()
             word = " ".join(word.split())
@@ -78,7 +82,9 @@ class FormHandlerSynonym(FlaskView):
     def delete_synonym(self):
         delete_synonyms_dependent_form = DeleteSynonymsDependentForm()
         main_word_id = request.args.get("word_id")
-        if delete_synonyms_dependent_form.validate_on_submit():
+        if not delete_synonyms_dependent_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             word_id = delete_synonyms_dependent_form.word_id.data
 
             if word_id == main_word_id:

@@ -31,7 +31,9 @@ class FormHandlerQA(FlaskView):
         categories_list = [(i.id, i.name) for i in categories]
         add_qa_form.cat_id.choices = categories_list
 
-        if add_qa_form.validate_on_submit():
+        if not add_qa_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             question = " ".join(add_qa_form.question.data.split())
             answer = re.sub(r'<p><br></p>', '', add_qa_form.answer.data)
             cat_id = add_qa_form.cat_id.data
@@ -80,7 +82,9 @@ class FormHandlerQA(FlaskView):
         else:
             categories_list = [(i.id, i.name) for i in available_categories]
             edit_qa_form.cat_id.choices = categories_list
-            if edit_qa_form.validate_on_submit():
+            if not edit_qa_form.validate_on_submit():
+                flash('Заполнены не все поля', category='danger')
+            else:
                 qa_id = edit_qa_form.id.data
                 question = " ".join(edit_qa_form.question.data.split())
                 answer = re.sub(r'<p><br></p>', '', edit_qa_form.answer.data)
@@ -102,7 +106,7 @@ class FormHandlerQA(FlaskView):
                         flash('Этот вопрос не найден', category='danger')
                     else:
                         if not qa.is_popular:
-                            qa.popular_priority = questions.filter(Questions.is_popular).count()
+                            qa.popular_priority = questions.filter(Questions.is_popular).count() + 1
                         qa.question = question
                         qa.clear_question = clear_question
                         qa.answer = answer
@@ -124,7 +128,9 @@ class FormHandlerQA(FlaskView):
         popular_data = request.args.get("popular")
 
         delete_qa_form = DeleteQAForm()
-        if delete_qa_form.validate_on_submit():
+        if not delete_qa_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             qa_id = delete_qa_form.id.data
             try:
                 qa = Questions.query.get(qa_id)

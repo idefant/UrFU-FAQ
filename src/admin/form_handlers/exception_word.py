@@ -19,7 +19,9 @@ class FormHandlerExceptionWord(FlaskView):
         word_type = request.args.get("word_type")
 
         add_exception_word_form = AddExceptionWordForm()
-        if add_exception_word_form.validate_on_submit():
+        if not add_exception_word_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             word = add_exception_word_form.word.data.lower()
             word = " ".join(word.split())
             if not word:
@@ -56,7 +58,9 @@ class FormHandlerExceptionWord(FlaskView):
 
         word_type = request.args.get("word_type")
 
-        if edit_exception_word_form.validate_on_submit():
+        if not edit_exception_word_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             word_id = edit_exception_word_form.id.data
             word = edit_exception_word_form.word.data.lower()
             word = " ".join(word.split())
@@ -103,7 +107,9 @@ class FormHandlerExceptionWord(FlaskView):
             return render_template('admin/access_denied.html')
         word_type = request.args.get("word_type")
         delete_exception_word_form = DeleteExceptionWordForm()
-        if delete_exception_word_form.validate_on_submit():
+        if not delete_exception_word_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
             word_id = delete_exception_word_form.id.data
             try:
                 white_words = WhiteWords.query

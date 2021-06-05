@@ -10,7 +10,7 @@ is_debug = True
 # Бот
 
 vk_bot_token = '2cc72f653d14df3eb7394cf282d770b1bcbcc256cd8097f9abedfa93baa80a56edac673466b2c7393380e'
-vk_bot_confirmation_token = '379c67e1'
+vk_bot_confirmation_token = 'f4722559'
 
 menu = [
     ("Прием УрФУ!", "https://urfu.ru/priemurfu/"),
@@ -18,7 +18,7 @@ menu = [
     ("Кабинет абитуриента", "https://priem.urfu.ru/")
 ]
 
-bot_messages = [
+bot_messages_button = [
     ("Начать", "Привет! Это чат-бот Уральского Федерального Университета, предназначенный для помощи абитуриентам"
                "в поиске информации о вузе.\n\n"
                "Можешь задать мне вопрос или воспользоваться кнопками для получения информации"),

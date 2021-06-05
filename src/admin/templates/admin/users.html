@@ -197,9 +197,15 @@
 			<td>{{ user.name }}</td>
 			<td>{{ user.username }}</td>
 			<td>{{ user.post }}</td>
+			{% if not (user.id == 1 or user.id == current_user.id) %}
 			<td scope="col" width="45"><i class="fa fa-key fa-lg table_action_icon change_psswd_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#changePsswdModal" title="Сменить пароль при утере"></i></td>
 			<td scope="col" width="45"><i class="fa fa-pencil fa-lg table_action_icon edit_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#editModal" title="Редактировать"></i></td>
 			<td scope="col" width="45"><i class="fa fa-ban fa-lg table_action_icon delete_icon" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deactivateModal" title="Деактивировать"></i></td>
+			{% else %}
+			<th scope="col"></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+			{% endif %}
 		</tr>
 		{% endfor %}
 	</tbody>
