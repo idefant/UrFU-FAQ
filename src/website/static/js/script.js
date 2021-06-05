@@ -31,3 +31,25 @@ $(function() {
 			}
 		})
 });
+
+
+
+var scrollingAnimate = function (offsetTop) {
+			$('html, body').stop().animate({
+				scrollTop: parseInt(offsetTop) || 0
+			}, 500);
+		};
+
+		var checkPageUpButton = function () {
+			var pageUP = $('#page_up');
+			if ( pageUP.css('display') != 'block' && $(window).scrollTop() > ($(window).height() / 3)){
+				pageUP.fadeIn().css('display', 'block');
+			}
+			if ( pageUP.css('display') != 'none' && $(window).scrollTop() < ($(window).height() / 3)){
+				pageUP.fadeIn().css('display', 'none');
+			}
+		};
+
+
+		$('#page_up').on('click', scrollingAnimate);
+		setInterval(checkPageUpButton, 500);

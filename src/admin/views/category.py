@@ -5,6 +5,8 @@ from sqlalchemy import desc
 from werkzeug.utils import redirect
 
 from admin import functions, forms
+from config import menu, contact_tel, site_title, site_subtitle, footer_about_university, footer_contacts, \
+    footer_social_net
 from models import Categories, Questions
 
 
@@ -105,4 +107,6 @@ class ViewCategory(FlaskView):
 
         return render_template('admin/color_picker.html', qa_list=qa_list, categories_list=categories,
                                current_category=current_category, index=category_index,
-                               is_popular_category=is_popular_category)
+                               is_popular_category=is_popular_category, menu=menu, contact_tel=contact_tel, site_title=site_title, site_subtitle=site_subtitle,
+                           footer_about_university=footer_about_university, footer_contacts=footer_contacts,
+                           footer_social_net=footer_social_net)

@@ -6,7 +6,8 @@ from vk_api.utils import get_random_id
 
 from search import get_answer
 
-from config import vk_bot_token, vk_bot_confirmation_token, bot_messages, bot_messages_emoji, bot_messages_not_found
+from config import vk_bot_token, vk_bot_confirmation_token, bot_messages, bot_messages_emoji, bot_messages_not_found, \
+    bot_messages_too_long_require
 
 bot = Blueprint('bot', __name__)
 
@@ -43,11 +44,17 @@ def message_handler(data, vk):
 
     user_message_text = data['object']['message']['text']
 
+    if len(user_message_text) > 100:
+        bot_message_text = (bot_messages_emoji["not_found"] + " ") if "not_found" in bot_messages_emoji else ""
+        bot_message_text += bot_messages_too_long_require
+        send_message(data, vk, bot_message_text)
+        return
 
     for bot_message in bot_messages:
         if bot_message[0] == user_message_text:
             bot_message_text = (bot_messages_emoji["info"] + " ") if "info" in bot_messages_emoji else ""
-            send_message(data, vk, bot_message_text + bot_message[1])
+            bot_message_text += bot_message[1]
+            send_message(data, vk, bot_message_text)
             return
 
     result = get_answer(user_message_text)

@@ -15,7 +15,34 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='libraries/css/font-awesome.min.css') }}">
 
 	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+	<style>
+		#page_up {
+		    width: 64px;
+		    height: 54px;
+		    top: 169px;
+		    left: 50%;
+		    margin-left: 485px;
+		    background: #fff url({{ url_for('website.static', filename='icons/page_up.png') }}) no-repeat 50%;
+		    box-shadow: 0 0 3px #dbdbdb;
+		    behavior: url(/typo3conf/ext/urfu/Resources/Public/dist/files/3b8fed93f46e41f2a69bd65c289de89b.htc);
+		    position: relative;
+		    -pie-poll: true;
+		    position: fixed;
+		    cursor: pointer;
+		    z-index: 990;
+		    display: none;
+		}
+
+		@media screen and (max-width: 1120px) {
+			#page_up {
+			    margin-left: 0;
+			    left: auto;
+			    right: 0;
+			}	
+		}
+	</style>
 
 	{% block styles %}{% endblock %}
 
@@ -105,7 +132,9 @@
 
 				<div class="subfooter">© ФГАОУ ВО «Уральский федеральный университет им. первого Президента России Б. Н. Ельцина»</div>
 			</div>
-		</section> 
+		</section>
+
+		<div id="page_up" style="display: none;"></div>
 	</div>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>

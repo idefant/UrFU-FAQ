@@ -10,7 +10,7 @@ is_debug = True
 # Бот
 
 vk_bot_token = '2cc72f653d14df3eb7394cf282d770b1bcbcc256cd8097f9abedfa93baa80a56edac673466b2c7393380e'
-vk_bot_confirmation_token = '6b999198'
+vk_bot_confirmation_token = '379c67e1'
 
 menu = [
     ("Прием УрФУ!", "https://urfu.ru/priemurfu/"),
@@ -49,6 +49,8 @@ bot_messages_emoji = {
 
 bot_messages_not_found = "Ничего не найдено. Попробуйте переформулировать вопрос или найдите его на сайте faq.urfu.ru"
 bot_messages_break_search = "Поиск временно не работает. Мы уже чиним"
+bot_messages_too_long_require = "Слишком длинный вопрос. Попробуйте объяснится покороче или найдите его на сайте " \
+                                "faq.urfu.ru"
 
 
 
