@@ -50,7 +50,7 @@ def index():
         categories = Categories.query
         questions = Questions.query
         users_count = Users.query.count()
-    except (NameError):
+    except NameError:
         return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
     categories_count = categories.count()

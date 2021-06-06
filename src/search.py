@@ -86,7 +86,7 @@ def parse_table():
             if not (Categories.query.first() is None or Questions.query.first() is None):
                 print("Таблицы категорий и вопросов должны быть пусты")
                 return
-        except (NameError, AttributeError):
+        except NameError:
             print("Ошибка чтения из БД")
             return
 

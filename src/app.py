@@ -30,7 +30,10 @@ login_manager.login_message = 'Для продолжения авторизуй�
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Users.query.get(user_id)
+    try:
+        return Users.query.get(user_id)
+    except NameError:
+        return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
 
 @app.errorhandler(404)

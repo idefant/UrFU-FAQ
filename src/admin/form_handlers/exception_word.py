@@ -88,13 +88,13 @@ class FormHandlerExceptionWord(FlaskView):
 
                 if word_type == "white":
                     try:
-                        word_from_db = WhiteWords.query.filter(WhiteWords.word == word).first()
+                        word_from_db = white_words.filter(WhiteWords.word == word).first()
                     except (NameError, AttributeError):
                         return render_template("admin/error_page.html", message="Ошибка чтения из БД")
                     exception_word = white_words.get(word_id)
                 elif word_type == "black":
                     try:
-                        word_from_db = BlackWords.query.filter(BlackWords.word == word).first()
+                        word_from_db = black_words.filter(BlackWords.word == word).first()
                     except (NameError, AttributeError):
                         return render_template("admin/error_page.html", message="Ошибка чтения из БД")
                     exception_word = black_words.get(word_id)

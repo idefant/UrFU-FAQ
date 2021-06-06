@@ -70,7 +70,7 @@ class FormHandlerSynonym(FlaskView):
             try:
                 synonyms = SynonymousWords.query
                 word_from_db = synonyms.filter(SynonymousWords.word == word).first()
-                synonym = SynonymousWords.query.get(word_id)
+                synonym = synonyms.get(word_id)
             except NameError:
                 return render_template("admin/error_page.html", message="Ошибка чтения из БД")
 
