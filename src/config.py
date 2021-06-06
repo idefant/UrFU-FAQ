@@ -2,7 +2,7 @@
 
 data_base = 'sqlite:///dbase.db'
 secret_key = 'fdgfh78@#5?>gfhf89dx,v06k'
-is_debug = True
+is_debug = False
 
 
 
