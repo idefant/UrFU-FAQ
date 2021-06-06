@@ -22,7 +22,6 @@
 
 
 {% block modals %}
-
 {{ macros.modal(modal_id = "changePsswdModal",
 		handler_url = url_for('.FormHandlerAccount:change_password_account'),
 		title = "Смена пароля",
@@ -52,14 +51,12 @@
 		]
 	)
 }}
-
 {% endblock %}
 
 
 
 
 {% block body %}
-
 <div class="col-6 offset-3">
 	{{ macros.flash_messages() }}
 
@@ -111,7 +108,6 @@
 					{{ '<li>История поиска</li>'|safe if current_user.right_request }}
 				</ul>
 			</div>
-			
 		</div>
 	</div>
 

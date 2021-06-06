@@ -2,12 +2,6 @@ body {
 	font-family: 'Arial', sans-serif !important;
 }
 
-/*.container {
-	text-align: center;
-	margin-right: auto;
-	margin-left: auto;
-}*/
-
 .flex_container {
 	display: flex;
 	align-items: center;

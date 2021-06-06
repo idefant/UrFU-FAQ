@@ -7,6 +7,7 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('.static', filename='css/color-picker.css') }}">
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap_btn.css') }}">
 {% if qa_text_shadow %}
 <style>
 	.qa_item, .tabs-menu button {
@@ -39,7 +40,6 @@
 		
 
 		<section class="faq">
-
 			<div class="tabs-menu flex">
 				{% for category in categories_list %}
 				<button style="background-color: {{ category.color }};">
@@ -52,10 +52,7 @@
 			<div class="tab-content current_tab" id="current_tab" style="background-color: {{ current_category.color }}; display: block;">
 				<div class="tab-content-container" id="tab-content-container">
 
-
-
 					{% if is_popular_category %}
-
 						{% for qa in qa_list %}
 						<div class="qa_item">
 							<div class="qa_item_container">
@@ -74,8 +71,6 @@
 							<div class="item_separator"></div>
 						</div>
 						{% endfor %}
-
-
 
 					{% else %}
 					
@@ -108,13 +103,10 @@
 {% block scripts %}
 	
 	<script src="{{ url_for('website.static', filename='js/script.js') }}"></script>
-
 	<script>
 		showPanel(0, {{ index }});
 	</script>
-
 	<script src="https://cdn.jsdelivr.net/npm/a-color-picker@1.2.1/dist/acolorpicker.min.js"></script>
-
 	<script>
 		var button = $("button.current");
 		var bgc = $(".current_tab");
@@ -124,7 +116,6 @@
 			bgc.css('backgroundColor', color);
 		});
 	</script>
-
 	<script>
 		$("#save_color").on("click", function() {
 			var bgc = $(".current_tab").css("backgroundColor");

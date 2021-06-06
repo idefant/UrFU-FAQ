@@ -187,7 +187,6 @@
 			<th scope="col"></th>
 			<th scope="col"></th>
 			<th scope="col"></th>
-			<!-- <th scope="col"></th> -->
 		</tr>
 	</thead>
 	<tbody>
@@ -195,7 +194,6 @@
 		<tr class="table_line_item" data-id="{{ qa.Questions.id }}" data-question="{{ qa.Questions.question }}" data-clear_question="{{ qa.Questions.clear_question }}" data-answer="{{ qa.Questions.answer }}" data-category="{{ qa.Categories.name }}" data-popular="{{ qa.Questions.is_popular }}" data-cat_id="{{ qa.Questions.cat_id }}">
 			<th scope="row" width="40"></th>
 			<td>{{ qa.Questions.question }}</td>
-			<!-- <td>{{ qa.Questions.clear_question }}</td> -->
 			<td>{{ qa.Categories.name }}</td>
 			<td>
 				{% if qa.Questions.is_popular == True %}

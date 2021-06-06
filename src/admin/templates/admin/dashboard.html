@@ -22,20 +22,16 @@
 		{% if current_user.right_qa %}
 		<div class="block_item">
 			<div class="block_item_container" onclick="window.location.href = '{{ url_for('.ViewQA:qa') }}';" style="background-color: #4976e7;">
-	
 					<div class="block_item_title">
 						Вопросы: {{ questions_count }}
 					</div>
 					<ol class="block_item_qa_list">
 						{% for category in categories_questions_count %}
 						<li>
-							
 							<a href="{{ url_for('.ViewQA:qa', cat_id=category[0].id) }}">{{ category[0].name }} - {{ category[1] }} шт.</a>
-
 						</li>
 						{% endfor %}
 					</ol>
-
 			</div>
 		</div>
 		{% endif %}

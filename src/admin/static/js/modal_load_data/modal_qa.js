@@ -101,12 +101,6 @@ $(function() {
 
 
 
-
-
-
-
-
-
 var choosing_cat = $("#cat_id").attr('onchange', "checkParams()");
 checkParams();
 

@@ -36,7 +36,6 @@ header {
 
 .modal_readonly_field[readonly] {
 	background-color: #f7f7f8;
-	/*min-height: 100%;*/
 }
 
 .view_item {
