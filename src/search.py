@@ -80,7 +80,7 @@ def correct_error(text, white_words):
 
 def parse_table():
     categories = list()
-    with open("FAQ_CSV.csv") as r_file:
+    with open("faq.csv") as r_file:
         file_reader = csv.DictReader(r_file, delimiter=",")
         try:
             if not (Categories.query.first() is None or Questions.query.first() is None):

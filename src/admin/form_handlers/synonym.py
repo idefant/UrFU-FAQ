@@ -24,31 +24,33 @@ class FormHandlerSynonym(FlaskView):
         else:
             word = add_synonyms_dependent_form.word.data.lower()
             word = " ".join(word.split())
-
-            try:
-                synonyms = SynonymousWords.query
-                word_from_db = synonyms.filter(SynonymousWords.word == word).first()
-            except (NameError, AttributeError):
-                return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-            if word_from_db is not None:
-                flash('Такое слово уже существует', category='danger')
+            if len(word) < 3:
+                flash('Длина слова должна быть не менее 3 символов', category='danger')
             else:
-                if main_word_id:
-                    main_word = synonyms.get(main_word_id)
-                    if main_word.synonym_id:
-                        flash('Главный синоним не должен сам быть чьим-то синонимом. Фильтры сброшены',
-                              category='danger')
-                        return redirect(url_for('.ViewSynonym:synonyms'))
-
-                    synonym = SynonymousWords(word=word, synonym_id=main_word_id)
-                else:
-                    synonym = SynonymousWords(word=word)
                 try:
-                    db.session.add(synonym)
-                    db.session.commit()
-                    flash(Markup("<strong>Добавлено слово:</strong> " + word), category='success')
-                except exc.SQLAlchemyError:
-                    flash('Ошибка внесения изменений в базу данных', category='danger')
+                    synonyms = SynonymousWords.query
+                    word_from_db = synonyms.filter(SynonymousWords.word == word).first()
+                except (NameError, AttributeError):
+                    return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+                if word_from_db is not None:
+                    flash('Такое слово уже существует', category='danger')
+                else:
+                    if main_word_id:
+                        main_word = synonyms.get(main_word_id)
+                        if main_word.synonym_id:
+                            flash('Главный синоним не должен сам быть чьим-то синонимом. Фильтры сброшены',
+                                  category='danger')
+                            return redirect(url_for('.ViewSynonym:synonyms'))
+
+                        synonym = SynonymousWords(word=word, synonym_id=main_word_id)
+                    else:
+                        synonym = SynonymousWords(word=word)
+                    try:
+                        db.session.add(synonym)
+                        db.session.commit()
+                        flash(Markup("<strong>Добавлено слово:</strong> " + word), category='success')
+                    except exc.SQLAlchemyError:
+                        flash('Ошибка внесения изменений в базу данных', category='danger')
         if main_word_id:
             return redirect(url_for('.ViewSynonym:synonyms_replacement', word_id=main_word_id))
         return redirect(url_for('.ViewSynonym:synonyms'))
@@ -67,25 +69,28 @@ class FormHandlerSynonym(FlaskView):
             word = edit_synonyms_dependent_form.word.data.lower()
             word = " ".join(word.split())
 
-            try:
-                synonyms = SynonymousWords.query
-                word_from_db = synonyms.filter(SynonymousWords.word == word).first()
-                synonym = synonyms.get(word_id)
-            except NameError:
-                return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-
-            if synonym is None:
-                flash('Нет такого слова', category='danger')
+            if len(word) < 3:
+                flash('Длина слова должна быть не менее 3 символов', category='danger')
             else:
-                if word_from_db is not None and word_from_db != synonym:
-                    flash('Такое слово уже существует. Изменения не сохранены', category='danger')
+                try:
+                    synonyms = SynonymousWords.query
+                    word_from_db = synonyms.filter(SynonymousWords.word == word).first()
+                    synonym = synonyms.get(word_id)
+                except NameError:
+                    return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+
+                if synonym is None:
+                    flash('Нет такого слова', category='danger')
                 else:
-                    synonym.word = word
-                    try:
-                        db.session.commit()
-                        flash(Markup("<strong>Изменено слово:</strong> " + word), category='success')
-                    except exc.SQLAlchemyError:
-                        flash('Ошибка внесения изменений в базу данных', category='danger')
+                    if word_from_db is not None and word_from_db != synonym:
+                        flash('Такое слово уже существует. Изменения не сохранены', category='danger')
+                    else:
+                        synonym.word = word
+                        try:
+                            db.session.commit()
+                            flash(Markup("<strong>Изменено слово:</strong> " + word), category='success')
+                        except exc.SQLAlchemyError:
+                            flash('Ошибка внесения изменений в базу данных', category='danger')
         if main_word_id:
             return redirect(url_for('.ViewSynonym:synonyms_replacement', word_id=main_word_id))
         return redirect(url_for('.ViewSynonym:synonyms'))

@@ -23,6 +23,10 @@
 				add_exception_word_form.word(class_="form-control", id="edit_category_content")
 			]
 		],
+		optional_bottom =
+			'<div class="mb-3">
+				<div class="red_text_error"><strong>Длина слова должна быть не менее 3 символов. Слова в 1-2 символа удаляются из поискового запроса автоматически</strong></div>
+			</div>',
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
 			add_exception_word_form.submit(class_="btn btn-primary")
@@ -44,6 +48,10 @@
 				edit_exception_word_form.word(class_="form-control", id="edit_name_content")
 			]
 		],
+		optional_bottom =
+			'<div class="mb-3">
+				<div class="red_text_error"><strong>Длина слова должна быть не менее 3 символов. Слова в 1-2 символа удаляются из поискового запроса автоматически</strong></div>
+			</div>',
 		buttons = [
 			'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>',
 			edit_exception_word_form.submit(class_="btn btn-primary")
