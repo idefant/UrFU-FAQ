@@ -127,7 +127,7 @@ def get_answer(user_question):
         return bot_message_text + bot_messages_break_search
     scores = []
     clear_text = convert_text(user_question)
-    request = Requests(original=user_question, cleared=clear_text, date_time=datetime.now())
+    request = Requests(original=re.sub("\n", " ", user_question), cleared=clear_text, date_time=datetime.now())
     try:
         db.session.add(request)
         db.session.commit()

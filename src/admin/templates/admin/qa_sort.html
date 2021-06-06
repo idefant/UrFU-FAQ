@@ -88,7 +88,7 @@
 		for (var i=0; i<table_row.length; i++) {
 			sequence_id[i] = table_row[i].getAttribute('data-id');
 		}
-		window.location.href = "{{ url_for('.FormHandlerQA:change_order_qa') }}?sequence_id="+sequence_id+"&cat_id={{ cat_id_data }}";
+		window.location.href = "{{ url_for('.FormHandlerQA:change_order_qa', cat_id=cat_id_data, sequence_id=sequence_id_str) }}&sequence_id="+sequence_id;
 	};
 
 	$("#get_data").on("click", function() {

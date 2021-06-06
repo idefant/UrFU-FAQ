@@ -69,3 +69,40 @@
 	{{ text }}
 </a>
 {% endmacro %}
+
+
+{% macro pagination(first_pages, last_pages, current_page) %}
+<nav aria-label="Навигации по страницам">
+  <ul class="pagination">
+
+  	{% if first_pages | length > 0 %}
+    <li class="page-item">
+      <a class="page-link" href="{{ url_for('.ViewRequest:requests', page=current_page-1) }}" aria-label="Предыдущая">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+
+    {% for page in first_pages %}
+    <li class="page-item"><a class="page-link" href="{{ url_for('.ViewRequest:requests', page=page) }}">{{ page }}</a></li>
+    {% endfor %}
+
+    <li class="page-item active" aria-current="page">
+      <a class="page-link">{{ current_page }}</a>
+    </li>
+
+    {% for page in last_pages %}
+    <li class="page-item"><a class="page-link" href="{{ url_for('.ViewRequest:requests', page=page) }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if last_pages | length > 0 %}
+    <li class="page-item">
+      <a class="page-link" href="{{ url_for('.ViewRequest:requests', page=current_page+1) }}" aria-label="Следующая">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+
+  </ul>
+</nav>
+{% endmacro %}

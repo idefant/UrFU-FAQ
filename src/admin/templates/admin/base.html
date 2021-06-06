@@ -75,12 +75,12 @@
 						<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
 
 							{% if current_user.right_exception_word %}
-							<li><a class="dropdown-item" href="{{ url_for('.ViewTechSetting:black_words') }}">Черный список слов</a></li>
-							<li><a class="dropdown-item" href="{{ url_for('.ViewTechSetting:white_words') }}">Белый список слов</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewExceptionWord:black_words') }}">Черный список слов</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewExceptionWord:white_words') }}">Белый список слов</a></li>
 							{% endif %}
 
 							{% if current_user.right_synonym %}
-							<li><a class="dropdown-item" href="{{ url_for('.ViewTechSetting:synonyms') }}">Синонимы</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('.ViewSynonym:synonyms') }}">Синонимы</a></li>
 							{% endif %}
 
 							{% if current_user.right_request %}

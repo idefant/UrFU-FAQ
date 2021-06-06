@@ -1,12 +1,12 @@
 import re
 from secrets import token_urlsafe
-from flask import flash, url_for, redirect, render_template
+from flask import flash, url_for, redirect, render_template, session
 from flask_classy import FlaskView, route
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, login_user
 from sqlalchemy import exc
 from werkzeug.security import check_password_hash, generate_password_hash
 from models import Users, db
-from admin.forms import EditAccountForm, ChangePasswordAccountForm
+from admin.forms import EditAccountForm, ChangePasswordAccountForm, LoginForm
 
 
 class FormHandlerAccount(FlaskView):
@@ -78,3 +78,22 @@ class FormHandlerAccount(FlaskView):
                     except exc.SQLAlchemyError:
                         flash('Ошибка внесения изменений в базу данных', category='danger')
         return redirect(url_for('.ViewAccount:account'))
+
+    @route('/login_handler', methods=["POST"])
+    def login_handler(self):
+        login_form = LoginForm()
+        if not login_form.validate_on_submit():
+            flash('Заполнены не все поля', category='danger')
+        else:
+            username = login_form.username.data.lower()
+            try:
+                user = Users.query.filter(Users.username == username).first()
+            except (NameError, AttributeError):
+                return render_template("admin/error_page.html", message="Ошибка чтения из БД")
+            if user and check_password_hash(user.psswd, login_form.password.data):
+                login_user(user, remember=login_form.remember.data)
+                session['auth_token'] = user.auth_token
+                session.modified = True
+                return redirect(url_for('.index'))
+            flash("Неверный логин/пароль", 'danger')
+        return redirect(url_for('.ViewAccount:login'))

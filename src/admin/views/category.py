@@ -5,8 +5,8 @@ from sqlalchemy import desc
 from werkzeug.utils import redirect
 
 from admin import functions, forms
-from config import menu, contact_tel, site_title, site_subtitle, footer_about_university, footer_contacts, \
-    footer_social_net
+from config import desktop_top_menu, contact_tel, site_title, site_subtitle, footer_about_university, footer_contacts, \
+    footer_social_net, mobile_side_menu, qa_text_shadow
 from models import Categories, Questions
 
 
@@ -49,6 +49,8 @@ class ViewCategory(FlaskView):
     @route('/cheat_sheet_icons')
     @login_required
     def cheat_sheet_icons(self):
+        if not current_user.right_category:
+            return render_template('admin/access_denied.html')
         return render_template('admin/cheat_sheet_icons.html')
 
     @route('/colors')
@@ -107,6 +109,8 @@ class ViewCategory(FlaskView):
 
         return render_template('admin/color_picker.html', qa_list=qa_list, categories_list=categories,
                                current_category=current_category, index=category_index,
-                               is_popular_category=is_popular_category, menu=menu, contact_tel=contact_tel, site_title=site_title, site_subtitle=site_subtitle,
-                           footer_about_university=footer_about_university, footer_contacts=footer_contacts,
-                           footer_social_net=footer_social_net)
+                               is_popular_category=is_popular_category, desktop_top_menu=desktop_top_menu,
+                               mobile_side_menu=mobile_side_menu, contact_tel=contact_tel, site_title=site_title,
+                               site_subtitle=site_subtitle, qa_text_shadow=qa_text_shadow,
+                               footer_about_university=footer_about_university, footer_contacts=footer_contacts,
+                               footer_social_net=footer_social_net)

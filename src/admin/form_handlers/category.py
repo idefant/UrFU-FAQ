@@ -3,7 +3,6 @@ from flask_classy import FlaskView, route
 from flask_login import login_required, current_user
 from markupsafe import Markup
 from sqlalchemy import exc
-
 from models import db, Categories
 from admin.forms import AddCategoryForm, EditCategoryForm, DeleteCategoryForm
 

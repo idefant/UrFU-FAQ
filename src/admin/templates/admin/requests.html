@@ -19,6 +19,7 @@
 	<a href="{{ url_for('.ViewRequest:requests_history') }}" class="btn btn-primary button_active" data-bs-dismiss="modal">Скачать базу пользовательских запросов</a>
 </div>
 
+{{ macros.pagination(first_pages, last_pages, current_page) }}
 
 <table class="table table-striped table-sm">
 	<thead>
@@ -43,38 +44,6 @@
 	</tbody>
 </table>
 
+{{ macros.pagination(first_pages, last_pages, current_page) }}
 
-<nav aria-label="Пример навигации по страницам">
-  <ul class="pagination">
-
-  	{% if first_pages | length > 0 %}
-    <li class="page-item">
-      <a class="page-link" href="{{ url_for('.ViewRequest:requests', page=current_page-1) }}" aria-label="Предыдущая">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-    {% endif %}
-
-    {% for page in first_pages %}
-    <li class="page-item"><a class="page-link" href="{{ url_for('.ViewRequest:requests', page=page) }}">{{ page }}</a></li>
-    {% endfor %}
-
-    <li class="page-item active" aria-current="page">
-      <a class="page-link" href="{{ url_for('.ViewRequest:requests', page=current_page) }}">{{ current_page }}</a>
-    </li>
-
-    {% for page in last_pages %}
-    <li class="page-item"><a class="page-link" href="{{ url_for('.ViewRequest:requests', page=page) }}">{{ page }}</a></li>
-    {% endfor %}
-
-    {% if last_pages | length > 0 %}
-    <li class="page-item">
-      <a class="page-link" href="{{ url_for('.ViewRequest:requests', page=current_page+1) }}" aria-label="Следующая">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-    {% endif %}
-
-  </ul>
-</nav>
 {% endblock %}

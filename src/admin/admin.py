@@ -13,7 +13,6 @@ from .form_handlers.account import FormHandlerAccount
 from .form_handlers.category import FormHandlerCategory
 from .form_handlers.qa import FormHandlerQA
 from .form_handlers.synonym import FormHandlerSynonym
-from .form_handlers.login import FormHandlerLogin
 from .form_handlers.exception_word import FormHandlerExceptionWord
 
 FormHandlerQA.register(admin)
@@ -22,19 +21,20 @@ FormHandlerAccount.register(admin)
 FormHandlerUser.register(admin)
 FormHandlerExceptionWord.register(admin)
 FormHandlerSynonym.register(admin)
-FormHandlerLogin.register(admin)
 
 from .views.qa import ViewQA
 from .views.category import ViewCategory
 from .views.user import ViewUser
-from .views.tech_setting import ViewTechSetting
+from .views.exception_word import ViewExceptionWord
+from .views.synonym import ViewSynonym
 from .views.request import ViewRequest
 from .views.account import ViewAccount
 
 ViewQA.register(admin)
 ViewCategory.register(admin)
 ViewUser.register(admin)
-ViewTechSetting.register(admin)
+ViewExceptionWord.register(admin)
+ViewSynonym.register(admin)
 ViewRequest.register(admin)
 ViewAccount.register(admin)
 

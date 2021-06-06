@@ -78,7 +78,7 @@
 	<button type="button" class="btn btn-success button_active" data-bs-toggle="modal" data-bs-target="#addModal">
 		Добавить слово
 	</button>
-	{% set current_url = url_for('.ViewTechSetting:black_words') if word_type == "black" else url_for('.ViewTechSetting:white_words') %}
+	{% set current_url = url_for('.ViewExceptionWord:black_words') if word_type == "black" else url_for('.ViewExceptionWord:white_words') %}
 	{{ macros.update_cleared_questions_dbase(current_url) }}
 </div>
 

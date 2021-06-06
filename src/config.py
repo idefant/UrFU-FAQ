@@ -1,6 +1,6 @@
 # Основное
 
-data_base = 'sqlite:///testfaq.db'  # "mysql+pymysql://idefant:iluxandr0@db4free.net/urfu_faq"
+data_base = 'sqlite:///testfaq.db'
 secret_key = 'fdgfh78@#5?>gfhf89dx,v06k'
 is_debug = True
 
@@ -10,13 +10,7 @@ is_debug = True
 # Бот
 
 vk_bot_token = '2cc72f653d14df3eb7394cf282d770b1bcbcc256cd8097f9abedfa93baa80a56edac673466b2c7393380e'
-vk_bot_confirmation_token = 'f4722559'
-
-menu = [
-    ("Прием УрФУ!", "https://urfu.ru/priemurfu/"),
-    ("Официальная информация", "https://urfu.ru/applicant"),
-    ("Кабинет абитуриента", "https://priem.urfu.ru/")
-]
+vk_bot_confirmation_token = '47e80731'
 
 bot_messages_button = [
     ("Начать", "Привет! Это чат-бот Уральского Федерального Университета, предназначенный для помощи абитуриентам"
@@ -57,6 +51,18 @@ bot_messages_too_long_require = "Слишком длинный вопрос. П�
 
 # Веб-сайт
 
+desktop_top_menu = [
+    ("Прием УрФУ!", "https://urfu.ru/priemurfu/"),
+    ("Официальная информация", "https://urfu.ru/applicant"),
+    ("Кабинет абитуриента", "https://priem.urfu.ru/")
+]
+
+mobile_side_menu = [
+    ("Прием УрФУ!", "https://urfu.ru/priemurfu/"),
+    ("Официальная информация", "https://urfu.ru/applicant"),
+    ("Кабинет абитуриента", "https://priem.urfu.ru/")
+]
+
 contact_tel = ("+7 (343) 375-44-44", "tel:+73433754444")
 site_title = "Как поступить в УрФУ?"
 site_subtitle = "Все вопросы, которые ты можешь задать при поступлении в УрФУ, мы собрали на одной странице. " \
@@ -81,6 +87,8 @@ footer_social_net = [
     ("Youtube", "https://www.youtube.com/user/stvTVIST"),
     ("Twitter", "https://twitter.com/urfu")
 ]
+
+qa_text_shadow = True
 
 
 # Админка

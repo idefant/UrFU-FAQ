@@ -18,7 +18,7 @@ class ViewRequest(FlaskView):
     def requests(self):
         if not current_user.right_request:
             return render_template('admin/access_denied.html')
-        requests_page_count = 10
+        requests_page_count = 300
         page_data = request.args.get("page")
         if page_data is None:
             page = 1
@@ -60,9 +60,10 @@ class ViewRequest(FlaskView):
             requests = Requests.query.order_by(desc(Requests.id))
         except (NameError, AttributeError):
             return render_template("admin/error_page.html", message="Ошибка чтения из БД")
-        output = "Тут какая-то инструкция" + "\n\n"
+        output = "База пользовательских запросов представляет из себя список состоящий из запроса, очишенного " \
+                 "запроса, даты/времени сообщения. Элементы списка отделены друг от друга горизонтальной чертой \n\n"
         for request_elem in requests:
-            output += "_" * 100 + "\n\n"
+            output += "-" * 100 + "\n"
             output += request_elem.original + "\n\n"
             output += request_elem.cleared + "\n\n"
             output += str(request_elem.date_time.strftime("%d.%m.%Y  %H:%M:%S")) + "\n"

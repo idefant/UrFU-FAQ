@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 
-from config import menu, contact_tel, site_title, site_subtitle, footer_about_university, footer_social_net, \
-    footer_contacts
+from config import desktop_top_menu, contact_tel, site_title, site_subtitle, footer_about_university, footer_social_net, \
+    footer_contacts, mobile_side_menu, qa_text_shadow
 from models import Categories, Questions
 
 website = Blueprint('website', __name__, template_folder='templates', static_folder='static', static_url_path='website')
@@ -35,6 +35,7 @@ def index():
         result_list += [(num, category, usually_questions)]
         num = num + 1
     return render_template('website/index.html', result_list=result_list, result_popular_list=result_popular_list,
-                           menu=menu, contact_tel=contact_tel, site_title=site_title, site_subtitle=site_subtitle,
+                           desktop_top_menu=desktop_top_menu, contact_tel=contact_tel, site_title=site_title,
+                           site_subtitle=site_subtitle, mobile_side_menu=mobile_side_menu,
                            footer_about_university=footer_about_university, footer_contacts=footer_contacts,
-                           footer_social_net=footer_social_net)
+                           footer_social_net=footer_social_net, qa_text_shadow=qa_text_shadow)

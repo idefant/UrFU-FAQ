@@ -53,7 +53,7 @@
 		handler_url = url_for('.FormHandlerSynonym:delete_synonym', word_id=word_id),
 		title = "Удаление синонима",
 		optional_top = 
-		'<strong>Подтвердите удаление категории: </strong>
+		'<strong>Подтвердите удаление синонима: </strong>
 		<span class="modal_inline_content" id="delete_name_content"></span>',
 		hidden_fields = [
 			delete_synonyms_dependent_form.csrf_token,
@@ -76,7 +76,7 @@
 	<button type="button" class="btn btn-success button_active" data-bs-toggle="modal" data-bs-target="#addModal">
 		Добавить слово
 	</button>
-	{{ macros.update_cleared_questions_dbase(url_for('.ViewTechSetting:synonyms')) }}
+	{{ macros.update_cleared_questions_dbase(url_for('.ViewSynonym:synonyms')) }}
 </div>
 
 
@@ -104,7 +104,7 @@
 			</td>
 			
 			<td scope="col" width="45">
-				<a href="{{ url_for('.ViewTechSetting:synonyms_replacement', word_id=main_dependent_word[0].id) }}">
+				<a href="{{ url_for('.ViewSynonym:synonyms_replacement', word_id=main_dependent_word[0].id) }}">
 					<i class="fa fa-eye fa-lg table_action_icon view_icon category_table" aria-hidden="true" title="Просмотреть синонимы слова"></i>
 				</a>
 			</td>

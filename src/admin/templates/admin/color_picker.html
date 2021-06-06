@@ -7,6 +7,13 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('.static', filename='css/color-picker.css') }}">
+{% if qa_text_shadow %}
+<style>
+	.qa_item, .tabs-menu button {
+		text-shadow: 0 0 1px black;
+	}
+</style>
+{% endif %}
 {% endblock %}
 
 
@@ -121,7 +128,7 @@
 	<script>
 		$("#save_color").on("click", function() {
 			var bgc = $(".current_tab").css("backgroundColor");
-			window.location.href = "{{ url_for('.FormHandlerCategory:change_color') }}?color="+bgc+"&cat_id={{ current_category.id }}";
+			window.location.href = "{{ url_for('.FormHandlerCategory:change_color', cat_id=current_category.id) }}&color="+bgc;
 		})		
 	</script>
 {% endblock %}

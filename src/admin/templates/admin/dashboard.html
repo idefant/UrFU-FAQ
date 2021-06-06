@@ -85,7 +85,7 @@
 		{% if current_user.right_exception_word %}
 		{{ macros.dashboard_item(title = 'Черные слова',
 				color = '#000',
-				link = 'window.location.href = "' + url_for('.ViewTechSetting:black_words') + '"'
+				link = 'window.location.href = "' + url_for('.ViewExceptionWord:black_words') + '"'
 			)
 		}}
 		{% endif %}
@@ -93,7 +93,7 @@
 		{% if current_user.right_exception_word %}
 		{{ macros.dashboard_item(title = 'Белые слова',
 				color = '#ccc',
-				link = 'window.location.href = "' + url_for('.ViewTechSetting:white_words') + '"'
+				link = 'window.location.href = "' + url_for('.ViewExceptionWord:white_words') + '"'
 			)
 		}}
 		{% endif %}
@@ -101,7 +101,7 @@
 		{% if current_user.right_synonym %}
 		{{ macros.dashboard_item(title = 'Синонимы',
 				color = '#2cc200',
-				link = 'window.location.href = "' + url_for('.ViewTechSetting:synonyms') + '"'
+				link = 'window.location.href = "' + url_for('.ViewSynonym:synonyms') + '"'
 			)
 		}}
 		{% endif %}

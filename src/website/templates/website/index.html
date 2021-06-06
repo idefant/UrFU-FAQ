@@ -7,6 +7,17 @@
 {% endblock %}
 
 
+{% block styles %}
+{% if qa_text_shadow %}
+<style>
+	.qa_item, .tabs-menu button {
+		text-shadow: 0 0 1px black;
+	}
+</style>
+{% endif %}
+{% endblock %}
+
+
 {% block body %}
 
 {{ macros.title_main_page(site_title, site_subtitle) }}

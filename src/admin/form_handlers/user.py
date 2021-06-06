@@ -1,13 +1,11 @@
 import re
 from secrets import token_urlsafe
-
 from flask import flash, redirect, url_for, render_template, request
 from flask_classy import FlaskView, route
 from flask_login import login_required, current_user
 from markupsafe import Markup
 from sqlalchemy import exc
 from werkzeug.security import generate_password_hash
-
 from models import db, Users
 from admin.forms import AddUserForm, EditUserForm, DeactivateUserForm, EditUserRightsForm, ActivateUserForm, \
     ChangePasswordUserForm, DeleteUserForm
@@ -53,7 +51,7 @@ class FormHandlerUser(FlaskView):
                         user = Users(username=username, name=name, psswd=password, post=post,
                                      right_category=right_category, right_users=right_users, right_qa=right_qa,
                                      right_synonym=right_synonym, right_exception_word=right_exception_word,
-                                     right_request=right_request, auth_token = token_urlsafe(32))
+                                     right_request=right_request, auth_token=token_urlsafe(32))
                         try:
                             db.session.add(user)
                             db.session.commit()
@@ -88,8 +86,8 @@ class FormHandlerUser(FlaskView):
                         flash('Неправильно заполнены поля', category='danger')
                     else:
                         if not bool(re.match("^[a-z0-9._-]*$", username)):
-                            flash('Логин может состоять только из латинских букв, цифр, знаков нижнего подчеркивания ( _ ), '
-                                  'тире ( - ), точки ( . )', category='danger')
+                            flash('Логин может состоять только из латинских букв, цифр, знаков нижнего '
+                                  'подчеркивания ( _ ), тире ( - ), точки ( . )', category='danger')
                         else:
                             try:
                                 users = Users.query
