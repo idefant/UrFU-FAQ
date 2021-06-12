@@ -9,8 +9,7 @@ header,
 html,
 img,
 li,
-section,
-ul {
+section {
     margin: 0;
     padding: 0;
     border: 0;
@@ -155,7 +154,6 @@ h1 {
 
 ul {
 	margin-left: 0;
-	list-style-type: none;
 }
 
 header a {
@@ -361,7 +359,7 @@ nav {
 .qa_item_container {
 	border-radius: 20px;
 	border: 2px solid #fff0;
-	padding: 15px 15px 20px;
+	padding: 15px 15px 8px;
 	margin: 30px 10px;
 	display: flex;
 }
@@ -883,4 +881,12 @@ html {
 
 .faq {
     padding-bottom: 0;
+}
+
+.qa_answer a {
+    color: white;
+}
+
+.qa_answer a:hover {
+    color: white;
 }

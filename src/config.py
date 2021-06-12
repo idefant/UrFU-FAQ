@@ -88,7 +88,7 @@ footer_social_net = [
     ("Twitter", "https://twitter.com/urfu")
 ]
 
-qa_text_shadow = True
+qa_text_shadow = False
 
 
 # Админка

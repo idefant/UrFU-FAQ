@@ -95,33 +95,21 @@
 					<a href="https://urfu.ru/" target="_blank" class="footer-logo"><img src="{{ url_for('website.static', filename='svg/UrFULogo100White.svg') }}" loading="lazy" alt="" width="260"></a>
 					<div class="footer-column">
 						<h3 class="footer-label">Об университете</h3>
-						<ul class="footer-list">
-							<li>
-								{% for item_link in footer_about_university %}
-									<a href="{{ item_link[1] }}" target="_blank" class="footer-link">{{ item_link[0] }}</a>
-								{% endfor %}
-							</li>
-						</ul>
+						{% for item_link in footer_about_university %}
+						<a href="{{ item_link[1] }}" target="_blank" class="footer-link">{{ item_link[0] }}</a>
+						{% endfor %}
 					</div>
 					<div class="footer-column">
 						<h3 class="footer-label">Контакты</h3>
-						<ul class="footer-list">
-							<li>
-								{% for item_link in footer_contacts %}
-									<a href="{{ item_link[1] }}" class="footer-link">{{ item_link[0] }}</a>
-								{% endfor %}
-							</li>
-						</ul>
+						{% for item_link in footer_contacts %}
+							<a href="{{ item_link[1] }}" class="footer-link">{{ item_link[0] }}</a>
+						{% endfor %}
 					</div>
 					<div class="footer-column">
 						<h3 class="footer-label">Наши соцсети</h3>
-						<ul class="footer-list">
-							<li>
-								{% for item_link in footer_social_net %}
-									<a href="{{ item_link[1] }}" target="_blank" class="footer-link">{{ item_link[0] }}</a>
-								{% endfor %}
-							</li>
-						</ul>
+						{% for item_link in footer_social_net %}
+							<a href="{{ item_link[1] }}" target="_blank" class="footer-link">{{ item_link[0] }}</a>
+						{% endfor %}
 					</div>
 				</div>
 
