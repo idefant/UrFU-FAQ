@@ -5,7 +5,14 @@ $(document).ready(function() {
 		minHeight:200,
 		maxHeight:500,
 		disableDragAndDrop:false,
-		shortcuts: false,
+		keyMap: {
+			pc: {
+				'ENTER': 'insertParagraph'
+			},
+			mac: {
+				'ENTER': 'insertParagraph'
+			}
+		},
 		tabDisable: false,
 		codeviewFilter: false,
 		codeviewIframeFilter: true,
