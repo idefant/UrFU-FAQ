@@ -88,8 +88,8 @@ def send_message(data, vk, bot_message_text):
                      dont_parse_links=1)
 
 def convert_html_to_text(html_code):
-    html_code = re.sub(r'</p>', '\n\n', html_code)
-    html_code = re.sub(r'<br>|<br/>|</br>|<ol>|<ul>', '\n', html_code)
+    html_code = re.sub(r'<\/p>', '\n\n', html_code)
+    html_code = re.sub(r'<br>|<br\/>|<\/br>|<ol>|<ul>', '\n', html_code)
     html_code = re.sub(r'<li>', '\n• ', html_code)
-    html_code = re.sub(r'<.*?>|<.*?/>|</.*?>', '', html_code)
+    html_code = re.sub(r'<.*?>|<.*?\/>|<\/.*?>', '', html_code)
     return html_code
