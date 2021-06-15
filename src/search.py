@@ -71,7 +71,6 @@ def correct_error(text, white_words):
                 dictionary = dict()
                 suggestions = set(language.suggest(word_list[i]))
                 for suggestion in suggestions:
-                    print(suggestion)
                     measure = difflib.SequenceMatcher(None, word_list[i], suggestion).ratio()
                     dictionary[measure] = suggestion
                 if len(dictionary) != 0:
