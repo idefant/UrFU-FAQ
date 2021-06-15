@@ -10,7 +10,7 @@ is_debug = False
 # Бот
 
 vk_bot_token = '2cc72f653d14df3eb7394cf282d770b1bcbcc256cd8097f9abedfa93baa80a56edac673466b2c7393380e'
-vk_bot_confirmation_token = '47e80731'
+vk_bot_confirmation_token = 'f84f948b'
 
 bot_messages_button = [
     ("Начать", "Привет! Это чат-бот Уральского Федерального Университета, предназначенный для помощи абитуриентам"
@@ -88,7 +88,7 @@ footer_social_net = [
     ("Twitter", "https://twitter.com/urfu")
 ]
 
-qa_text_shadow = False
+qa_text_shadow = True
 
 
 # Админка
