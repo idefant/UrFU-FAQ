@@ -64,17 +64,18 @@ def correct_error(text, white_words):
     word_list_mistakes = [i.word for i in checker]
     word_list = text.split()
 
-    for word in word_list:
-        is_white = white_words.filter(WhiteWords.word == word).first()
+    for i in range(len(word_list)):
+        is_white = white_words.filter(WhiteWords.word == word_list[i]).first()
         if not is_white:
-            if word_list_mistakes.__contains__(word):
+            if word_list_mistakes.__contains__(word_list[i]):
                 dictionary = dict()
-                suggestions = set(language.suggest(word))
+                suggestions = set(language.suggest(word_list[i]))
                 for suggestion in suggestions:
-                    measure = difflib.SequenceMatcher(None, word, suggestion).ratio()
+                    print(suggestion)
+                    measure = difflib.SequenceMatcher(None, word_list[i], suggestion).ratio()
                     dictionary[measure] = suggestion
                 if len(dictionary) != 0:
-                    word = dictionary[max(dictionary.keys())]
+                    word_list[i] = dictionary[max(dictionary.keys())]
     return word_list
 
 
