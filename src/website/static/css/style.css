@@ -92,7 +92,6 @@ button:active {
         margin: 0
     }
     p {
-        font-size: .875em;
         line-height: 1.4
     }
     .site {
@@ -313,6 +312,13 @@ button.current {
 /* Мои стили для вопросов */
 
 
+ol, ul {
+    padding-left: 1.5rem;
+}
+
+li {
+    line-height: 23px;
+}
 
 nav {
   width: 100%;
@@ -388,7 +394,7 @@ nav {
 .qa_answer {
 	font-size: 18px;
 	font-weight: 400;
-	line-height: 22px;
+	line-height: 23px;
 }
 
 .item_separator {
@@ -826,6 +832,10 @@ html {
 
     .qa_question {
         font-size: 20px;
+    }
+
+    .qa_answer {
+        font-size: 1em;
     }
 }
 
